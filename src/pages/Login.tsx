@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, ArrowRight, Sparkles, Youtube, Globe, FileText, Video, Tv, Palette, Lock, Clock } from 'lucide-react';
+import { Eye, EyeOff, ArrowRight, Sparkles, Youtube, Globe, FileText, Video, Tv, Palette, Lock, Clock, Download, CheckCircle } from 'lucide-react';
 import { login, register, hasAnyUser } from '../auth';
 
 type Mode = 'sign-in' | 'create';
@@ -317,6 +317,29 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [installable, setInstallable] = useState(false);
+  const [installed, setInstalled] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setInstalled(true);
+      return;
+    }
+    const handler = (e: Event) => { e.preventDefault(); setInstallPrompt(e); setInstallable(true); };
+    window.addEventListener('beforeinstallprompt', handler as EventListener);
+    window.addEventListener('appinstalled', () => { setInstalled(true); setInstallable(false); });
+    return () => window.removeEventListener('beforeinstallprompt', handler as EventListener);
+  }, []);
+
+  async function handleInstall() {
+    if (!installPrompt) return;
+    (installPrompt as any).prompt();
+    const { outcome } = await (installPrompt as any).userChoice;
+    if (outcome === 'accepted') setInstalled(true);
+    setInstallPrompt(null);
+    setInstallable(false);
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -369,11 +392,42 @@ export default function Login() {
           {/* CTAs */}
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 70 }}>
             <button onClick={scrollToForm} className="btn-pill" style={{ background: 'linear-gradient(135deg, #8B5CF6, #6D28D9)', color: '#fff', boxShadow: '0 8px 32px rgba(139,92,246,0.4)', padding: '14px 32px', fontSize: 15 }}>
-              {isFirstTime ? 'get started — it\'s free' : 'sign in'} <ArrowRight size={16} />
+              {isFirstTime ? 'get started — free' : 'sign in'} <ArrowRight size={16} />
             </button>
-            <button onClick={scrollToForm} className="btn-ghost btn-pill" style={{ padding: '14px 28px', fontSize: 15, borderColor: 'rgba(255,255,255,0.12)' }}>
-              see what it can do ↓
-            </button>
+
+            {installable && !installed && (
+              <button onClick={handleInstall} className="btn-pill" style={{ background: 'rgba(34,211,238,0.12)', border: '1px solid rgba(34,211,238,0.3)', color: '#22D3EE', padding: '14px 28px', fontSize: 15, gap: 8 }}>
+                <Download size={15} /> install app
+              </button>
+            )}
+
+            {installed && (
+              <div className="btn-pill" style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)', color: '#10B981', padding: '14px 24px', fontSize: 14, gap: 8, cursor: 'default' }}>
+                <CheckCircle size={15} /> app installed
+              </div>
+            )}
+
+            {!installable && !installed && (
+              <button onClick={scrollToForm} className="btn-ghost btn-pill" style={{ padding: '14px 28px', fontSize: 15, borderColor: 'rgba(255,255,255,0.12)' }}>
+                see what it can do ↓
+              </button>
+            )}
+          </div>
+
+          {/* Platform install hints */}
+          <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 70, marginTop: -56 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 14 }}>🤖</span>
+              <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(226,232,240,0.25)', letterSpacing: 1 }}>android — install from chrome</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 14 }}>🍎</span>
+              <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(226,232,240,0.25)', letterSpacing: 1 }}>ios — share → add to home screen</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 14 }}>💻</span>
+              <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(226,232,240,0.25)', letterSpacing: 1 }}>desktop — install from browser bar</span>
+            </div>
           </div>
 
           {/* Hero dashboard mockup */}

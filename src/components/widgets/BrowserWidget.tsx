@@ -1,14 +1,22 @@
 import { useState, useRef } from 'react';
 import { ArrowLeft, ArrowRight, RefreshCw, Globe, X } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
+import { GoogleLogo, YouTubeLogo, GoogleMapsLogo } from '../BrandLogos';
 
-const QUICK_LINKS = [
-  { label: 'Google', url: 'https://www.google.com/webhp?igu=1', emoji: '🔍' },
-  { label: 'Wikipedia', url: 'https://en.m.wikipedia.org', emoji: '📖' },
-  { label: 'YouTube', url: 'https://www.youtube.com', emoji: '▶️' },
-  { label: 'Maps', url: 'https://maps.google.com', emoji: '🗺️' },
-  { label: 'Translate', url: 'https://translate.google.com', emoji: '🌐' },
-  { label: 'Weather', url: 'https://weather.com', emoji: '🌤️' },
+type QuickLink = {
+  label: string;
+  url: string;
+  Logo?: React.FC<{ size: number }>;
+  emoji?: string;
+};
+
+const QUICK_LINKS: QuickLink[] = [
+  { label: 'Google',    url: 'https://www.google.com/webhp?igu=1', Logo: GoogleLogo },
+  { label: 'Wikipedia', url: 'https://en.m.wikipedia.org',         emoji: '📖' },
+  { label: 'YouTube',   url: 'https://www.youtube.com',            Logo: YouTubeLogo },
+  { label: 'Maps',      url: 'https://maps.google.com',            Logo: GoogleMapsLogo },
+  { label: 'Translate', url: 'https://translate.google.com',       emoji: '🌐' },
+  { label: 'Weather',   url: 'https://weather.com',                emoji: '🌤️' },
 ];
 
 export default function BrowserWidget() {
@@ -95,7 +103,10 @@ export default function BrowserWidget() {
                 className="flex flex-col items-center gap-1.5 p-2 rounded-xl transition-all glass-hover"
                 style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer' }}
               >
-                <span style={{ fontSize: 20 }}>{q.emoji}</span>
+                {q.Logo
+                  ? <q.Logo size={28} />
+                  : <span style={{ fontSize: 20 }}>{q.emoji}</span>
+                }
                 <span className="text-xs font-mono" style={{ color: 'rgba(226,232,240,0.5)' }}>{q.label}</span>
               </button>
             ))}

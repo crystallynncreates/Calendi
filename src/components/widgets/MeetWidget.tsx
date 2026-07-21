@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Video, ExternalLink } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
+import { GoogleMeetLogo, ZoomLogo } from '../BrandLogos';
 
 function openInPopup(url: string, name: string) {
   const w = Math.min(1280, window.screen.width - 100);
@@ -39,8 +40,8 @@ export default function MeetWidget() {
       <div className="flex-1 flex flex-col items-center justify-center gap-4">
         {tab === 'meet' ? (
           <>
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(52,168,83,0.12)', border: '1px solid rgba(52,168,83,0.3)' }}>
-              <span style={{ fontSize: 28 }}>📹</span>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(0,137,123,0.1)', border: '1px solid rgba(0,137,123,0.3)' }}>
+              <GoogleMeetLogo size={48} />
             </div>
             <div className="text-center">
               <p className="text-sm font-semibold" style={{ color: '#E2E8F0' }}>Google Meet</p>
@@ -51,7 +52,7 @@ export default function MeetWidget() {
             <div className="flex flex-col gap-2 w-full px-2">
               <button
                 className="btn-pill w-full"
-                style={{ background: 'rgba(52,168,83,0.15)', color: '#4ADE80', border: '1px solid rgba(52,168,83,0.3)' }}
+                style={{ background: 'rgba(0,137,123,0.15)', color: '#4DB6AC', border: '1px solid rgba(0,137,123,0.3)' }}
                 onClick={() => openInPopup('https://meet.google.com/new', 'meet')}
               >
                 <Video size={13} /> new meeting
@@ -66,8 +67,8 @@ export default function MeetWidget() {
           </>
         ) : (
           <>
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(45,140,255,0.12)', border: '1px solid rgba(45,140,255,0.3)' }}>
-              <span style={{ fontSize: 28 }}>💬</span>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(45,140,255,0.1)', border: '1px solid rgba(45,140,255,0.3)' }}>
+              <ZoomLogo size={48} />
             </div>
             <p className="text-sm font-semibold" style={{ color: '#E2E8F0' }}>Zoom</p>
             <div className="w-full px-2">

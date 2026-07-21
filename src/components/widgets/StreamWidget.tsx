@@ -1,16 +1,24 @@
 import { ExternalLink } from 'lucide-react';
-import { useStore, getSkinColors } from '../../store';
+import {
+  NetflixLogo, DisneyPlusLogo, PrimeLogo, FacebookLogo,
+  WhatsAppLogo, InstagramLogo,
+} from '../BrandLogos';
 
 const SERVICES = [
-  { id: 'netflix',   name: 'Netflix',   emoji: '🎬', url: 'https://netflix.com',         bg: 'rgba(229,9,20,0.1)',   border: 'rgba(229,9,20,0.3)',   textColor: '#FF4444' },
-  { id: 'disney',    name: 'Disney+',   emoji: '✨', url: 'https://disneyplus.com',      bg: 'rgba(17,60,207,0.1)',  border: 'rgba(17,60,207,0.3)',  textColor: '#4488FF' },
-  { id: 'prime',     name: 'Prime',     emoji: '📦', url: 'https://primevideo.com',      bg: 'rgba(0,168,225,0.1)', border: 'rgba(0,168,225,0.3)', textColor: '#00AAFF' },
-  { id: 'facebook',  name: 'Facebook',  emoji: '👥', url: 'https://facebook.com',        bg: 'rgba(24,119,242,0.1)', border: 'rgba(24,119,242,0.3)', textColor: '#4488EE' },
-  { id: 'messages',  name: 'Messages',  emoji: '💬', url: 'https://messages.google.com', bg: 'rgba(52,168,83,0.1)',  border: 'rgba(52,168,83,0.3)',  textColor: '#44AA66' },
-  { id: 'whatsapp',  name: 'WhatsApp',  emoji: '📱', url: 'https://web.whatsapp.com',    bg: 'rgba(37,211,102,0.1)', border: 'rgba(37,211,102,0.3)', textColor: '#25D366' },
-  { id: 'phone',     name: 'Phone',     emoji: '📞', url: 'tel:',                        bg: 'rgba(52,168,83,0.1)',  border: 'rgba(52,168,83,0.3)',  textColor: '#44AA66' },
-  { id: 'instagram', name: 'Instagram', emoji: '📸', url: 'https://instagram.com',       bg: 'rgba(193,53,132,0.1)', border: 'rgba(193,53,132,0.3)', textColor: '#E1306C' },
+  { id: 'netflix',   name: 'Netflix',   url: 'https://netflix.com',         Logo: NetflixLogo,   border: 'rgba(229,9,20,0.3)',    bg: 'rgba(229,9,20,0.08)'   },
+  { id: 'disney',    name: 'Disney+',   url: 'https://disneyplus.com',      Logo: DisneyPlusLogo,border: 'rgba(4,14,54,0.6)',     bg: 'rgba(4,14,54,0.25)'    },
+  { id: 'prime',     name: 'Prime',     url: 'https://primevideo.com',      Logo: PrimeLogo,     border: 'rgba(0,168,225,0.3)',   bg: 'rgba(0,168,225,0.08)'  },
+  { id: 'facebook',  name: 'Facebook',  url: 'https://facebook.com',        Logo: FacebookLogo,  border: 'rgba(24,119,242,0.3)', bg: 'rgba(24,119,242,0.08)' },
+  { id: 'messages',  name: 'Messages',  url: 'https://messages.google.com', Logo: null,          border: 'rgba(52,168,83,0.3)',  bg: 'rgba(52,168,83,0.08)'  },
+  { id: 'whatsapp',  name: 'WhatsApp',  url: 'https://web.whatsapp.com',    Logo: WhatsAppLogo,  border: 'rgba(37,211,102,0.3)', bg: 'rgba(37,211,102,0.08)' },
+  { id: 'phone',     name: 'Phone',     url: 'tel:',                        Logo: null,          border: 'rgba(52,168,83,0.3)',  bg: 'rgba(52,168,83,0.08)'  },
+  { id: 'instagram', name: 'Instagram', url: 'https://instagram.com',       Logo: InstagramLogo, border: 'rgba(193,53,132,0.3)', bg: 'rgba(193,53,132,0.08)' },
 ];
+
+const EMOJI_FALLBACK: Record<string, string> = {
+  messages: '💬',
+  phone:    '📞',
+};
 
 function openInPopup(url: string, name: string) {
   const w = Math.min(1280, window.screen.width - 100);
@@ -21,9 +29,6 @@ function openInPopup(url: string, name: string) {
 }
 
 export default function StreamWidget() {
-  const skin = useStore(s => s.skin);
-  getSkinColors(skin);
-
   return (
     <div className="widget-card h-full flex flex-col p-3">
       <div className="flex items-center justify-between mb-3 shrink-0">
@@ -40,9 +45,14 @@ export default function StreamWidget() {
             onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.04)')}
             onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
           >
-            <span style={{ fontSize: 22 }}>{s.emoji}</span>
-            <span style={{ color: s.textColor, fontSize: '0.65rem', fontWeight: 600 }}>{s.name}</span>
-            <ExternalLink size={8} style={{ color: 'rgba(226,232,240,0.2)' }} />
+            {s.Logo
+              ? <s.Logo size={34} />
+              : <span style={{ fontSize: 22 }}>{EMOJI_FALLBACK[s.id]}</span>
+            }
+            <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'rgba(226,232,240,0.6)', fontFamily: 'monospace', letterSpacing: 1 }}>
+              {s.name}
+            </span>
+            <ExternalLink size={8} style={{ color: 'rgba(226,232,240,0.15)' }} />
           </button>
         ))}
       </div>

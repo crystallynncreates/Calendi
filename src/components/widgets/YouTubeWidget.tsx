@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Play, Search, X, ExternalLink } from 'lucide-react';
+import { Search, X, ExternalLink } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
+import { YouTubeLogo } from '../BrandLogos';
 
 const DEFAULT_CHANNEL = 'clc4321';
 
@@ -25,9 +26,7 @@ export default function YouTubeWidget() {
   function load() {
     const id = extractVideoId(input.trim());
     if (id) { setVideoId(id); return; }
-    // If it looks like a search term, open YouTube search in the player
     if (input.trim()) {
-      const searchEmbed = `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(input.trim())}`;
       setVideoId('__search__' + input.trim());
     }
   }
@@ -40,10 +39,14 @@ export default function YouTubeWidget() {
 
   return (
     <div className="widget-card h-full flex flex-col" style={{ borderColor: `${color}25` }}>
+      {/* Header */}
       <div className="flex items-center justify-between px-3 pt-3 pb-2 shrink-0">
-        <span className="text-xs font-mono uppercase tracking-widest" style={{ color: 'rgba(226,232,240,0.3)' }}>
-          youtube
-        </span>
+        <div className="flex items-center gap-2">
+          <YouTubeLogo size={22} />
+          <span className="text-xs font-mono uppercase tracking-widest" style={{ color: 'rgba(226,232,240,0.3)' }}>
+            youtube
+          </span>
+        </div>
         {videoId && (
           <button onClick={() => { setVideoId(null); setInput(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.3)', padding: 2 }}>
             <X size={12} />
@@ -82,9 +85,7 @@ export default function YouTubeWidget() {
           />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-4" style={{ background: 'linear-gradient(135deg, #0d0d0d 0%, #1a0a0a 100%)' }}>
-            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,0,0,0.15)', border: '1px solid rgba(255,0,0,0.3)' }}>
-              <Play size={24} fill="#FF4444" style={{ color: '#FF4444' }} />
-            </div>
+            <YouTubeLogo size={52} />
             <p className="text-xs text-center leading-relaxed px-4" style={{ color: 'rgba(226,232,240,0.3)' }}>
               paste a YouTube URL above<br />or search for a video
             </p>

@@ -3,13 +3,13 @@ export type WidgetType =
   | 'calculator'
   | 'timer'
   | 'photo-frame'
-  | 'netflix'
-  | 'disney'
-  | 'prime'
+  | 'streaming'
+  | 'youtube'
+  | 'facebook'
   | 'meet'
-  | 'zoom'
-  | 'messaging'
-  | 'phone';
+  | 'browser'
+  | 'notes'
+  | 'netflix' | 'disney' | 'prime' | 'messaging' | 'phone' | 'zoom';
 
 export type LayoutId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
@@ -38,7 +38,18 @@ export interface CalEvent {
   allDay: boolean;
 }
 
-export type SkinId = 'violet' | 'cyan' | 'pink' | 'amber' | 'auto';
+export type SkinId =
+  | 'auto'
+  | 'violet' | 'cyan' | 'pink' | 'amber' | 'emerald' | 'fire' | 'ocean' | 'rose' | 'gold' | 'indigo'
+  | 'aurora' | 'sunset' | 'night-sky' | 'deep-ocean' | 'galaxy' | 'forest' | 'desert' | 'mountain';
+
+export interface SkinColors {
+  color: string;
+  glow: string;
+  dim: string;
+  isLandscape?: boolean;
+  scene?: string;
+}
 
 export interface Photo {
   id: string;

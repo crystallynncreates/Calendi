@@ -1,5 +1,5 @@
-import { useState, lazy, Suspense } from 'react';
-import { LayoutGrid, Palette, Plus, X, Clock, Calculator, Timer, Image, Tv, Video, Globe, FileText, Youtube, Lock, Users, BookOpen } from 'lucide-react';
+import { useState, lazy, Suspense, useEffect } from 'react';
+import { LayoutGrid, Palette, Plus, X, Clock, Calculator, Timer, Image, Tv, Video, Globe, FileText, Youtube, Lock, Users, BookOpen, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useStore, LAYOUTS, getSkinColors, ALL_COLOR_SKINS, ALL_LANDSCAPE_SKINS } from '../store';
 import { logout, getSession } from '../auth';
@@ -8,6 +8,8 @@ import ContactsModal from '../components/ContactsModal';
 import PlannerSheet from '../components/PlannerSheet';
 import LayoutPicker from '../components/LayoutPicker';
 import LandscapeScene from '../components/LandscapeScene';
+import AdBanner from '../components/AdBanner';
+import SubscribeModal from '../components/SubscribeModal';
 import type { WidgetType, SkinId } from '../types';
 
 const ClockWidget      = lazy(() => import('../components/widgets/ClockWidget'));
@@ -205,7 +207,7 @@ function AddWidgetSheet({ onSelect, onClose, color }: { onSelect: (t: WidgetType
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { layoutId, slots, setSlotWidget, skin } = useStore();
+  const { layoutId, slots, setSlotWidget, skin, isPremium, setIsPremium } = useStore();
   const skinColors = getSkinColors(skin);
   const { color, glow, dim, isLandscape, scene } = skinColors;
   const layout = LAYOUTS.find(l => l.id === layoutId)!;
@@ -215,7 +217,16 @@ export default function Dashboard() {
   const [showSkinPicker, setShowSkinPicker] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
   const [showPlanners, setShowPlanners] = useState(false);
+  const [showSubscribe, setShowSubscribe] = useState(false);
   const [addingToSlot, setAddingToSlot] = useState<string | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('sub') === 'success') {
+      setIsPremium(true);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
 
   const slotIds = Array.from({ length: layout.slots }, (_, i) => `s${i + 1}`);
 
@@ -249,6 +260,12 @@ export default function Dashboard() {
         </div>
 
         <div className="flex gap-1.5">
+          {!isPremium && (
+            <button className="btn-pill !px-2 !py-1.5 gap-1" onClick={() => setShowSubscribe(true)}
+              style={{ background: `linear-gradient(135deg,${color},${color}AA)`, color: '#fff', fontSize: '0.7rem', fontWeight: 700 }}>
+              <Sparkles size={11} /><span className="hidden sm:inline">Go Premium</span>
+            </button>
+          )}
           <button className="btn-ghost btn-pill !px-2 !py-1.5 gap-1" onClick={() => setShowContacts(true)} title="Contacts">
             <Users size={13} style={{ color }} /><span className="text-xs hidden sm:inline">contacts</span>
           </button>
@@ -299,10 +316,14 @@ export default function Dashboard() {
         })}
       </main>
 
+      {/* Ad banner — shown when not premium */}
+      {!isPremium && <AdBanner onSubscribe={() => setShowSubscribe(true)} />}
+
       {showLayoutPicker && <LayoutPicker onClose={() => setShowLayoutPicker(false)} />}
       {showSkinPicker && <SkinPicker onClose={() => setShowSkinPicker(false)} />}
       {showContacts && <ContactsModal onClose={() => setShowContacts(false)} />}
       {showPlanners && <PlannerSheet onClose={() => setShowPlanners(false)} />}
+      {showSubscribe && <SubscribeModal onClose={() => setShowSubscribe(false)} />}
       {addingToSlot && (
         <AddWidgetSheet color={color} glow={glow}
           onClose={() => setAddingToSlot(null)}

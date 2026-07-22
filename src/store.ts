@@ -38,6 +38,9 @@ interface Store {
 
   notificationsEnabled: boolean;
   setNotificationsEnabled: (v: boolean) => void;
+
+  isPremium: boolean;
+  setIsPremium: (v: boolean) => void;
 }
 
 export const useStore = create<Store>()(
@@ -77,6 +80,9 @@ export const useStore = create<Store>()(
 
       notificationsEnabled: false,
       setNotificationsEnabled: (v) => set({ notificationsEnabled: v }),
+
+      isPremium: false,
+      setIsPremium: (v) => set({ isPremium: v }),
     }),
     { name: 'calendi-v1' }
   )

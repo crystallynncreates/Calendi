@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 530" width="500" height="530">
+  <rect width="500" height="530" fill="#EDE8DC"/>
+
+  <!-- Outer circle border -->
+  <circle cx="250" cy="245" r="198" fill="none" stroke="#1C1A16" stroke-width="1.4"/>
+
+  <!-- Arc paths for circular text -->
+  <defs>
+    <path id="ta" d="M 55,245 A 195,195 0 0,1 445,245"/>
+    <path id="ba" d="M 445,245 A 195,195 0 0,1 55,245"/>
+    <radialGradient id="floralBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F9EFF5"/>
+      <stop offset="100%" stop-color="#F0E8EC"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Top arc: *CLC PREMIER STUDIOS* -->
+  <text font-family="'Times New Roman', Times, serif" font-size="21" letter-spacing="5.5" fill="#1C1A16">
+    <textPath href="#ta" startOffset="50%" text-anchor="middle">* C L C  P R E M I E R  S T U D I O S *</textPath>
+  </text>
+  <!-- Bottom arc inverted: *PREMIER CLC* -->
+  <text font-family="'Times New Roman', Times, serif" font-size="21" letter-spacing="5.5" fill="#1C1A16">
+    <textPath href="#ba" startOffset="50%" text-anchor="middle">* P R E M I E R  C L C *</textPath>
+  </text>
+
+  <!-- Inner floral background circle -->
+  <circle cx="250" cy="245" r="148" fill="url(#floralBg)"/>
+
+  <!-- Pink floral petals – simplified watercolor style -->
+  <g opacity="0.72">
+    <!-- Top cluster -->
+    <ellipse cx="250" cy="103" rx="22" ry="13" fill="#E8B0C5" transform="rotate(-5,250,103)"/>
+    <ellipse cx="228" cy="109" rx="17" ry="10" fill="#D4A0B8" transform="rotate(-28,228,109)"/>
+    <ellipse cx="273" cy="107" rx="18" ry="11" fill="#EDC4D2" transform="rotate(18,273,107)"/>
+    <ellipse cx="210" cy="124" rx="13" ry="8" fill="#C890A8" transform="rotate(-50,210,124)"/>
+    <ellipse cx="292" cy="121" rx="14" ry="9" fill="#DBA8BA" transform="rotate(38,292,121)"/>
+    <!-- Right cluster -->
+    <ellipse cx="386" cy="190" rx="19" ry="11" fill="#E8B0C5" transform="rotate(76,386,190)"/>
+    <ellipse cx="381" cy="218" rx="15" ry="9" fill="#D4A0B8" transform="rotate(93,381,218)"/>
+    <ellipse cx="376" cy="245" rx="13" ry="8" fill="#EDC4D2" transform="rotate(105,376,245)"/>
+    <!-- Bottom cluster -->
+    <ellipse cx="250" cy="386" rx="22" ry="13" fill="#E8B0C5" transform="rotate(175,250,386)"/>
+    <ellipse cx="228" cy="381" rx="17" ry="10" fill="#D4A0B8" transform="rotate(152,228,381)"/>
+    <ellipse cx="273" cy="382" rx="18" ry="11" fill="#EDC4D2" transform="rotate(197,273,382)"/>
+    <!-- Left cluster -->
+    <ellipse cx="114" cy="190" rx="19" ry="11" fill="#E8B0C5" transform="rotate(-76,114,190)"/>
+    <ellipse cx="119" cy="218" rx="15" ry="9" fill="#D4A0B8" transform="rotate(-93,119,218)"/>
+    <ellipse cx="124" cy="245" rx="13" ry="8" fill="#EDC4D2" transform="rotate(-105,124,245)"/>
+    <!-- Green leaf accents -->
+    <ellipse cx="193" cy="138" rx="13" ry="5" fill="#A8C090" transform="rotate(-52,193,138)" opacity="0.85"/>
+    <ellipse cx="310" cy="141" rx="12" ry="5" fill="#A8C090" transform="rotate(52,310,141)" opacity="0.85"/>
+    <ellipse cx="192" cy="352" rx="13" ry="5" fill="#A8C090" transform="rotate(-128,192,352)" opacity="0.85"/>
+    <ellipse cx="309" cy="351" rx="12" ry="5" fill="#A8C090" transform="rotate(128,309,351)" opacity="0.85"/>
+    <!-- Small flower centers -->
+    <circle cx="250" cy="103" r="4" fill="#C07090" opacity="0.8"/>
+    <circle cx="386" cy="190" r="3" fill="#C07090" opacity="0.7"/>
+    <circle cx="250" cy="386" r="4" fill="#C07090" opacity="0.8"/>
+    <circle cx="114" cy="190" r="3" fill="#C07090" opacity="0.7"/>
+  </g>
+
+  <!-- Gold geometric diamond lines -->
+  <g stroke="#C9A84C" stroke-width="1.6" fill="none" opacity="0.62">
+    <line x1="250" y1="152" x2="162" y2="245"/>
+    <line x1="250" y1="152" x2="338" y2="245"/>
+    <line x1="162" y1="245" x2="250" y2="336"/>
+    <line x1="338" y1="245" x2="250" y2="336"/>
+  </g>
+
+  <!-- Double horizontal gray lines (center dividers) -->
+  <line x1="57" y1="236" x2="185" y2="236" stroke="#909090" stroke-width="1"/>
+  <line x1="315" y1="236" x2="443" y2="236" stroke="#909090" stroke-width="1"/>
+  <line x1="57" y1="252" x2="185" y2="252" stroke="#909090" stroke-width="1"/>
+  <line x1="315" y1="252" x2="443" y2="252" stroke="#909090" stroke-width="1"/>
+
+  <!-- Large serif C letter (foreground) -->
+  <text x="134" y="330" font-family="Georgia, 'Times New Roman', serif" font-size="190" fill="#1C1A16" opacity="0.9">C</text>
+
+  <!-- Large serif L letter (slightly overlapping) -->
+  <text x="276" y="346" font-family="Georgia, 'Times New Roman', serif" font-size="205" fill="#1C1A16" opacity="0.84">L</text>
+
+  <!-- Crystal Lynn italic script -->
+  <text x="250" y="224" font-family="Georgia, 'Times New Roman', serif" font-size="33" font-style="italic" fill="#2A2626" text-anchor="middle" letter-spacing="1">Crystal Lynn</text>
+
+  <!-- CREATES mint/teal ribbon -->
+  <rect x="170" y="235" width="160" height="30" fill="#89CCC5" rx="2" opacity="0.96"/>
+  <text x="250" y="256" font-family="'Times New Roman', Arial, sans-serif" font-size="12.5" letter-spacing="5" fill="#FFFFFF" text-anchor="middle" font-weight="bold">CREATES</text>
+
+  <!-- Email at bottom -->
+  <text x="250" y="513" font-family="'Times New Roman', Arial, sans-serif" font-size="11.5" letter-spacing="3.8" fill="#1C1A16" text-anchor="middle">CRYSTALLYNNCREATES@GMAIL.COM</text>
+</svg>

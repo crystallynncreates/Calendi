@@ -6,7 +6,7 @@ declare global {
   interface Window { adsbygoogle: unknown[] }
 }
 
-const ADSENSE_CLIENT = import.meta.env.VITE_ADSENSE_CLIENT || 'ca-pub-PLACEHOLDER';
+const ADSENSE_CLIENT = import.meta.env.VITE_ADSENSE_CLIENT || 'ca-pub-6680059796774721';
 const ADSENSE_SLOT   = import.meta.env.VITE_ADSENSE_SLOT   || '0000000000';
 
 interface Props { onSubscribe: () => void }

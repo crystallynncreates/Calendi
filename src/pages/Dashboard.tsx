@@ -1,9 +1,11 @@
 import { useState, lazy, Suspense } from 'react';
-import { LayoutGrid, Palette, Plus, X, Clock, Calculator, Timer, Image, Tv, Video, Globe, FileText, Youtube, Lock } from 'lucide-react';
+import { LayoutGrid, Palette, Plus, X, Clock, Calculator, Timer, Image, Tv, Video, Globe, FileText, Youtube, Lock, Users, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useStore, LAYOUTS, getSkinColors, ALL_COLOR_SKINS, ALL_LANDSCAPE_SKINS } from '../store';
 import { logout, getSession } from '../auth';
 import CalendarWidget from '../components/CalendarWidget';
+import ContactsModal from '../components/ContactsModal';
+import PlannerSheet from '../components/PlannerSheet';
 import LayoutPicker from '../components/LayoutPicker';
 import LandscapeScene from '../components/LandscapeScene';
 import type { WidgetType, SkinId } from '../types';
@@ -69,14 +71,19 @@ function EmptySlot({ slotId, onAdd, color }: { slotId: string; onAdd: (id: strin
 }
 
 const LANDSCAPE_LABELS: Record<string, { label: string; preview: string }> = {
-  'aurora':     { label: 'aurora',      preview: 'linear-gradient(135deg, #030b14, #0d2a1e, #1a0a3e)' },
-  'sunset':     { label: 'sunset',      preview: 'linear-gradient(135deg, #1a0a2e, #8b1a4a, #e8752e)' },
-  'night-sky':  { label: 'night sky',   preview: 'linear-gradient(135deg, #01020a, #02050f, #030a18)' },
-  'deep-ocean': { label: 'deep ocean',  preview: 'linear-gradient(135deg, #000d1a, #002040, #003060)' },
-  'galaxy':     { label: 'galaxy',      preview: 'linear-gradient(135deg, #050010, #0a0020, #180030)' },
-  'forest':     { label: 'forest',      preview: 'linear-gradient(135deg, #050e08, #0a2010, #0c2812)' },
-  'desert':     { label: 'desert',      preview: 'linear-gradient(135deg, #3d2810, #c07830, #f0c870)' },
-  'mountain':   { label: 'mountain',    preview: 'linear-gradient(135deg, #060810, #121e35, #1a2c4a)' },
+  'aurora':          { label: 'aurora',          preview: 'linear-gradient(135deg, #030b14, #0d2a1e, #1a0a3e)' },
+  'sunset':          { label: 'sunset',          preview: 'linear-gradient(135deg, #1a0a2e, #8b1a4a, #e8752e)' },
+  'night-sky':       { label: 'night sky',       preview: 'linear-gradient(135deg, #01020a, #02050f, #030a18)' },
+  'deep-ocean':      { label: 'deep ocean',      preview: 'linear-gradient(135deg, #000d1a, #002040, #003060)' },
+  'galaxy':          { label: 'galaxy',          preview: 'linear-gradient(135deg, #050010, #0a0020, #180030)' },
+  'forest':          { label: 'forest',          preview: 'linear-gradient(135deg, #050e08, #0a2010, #0c2812)' },
+  'desert':          { label: 'desert',          preview: 'linear-gradient(135deg, #3d2810, #c07830, #f0c870)' },
+  'mountain':        { label: 'mountain',        preview: 'linear-gradient(135deg, #060810, #121e35, #1a2c4a)' },
+  'cherry-blossom':  { label: 'cherry blossom',  preview: 'linear-gradient(135deg, #2d0a1a, #6b1a3a, #f9a8d4)' },
+  'winter-snow':     { label: 'winter snow',     preview: 'linear-gradient(135deg, #0a1628, #1a2a4a, #bae6fd)' },
+  'tropical-beach':  { label: 'tropical beach',  preview: 'linear-gradient(135deg, #006994, #00b4d8, #34d399)' },
+  'rainy-night':     { label: 'rainy night',     preview: 'linear-gradient(135deg, #050a14, #0d1a2e, #60a5fa)' },
+  'fireflies':       { label: 'fireflies',       preview: 'linear-gradient(135deg, #050e08, #0a1a0c, #a3e635)' },
 };
 
 const COLOR_SWATCH: Record<string, string> = {
@@ -206,6 +213,8 @@ export default function Dashboard() {
 
   const [showLayoutPicker, setShowLayoutPicker] = useState(false);
   const [showSkinPicker, setShowSkinPicker] = useState(false);
+  const [showContacts, setShowContacts] = useState(false);
+  const [showPlanners, setShowPlanners] = useState(false);
   const [addingToSlot, setAddingToSlot] = useState<string | null>(null);
 
   const slotIds = Array.from({ length: layout.slots }, (_, i) => `s${i + 1}`);
@@ -240,6 +249,12 @@ export default function Dashboard() {
         </div>
 
         <div className="flex gap-1.5">
+          <button className="btn-ghost btn-pill !px-2 !py-1.5 gap-1" onClick={() => setShowContacts(true)} title="Contacts">
+            <Users size={13} style={{ color }} /><span className="text-xs hidden sm:inline">contacts</span>
+          </button>
+          <button className="btn-ghost btn-pill !px-2 !py-1.5 gap-1" onClick={() => setShowPlanners(true)} title="Planners">
+            <BookOpen size={13} style={{ color }} /><span className="text-xs hidden sm:inline">planners</span>
+          </button>
           <button className="btn-ghost btn-pill !px-2 !py-1.5 gap-1.5" onClick={() => setShowSkinPicker(true)}>
             <Palette size={13} style={{ color }} /><span className="text-xs hidden sm:inline">skin</span>
           </button>
@@ -286,6 +301,8 @@ export default function Dashboard() {
 
       {showLayoutPicker && <LayoutPicker onClose={() => setShowLayoutPicker(false)} />}
       {showSkinPicker && <SkinPicker onClose={() => setShowSkinPicker(false)} />}
+      {showContacts && <ContactsModal onClose={() => setShowContacts(false)} />}
+      {showPlanners && <PlannerSheet onClose={() => setShowPlanners(false)} />}
       {addingToSlot && (
         <AddWidgetSheet color={color} glow={glow}
           onClose={() => setAddingToSlot(null)}

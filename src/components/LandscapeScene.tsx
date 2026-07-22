@@ -3,14 +3,19 @@ interface Props { scene: string }
 export default function LandscapeScene({ scene }: Props) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-      {scene === 'aurora' && <AuroraScene />}
-      {scene === 'sunset' && <SunsetScene />}
-      {scene === 'night-sky' && <NightSkyScene />}
-      {scene === 'deep-ocean' && <DeepOceanScene />}
-      {scene === 'galaxy' && <GalaxyScene />}
-      {scene === 'forest' && <ForestScene />}
-      {scene === 'desert' && <DesertScene />}
-      {scene === 'mountain' && <MountainScene />}
+      {scene === 'aurora'         && <AuroraScene />}
+      {scene === 'sunset'         && <SunsetScene />}
+      {scene === 'night-sky'      && <NightSkyScene />}
+      {scene === 'deep-ocean'     && <DeepOceanScene />}
+      {scene === 'galaxy'         && <GalaxyScene />}
+      {scene === 'forest'         && <ForestScene />}
+      {scene === 'desert'         && <DesertScene />}
+      {scene === 'mountain'       && <MountainScene />}
+      {scene === 'cherry-blossom' && <CherryBlossomScene />}
+      {scene === 'winter-snow'    && <WinterSnowScene />}
+      {scene === 'tropical-beach' && <TropicalBeachScene />}
+      {scene === 'rainy-night'    && <RainyNightScene />}
+      {scene === 'fireflies'      && <FirefliesScene />}
     </div>
   );
 }
@@ -171,6 +176,134 @@ function MountainScene() {
         <path d="M0,300 L0,200 L120,80 L240,160 L360,60 L480,150 L600,40 L720,130 L840,50 L960,140 L1080,55 L1200,145 L1320,65 L1440,120 L1440,300 Z" fill="rgba(20,28,45,0.9)" />
         <path d="M0,300 L0,230 L100,160 L220,210 L360,150 L500,200 L640,140 L780,195 L900,155 L1040,200 L1160,160 L1300,205 L1440,170 L1440,300 Z" fill="rgba(12,18,30,0.95)" />
         <path d="M0,300 L0,260 L180,220 L360,250 L540,215 L720,245 L900,210 L1080,240 L1260,215 L1440,235 L1440,300 Z" fill="rgba(8,12,20,0.98)" />
+      </svg>
+    </div>
+  );
+}
+
+function CherryBlossomScene() {
+  const petals = Array.from({ length: 40 }, (_, i) => ({
+    left: (i * 37 + 11) % 100,
+    delay: (i * 0.4) % 8,
+    dur: 4 + (i % 4) * 1.5,
+    size: 6 + (i % 4) * 3,
+  }));
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #1a0a2e 0%, #3d1a4a 25%, #7a3060 50%, #c05080 70%, #f09090 85%, #f8c0b0 100%)' }}>
+      <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 200, height: 120, borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(255,200,200,0.2) 0%, transparent 70%)', filter: 'blur(30px)' }} />
+      {petals.map((p, i) => (
+        <div key={i} style={{
+          position: 'absolute', top: '-20px', left: `${p.left}%`,
+          width: p.size, height: p.size * 0.7,
+          borderRadius: '50% 0 50% 0',
+          background: `rgba(${240 + (i % 3) * 5}, ${160 + (i % 5) * 10}, ${175 + (i % 4) * 8}, 0.75)`,
+          animation: `petal-fall ${p.dur}s ease-in ${p.delay}s infinite`,
+          transform: `rotate(${-30 + (i % 5) * 15}deg)`,
+        }} />
+      ))}
+      <svg viewBox="0 0 1440 220" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, width: '100%', height: '28%' }}>
+        <path d="M0,220 L0,150 Q80,80 160,140 Q200,160 240,100 Q290,30 340,100 Q380,150 420,80 Q470,10 540,90 Q600,150 660,80 Q720,20 780,90 Q840,150 900,80 Q960,10 1020,90 Q1080,150 1140,80 Q1200,20 1260,90 Q1330,160 1440,100 L1440,220 Z" fill="rgba(20,8,30,0.95)" />
+      </svg>
+    </div>
+  );
+}
+
+function WinterSnowScene() {
+  const flakes = Array.from({ length: 55 }, (_, i) => ({
+    left: (i * 43 + 7) % 100,
+    delay: (i * 0.25) % 7,
+    dur: 5 + (i % 5) * 1.2,
+    size: 2 + (i % 4),
+    opacity: 0.4 + (i % 3) * 0.2,
+  }));
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #050818 0%, #0a1030 30%, #101840 60%, #182050 80%, #202860 100%)' }}>
+      <div style={{ position: 'absolute', top: '10%', left: '60%', width: 55, height: 55, borderRadius: '50%', background: 'radial-gradient(circle, rgba(230,240,255,0.95) 0%, rgba(200,220,255,0.6) 50%, transparent 75%)', boxShadow: '0 0 40px rgba(200,220,255,0.4)' }} />
+      {flakes.map((f, i) => (
+        <div key={i} style={{
+          position: 'absolute', top: '-10px', left: `${f.left}%`,
+          width: f.size, height: f.size, borderRadius: '50%',
+          background: 'white', opacity: f.opacity,
+          animation: `snow-fall ${f.dur}s linear ${f.delay}s infinite`,
+        }} />
+      ))}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '22%', background: 'linear-gradient(to top, rgba(180,210,255,0.12) 0%, transparent 100%)', filter: 'blur(10px)' }} />
+    </div>
+  );
+}
+
+function TropicalBeachScene() {
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #0a1828 0%, #0d2040 20%, #103060 40%, #1848a0 60%, #2870c8 75%, #3898e0 85%, #50c0f0 100%)' }}>
+      <div style={{ position: 'absolute', top: '12%', left: '65%', width: 80, height: 80, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,250,200,0.98) 0%, rgba(255,220,80,0.7) 50%, transparent 75%)', boxShadow: '0 0 60px rgba(255,220,80,0.5), 0 0 120px rgba(255,200,50,0.2)' }} />
+      <div style={{ position: 'absolute', bottom: '38%', left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, rgba(255,240,180,0.3), rgba(255,255,200,0.5), rgba(255,240,180,0.3), transparent)', animation: 'shimmer 4s ease-in-out infinite' }} />
+      <svg viewBox="0 0 1440 160" preserveAspectRatio="none" style={{ position: 'absolute', bottom: '28%', left: 0, right: 0, width: '100%', height: '15%', animation: 'aurora-shift 6s ease-in-out infinite' }}>
+        <path d="M0,80 C180,40 360,120 540,60 C720,0 900,100 1080,50 C1260,0 1380,80 1440,60 L1440,160 L0,160 Z" fill="rgba(32,120,200,0.5)" />
+      </svg>
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" style={{ position: 'absolute', bottom: '22%', left: 0, right: 0, width: '100%', height: '12%', animation: 'aurora-shift 8s ease-in-out 1s infinite reverse' }}>
+        <path d="M0,60 C200,20 400,80 600,40 C800,0 1000,70 1200,35 C1350,10 1420,55 1440,45 L1440,120 L0,120 Z" fill="rgba(40,140,220,0.45)" />
+      </svg>
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '25%', background: 'linear-gradient(to top, #c8a060 0%, #d4b070 40%, rgba(180,145,80,0.6) 70%, transparent 100%)' }} />
+    </div>
+  );
+}
+
+function RainyNightScene() {
+  const drops = Array.from({ length: 50 }, (_, i) => ({
+    left: (i * 53 + 7) % 100,
+    delay: (i * 0.18) % 2,
+    dur: 0.5 + (i % 4) * 0.15,
+    height: 10 + (i % 5) * 5,
+    opacity: 0.15 + (i % 4) * 0.08,
+  }));
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #020408 0%, #050a10 30%, #080f18 60%, #0a1220 100%)' }}>
+      {[0, 1, 2, 3, 4].map(i => (
+        <div key={i} style={{ position: 'absolute', bottom: `${20 + (i % 2) * 8}%`, left: `${5 + i * 20}%`, width: `${8 + (i % 3) * 6}%`, height: '20%', background: `radial-gradient(ellipse, rgba(${i % 2 === 0 ? '255,180,60' : '100,160,255'},0.08) 0%, transparent 70%)`, filter: 'blur(20px)' }} />
+      ))}
+      {drops.map((d, i) => (
+        <div key={i} style={{
+          position: 'absolute', top: '-20px', left: `${d.left}%`,
+          width: 1, height: d.height,
+          background: `rgba(160,200,240,${d.opacity})`,
+          animation: `rain-fall ${d.dur}s linear ${d.delay}s infinite`,
+          transform: 'rotate(15deg)',
+        }} />
+      ))}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '20%', background: 'linear-gradient(to top, rgba(30,50,80,0.6) 0%, transparent 100%)' }} />
+      <svg viewBox="0 0 1440 300" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, width: '100%', height: '55%' }}>
+        <path d="M0,300 L0,160 L60,160 L60,100 L100,100 L100,80 L120,80 L120,100 L160,100 L160,160 L200,160 L200,120 L240,120 L240,90 L260,90 L260,120 L300,120 L300,160 L360,160 L360,130 L400,130 L400,70 L430,70 L430,130 L470,130 L470,160 L530,160 L530,110 L570,110 L570,160 L630,160 L630,90 L660,90 L660,60 L690,60 L690,90 L730,90 L730,160 L790,160 L790,120 L820,120 L820,80 L850,80 L850,120 L890,120 L890,160 L950,160 L950,80 L980,80 L980,50 L1010,50 L1010,80 L1050,80 L1050,160 L1110,160 L1110,110 L1150,110 L1150,160 L1210,160 L1210,90 L1250,90 L1250,160 L1310,160 L1310,120 L1350,120 L1350,70 L1380,70 L1380,120 L1440,120 L1440,300 Z" fill="rgba(8,12,18,0.97)" />
+      </svg>
+    </div>
+  );
+}
+
+function FirefliesScene() {
+  const flies = Array.from({ length: 30 }, (_, i) => ({
+    x: (i * 67 + 13) % 90,
+    y: (i * 43 + 11) % 70,
+    delay: (i * 0.5) % 6,
+    dur: 2 + (i % 4),
+    size: 3 + (i % 3) * 2,
+  }));
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #010805 0%, #020d08 30%, #041510 60%, #061a12 100%)' }}>
+      {Array.from({ length: 40 }, (_, i) => (
+        <div key={i} style={{ position: 'absolute', left: `${(i * 71 + 9) % 100}%`, top: `${(i * 37 + 5) % 45}%`, width: 1, height: 1, borderRadius: '50%', background: '#fff', opacity: 0.25 + (i % 4) * 0.12, animation: `twinkle ${2 + (i % 3)}s ease-in-out ${(i * 0.3) % 3}s infinite` }} />
+      ))}
+      {flies.map((f, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          left: `${f.x}%`, top: `${f.y + 20}%`,
+          width: f.size, height: f.size,
+          borderRadius: '50%',
+          background: 'rgba(200,255,100,0.9)',
+          boxShadow: `0 0 ${f.size * 3}px rgba(180,255,80,0.7), 0 0 ${f.size * 6}px rgba(160,240,60,0.3)`,
+          animation: `firefly-glow ${f.dur}s ease-in-out ${f.delay}s infinite`,
+        }} />
+      ))}
+      <svg viewBox="0 0 1440 250" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, width: '100%', height: '35%' }}>
+        <path d="M0,250 L0,60 L40,100 L60,40 L80,80 L100,20 L120,60 L150,5 L180,50 L210,0 L240,45 L270,10 L300,55 L340,5 L380,50 L420,0 L460,45 L500,10 L540,55 L580,5 L620,48 L660,8 L700,52 L740,5 L780,48 L820,10 L860,55 L900,5 L940,48 L980,8 L1020,52 L1060,5 L1100,48 L1140,10 L1180,55 L1220,8 L1260,50 L1300,12 L1340,55 L1380,15 L1440,50 L1440,250 Z" fill="rgba(4,14,6,0.97)" />
       </svg>
     </div>
   );

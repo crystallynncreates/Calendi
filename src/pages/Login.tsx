@@ -361,13 +361,13 @@ export default function Login() {
   }
 
   return (
-    <div style={{ background: '#06060F', color: '#E2E8F0', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ background: '#EDE8DC', color: '#1C1A16', minHeight: '100vh', overflowX: 'hidden' }}>
 
       {/* ── Ambient background ── */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-        <div className="orb-drift" style={{ position: 'absolute', top: '-15%', left: '-10%', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 65%)', filter: 'blur(80px)' }} />
-        <div className="orb-drift-2" style={{ position: 'absolute', top: '30%', right: '-15%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(34,211,238,0.07) 0%, transparent 65%)', filter: 'blur(80px)' }} />
-        <div className="orb-drift-3" style={{ position: 'absolute', bottom: '-10%', left: '20%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(236,72,153,0.06) 0%, transparent 65%)', filter: 'blur(80px)' }} />
+        <div className="orb-drift" style={{ position: 'absolute', top: '-15%', left: '-10%', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 65%)', filter: 'blur(100px)' }} />
+        <div className="orb-drift-2" style={{ position: 'absolute', top: '30%', right: '-15%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(34,211,238,0.05) 0%, transparent 65%)', filter: 'blur(100px)' }} />
+        <div className="orb-drift-3" style={{ position: 'absolute', bottom: '-10%', left: '20%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(236,72,153,0.05) 0%, transparent 65%)', filter: 'blur(100px)' }} />
       </div>
 
       <div style={{ position: 'relative', zIndex: 1 }}>
@@ -375,40 +375,40 @@ export default function Login() {
         {/* ── HERO ── */}
         <section style={{ maxWidth: 900, margin: '0 auto', padding: '80px 24px 60px', textAlign: 'center' }}>
           {/* Badge */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 16px', borderRadius: 9999, background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.25)', marginBottom: 28 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 16px', borderRadius: 9999, background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)', marginBottom: 28 }}>
             <Sparkles size={12} style={{ color: '#8B5CF6' }} />
-            <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(196,181,253,0.8)', letterSpacing: 2, textTransform: 'uppercase' }}>your personal dashboard</span>
+            <span style={{ fontSize: 11, fontFamily: 'monospace', color: '#6D28D9', letterSpacing: 2, textTransform: 'uppercase' }}>your personal dashboard</span>
           </div>
 
           {/* Wordmark */}
-          <h1 style={{ fontSize: 'clamp(3.5rem, 10vw, 7rem)', fontWeight: 900, fontFamily: 'monospace', lineHeight: 0.95, letterSpacing: '-0.04em', marginBottom: 24, background: 'linear-gradient(135deg, #8B5CF6 0%, #C4B5FD 40%, #22D3EE 70%, #67E8F9 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <h1 style={{ fontSize: 'clamp(3.5rem, 10vw, 7rem)', fontWeight: 900, fontFamily: 'monospace', lineHeight: 0.95, letterSpacing: '-0.04em', marginBottom: 24, background: 'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 40%, #0891B2 70%, #06B6D4 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             calendi
           </h1>
 
-          <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.3rem)', color: 'rgba(226,232,240,0.55)', maxWidth: 540, margin: '0 auto 40px', lineHeight: 1.6, fontWeight: 400 }}>
+          <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.3rem)', color: 'rgba(28,26,22,0.55)', maxWidth: 540, margin: '0 auto 40px', lineHeight: 1.6, fontWeight: 400 }}>
             Everything you need — streaming, notes, meetings, browsing — in one beautiful, private dashboard that belongs only to you.
           </p>
 
           {/* CTAs */}
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 70 }}>
-            <button onClick={scrollToForm} className="btn-pill" style={{ background: 'linear-gradient(135deg, #8B5CF6, #6D28D9)', color: '#fff', boxShadow: '0 8px 32px rgba(139,92,246,0.4)', padding: '14px 32px', fontSize: 15 }}>
+            <button onClick={scrollToForm} className="btn-pill" style={{ background: 'linear-gradient(135deg, #8B5CF6, #6D28D9)', color: '#fff', boxShadow: '0 8px 32px rgba(139,92,246,0.3)', padding: '14px 32px', fontSize: 15 }}>
               {isFirstTime ? 'get started — free' : 'sign in'} <ArrowRight size={16} />
             </button>
 
             {installable && !installed && (
-              <button onClick={handleInstall} className="btn-pill" style={{ background: 'rgba(34,211,238,0.12)', border: '1px solid rgba(34,211,238,0.3)', color: '#22D3EE', padding: '14px 28px', fontSize: 15, gap: 8 }}>
+              <button onClick={handleInstall} className="btn-pill" style={{ background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.3)', color: '#0891B2', padding: '14px 28px', fontSize: 15, gap: 8 }}>
                 <Download size={15} /> install app
               </button>
             )}
 
             {installed && (
-              <div className="btn-pill" style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)', color: '#10B981', padding: '14px 24px', fontSize: 14, gap: 8, cursor: 'default' }}>
+              <div className="btn-pill" style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)', color: '#059669', padding: '14px 24px', fontSize: 14, gap: 8, cursor: 'default' }}>
                 <CheckCircle size={15} /> app installed
               </div>
             )}
 
             {!installable && !installed && (
-              <button onClick={scrollToForm} className="btn-ghost btn-pill" style={{ padding: '14px 28px', fontSize: 15, borderColor: 'rgba(255,255,255,0.12)' }}>
+              <button onClick={scrollToForm} className="btn-pill" style={{ padding: '14px 28px', fontSize: 15, background: 'rgba(28,26,22,0.07)', border: '1px solid rgba(28,26,22,0.15)', color: 'rgba(28,26,22,0.6)' }}>
                 see what it can do ↓
               </button>
             )}
@@ -418,15 +418,15 @@ export default function Login() {
           <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 70, marginTop: -56 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ fontSize: 14 }}>🤖</span>
-              <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(226,232,240,0.25)', letterSpacing: 1 }}>android — install from chrome</span>
+              <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(28,26,22,0.3)', letterSpacing: 1 }}>android — install from chrome</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ fontSize: 14 }}>🍎</span>
-              <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(226,232,240,0.25)', letterSpacing: 1 }}>ios — share → add to home screen</span>
+              <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(28,26,22,0.3)', letterSpacing: 1 }}>ios — share → add to home screen</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ fontSize: 14 }}>💻</span>
-              <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(226,232,240,0.25)', letterSpacing: 1 }}>desktop — install from browser bar</span>
+              <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(28,26,22,0.3)', letterSpacing: 1 }}>desktop — install from browser bar</span>
             </div>
           </div>
 
@@ -439,10 +439,10 @@ export default function Login() {
         {/* ── FEATURES ── */}
         <section style={{ maxWidth: 860, margin: '0 auto', padding: '60px 24px' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <p style={{ fontSize: 11, fontFamily: 'monospace', letterSpacing: 4, textTransform: 'uppercase', color: 'rgba(139,92,246,0.7)', marginBottom: 12 }}>everything in one place</p>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.03em', color: '#E2E8F0' }}>
+            <p style={{ fontSize: 11, fontFamily: 'monospace', letterSpacing: 4, textTransform: 'uppercase', color: '#7C3AED', marginBottom: 12 }}>everything in one place</p>
+            <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.03em', color: '#1C1A16' }}>
               every widget you need.<br />
-              <span style={{ background: 'linear-gradient(135deg, #8B5CF6, #22D3EE)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>nothing you don't.</span>
+              <span style={{ background: 'linear-gradient(135deg, #7C3AED, #0891B2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>nothing you don't.</span>
             </h2>
           </div>
 
@@ -453,16 +453,15 @@ export default function Login() {
                 gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
                 gap: 28,
                 alignItems: 'center',
-                flexDirection: i % 2 === 0 ? 'row' : 'row-reverse',
               }}>
                 <div style={{ order: i % 2 === 0 ? 0 : 1 }}>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 12px', borderRadius: 9999, background: `${f.color}15`, border: `1px solid ${f.color}30`, marginBottom: 14 }}>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 12px', borderRadius: 9999, background: `${f.color}12`, border: `1px solid ${f.color}28`, marginBottom: 14 }}>
                     <span style={{ color: f.color }}>{f.icon}</span>
                     <span style={{ fontSize: 10, fontFamily: 'monospace', color: f.color, letterSpacing: 2, textTransform: 'uppercase' }}>{f.title}</span>
                   </div>
-                  <p style={{ fontSize: 15, color: 'rgba(226,232,240,0.55)', lineHeight: 1.7, margin: 0 }}>{f.desc}</p>
+                  <p style={{ fontSize: 15, color: 'rgba(28,26,22,0.55)', lineHeight: 1.7, margin: 0 }}>{f.desc}</p>
                 </div>
-                <div style={{ order: i % 2 === 0 ? 1 : 0 }}>
+                <div style={{ order: i % 2 === 0 ? 1 : 0, background: 'rgba(255,255,255,0.5)', borderRadius: 20, padding: 14, border: '1px solid rgba(28,26,22,0.08)' }}>
                   {f.mockup}
                 </div>
               </div>
@@ -471,25 +470,25 @@ export default function Login() {
         </section>
 
         {/* ── SIGN IN / CREATE ACCOUNT ── */}
-        <section ref={formRef} style={{ maxWidth: 420, margin: '0 auto', padding: '60px 24px 100px' }}>
+        <section ref={formRef} style={{ maxWidth: 420, margin: '0 auto', padding: '60px 24px 20px' }}>
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
-            <div style={{ width: 64, height: 64, borderRadius: 20, margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.25)', boxShadow: '0 0 40px rgba(139,92,246,0.2)' }}>
+            <div style={{ width: 64, height: 64, borderRadius: 20, margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.22)', boxShadow: '0 0 40px rgba(139,92,246,0.12)' }}>
               <Lock size={26} style={{ color: '#8B5CF6' }} />
             </div>
-            <h2 style={{ fontSize: 28, fontWeight: 800, fontFamily: 'monospace', background: 'linear-gradient(135deg, #8B5CF6, #22D3EE)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: 6 }}>
+            <h2 style={{ fontSize: 28, fontWeight: 800, fontFamily: 'monospace', background: 'linear-gradient(135deg, #7C3AED, #0891B2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: 6 }}>
               {isFirstTime ? 'create your space' : 'welcome back'}
             </h2>
-            <p style={{ fontSize: 13, color: 'rgba(226,232,240,0.3)' }}>
+            <p style={{ fontSize: 13, color: 'rgba(28,26,22,0.4)' }}>
               {isFirstTime ? 'your data stays on this device — private, always' : 'your dashboard is waiting'}
             </p>
           </div>
 
           {!isFirstTime && (
-            <div style={{ display: 'flex', gap: 4, marginBottom: 20, padding: 3, borderRadius: 14, background: 'rgba(255,255,255,0.03)' }}>
+            <div style={{ display: 'flex', gap: 4, marginBottom: 20, padding: 3, borderRadius: 14, background: 'rgba(28,26,22,0.06)' }}>
               {(['sign-in', 'create'] as Mode[]).map(m => (
                 <button key={m} onClick={() => { setMode(m); setError(''); }} className="btn-pill" style={{
-                  flex: 1, background: mode === m ? '#8B5CF6' : 'transparent', color: mode === m ? '#fff' : 'rgba(226,232,240,0.35)',
-                  boxShadow: mode === m ? '0 2px 12px rgba(139,92,246,0.45)' : 'none', fontSize: 12, border: 'none', padding: '9px 0',
+                  flex: 1, background: mode === m ? '#8B5CF6' : 'transparent', color: mode === m ? '#fff' : 'rgba(28,26,22,0.4)',
+                  boxShadow: mode === m ? '0 2px 12px rgba(139,92,246,0.35)' : 'none', fontSize: 12, border: 'none', padding: '9px 0',
                 }}>
                   {m === 'sign-in' ? 'sign in' : 'create account'}
                 </button>
@@ -497,40 +496,49 @@ export default function Login() {
             </div>
           )}
 
-          <form onSubmit={submit} className="glass anim-scale-in" style={{ borderRadius: 24, padding: 28 }}>
+          <form onSubmit={submit} className="anim-scale-in" style={{ borderRadius: 24, padding: 28, background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(20px)', border: '1px solid rgba(28,26,22,0.1)', boxShadow: '0 8px 40px rgba(28,26,22,0.08)' }}>
             <div style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', fontSize: 11, fontFamily: 'monospace', color: 'rgba(226,232,240,0.4)', marginBottom: 6, letterSpacing: 1 }}>username</label>
-              <input className="input-dark" placeholder="your username" value={username} onChange={e => { setUsername(e.target.value); setError(''); }} autoCapitalize="none" autoComplete={mode === 'create' ? 'new-password' : 'username'} />
+              <label style={{ display: 'block', fontSize: 11, fontFamily: 'monospace', color: 'rgba(28,26,22,0.45)', marginBottom: 6, letterSpacing: 1 }}>username</label>
+              <input style={{ background: 'rgba(28,26,22,0.05)', border: '1px solid rgba(28,26,22,0.15)', borderRadius: '0.75rem', padding: '0.625rem 0.875rem', color: '#1C1A16', fontSize: '0.875rem', outline: 'none', width: '100%', transition: 'border-color 0.2s ease' }}
+                placeholder="your username" value={username} onChange={e => { setUsername(e.target.value); setError(''); }} autoCapitalize="none" autoComplete={mode === 'create' ? 'new-password' : 'username'} />
             </div>
 
             <div style={{ marginBottom: 24 }}>
-              <label style={{ display: 'block', fontSize: 11, fontFamily: 'monospace', color: 'rgba(226,232,240,0.4)', marginBottom: 6, letterSpacing: 1 }}>password</label>
+              <label style={{ display: 'block', fontSize: 11, fontFamily: 'monospace', color: 'rgba(28,26,22,0.45)', marginBottom: 6, letterSpacing: 1 }}>password</label>
               <div style={{ position: 'relative' }}>
-                <input className="input-dark" style={{ paddingRight: 40 }} type={showPw ? 'text' : 'password'} placeholder={mode === 'create' ? 'min 4 characters' : 'your password'} value={password} onChange={e => { setPassword(e.target.value); setError(''); }} autoComplete={mode === 'create' ? 'new-password' : 'current-password'} />
-                <button type="button" onClick={() => setShowPw(!showPw)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.3)', padding: 2 }}>
+                <input style={{ background: 'rgba(28,26,22,0.05)', border: '1px solid rgba(28,26,22,0.15)', borderRadius: '0.75rem', padding: '0.625rem 0.875rem', paddingRight: 40, color: '#1C1A16', fontSize: '0.875rem', outline: 'none', width: '100%', transition: 'border-color 0.2s ease' }}
+                  type={showPw ? 'text' : 'password'} placeholder={mode === 'create' ? 'min 4 characters' : 'your password'}
+                  value={password} onChange={e => { setPassword(e.target.value); setError(''); }}
+                  autoComplete={mode === 'create' ? 'new-password' : 'current-password'} />
+                <button type="button" onClick={() => setShowPw(!showPw)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(28,26,22,0.3)', padding: 2 }}>
                   {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
             </div>
 
             {error && (
-              <div style={{ marginBottom: 16, padding: '8px 12px', borderRadius: 12, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#EF4444', fontSize: 12 }}>
+              <div style={{ marginBottom: 16, padding: '8px 12px', borderRadius: 12, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#DC2626', fontSize: 12 }}>
                 {error}
               </div>
             )}
 
             <button type="submit" disabled={loading || !username || !password} className="btn-pill" style={{
-              width: '100%', justifyContent: 'center', background: loading || !username || !password ? 'rgba(139,92,246,0.3)' : 'linear-gradient(135deg, #8B5CF6, #6D28D9)', color: '#fff',
-              boxShadow: '0 6px 24px rgba(139,92,246,0.4)', opacity: loading || !username || !password ? 0.6 : 1, fontSize: 14, padding: '13px 0',
+              width: '100%', justifyContent: 'center', background: loading || !username || !password ? 'rgba(139,92,246,0.35)' : 'linear-gradient(135deg, #8B5CF6, #6D28D9)', color: '#fff',
+              boxShadow: '0 6px 24px rgba(139,92,246,0.3)', opacity: loading || !username || !password ? 0.6 : 1, fontSize: 14, padding: '13px 0',
             }}>
               {loading ? <span style={{ fontFamily: 'monospace' }}>unlocking...</span> : <><span style={{ fontFamily: 'monospace' }}>{mode === 'create' ? 'create account' : 'sign in'}</span><ArrowRight size={14} /></>}
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', fontSize: 11, marginTop: 16, color: 'rgba(226,232,240,0.18)', fontFamily: 'monospace' }}>
+          <p style={{ textAlign: 'center', fontSize: 11, marginTop: 16, color: 'rgba(28,26,22,0.25)', fontFamily: 'monospace' }}>
             🔒 data stored locally · never sent anywhere
           </p>
         </section>
+
+        {/* ── CLC Logo ── */}
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '20px 24px 60px' }}>
+          <img src="/clc-logo.png" alt="CLC Premier Studios" style={{ maxWidth: 160, height: 'auto', opacity: 0.9 }} />
+        </div>
 
       </div>
     </div>

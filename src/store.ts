@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { LayoutId, WidgetType, CalEvent, SkinId, Photo, SkinColors } from './types';
+import type { LayoutId, WidgetType, CalEvent, SkinId, Photo, SkinColors, Contact, Planner } from './types';
 import { getAutoSkinForDate } from './data/holidays';
 
 interface SlotMap { [slotId: string]: WidgetType | null }
@@ -10,16 +10,34 @@ interface Store {
   setLayout: (id: LayoutId) => void;
   slots: SlotMap;
   setSlotWidget: (slotId: string, widget: WidgetType | null) => void;
+
   events: CalEvent[];
   addEvent: (e: CalEvent) => void;
+  updateEvent: (e: CalEvent) => void;
   removeEvent: (id: string) => void;
+
+  contacts: Contact[];
+  addContact: (c: Contact) => void;
+  updateContact: (c: Contact) => void;
+  removeContact: (id: string) => void;
+
+  planners: Planner[];
+  addPlanner: (p: Planner) => void;
+  updatePlanner: (p: Planner) => void;
+  removePlanner: (id: string) => void;
+
   skin: SkinId;
   setSkin: (s: SkinId) => void;
+
   photos: Photo[];
   addPhoto: (p: Photo) => void;
   removePhoto: (id: string) => void;
+
   hasOnboarded: boolean;
   setOnboarded: () => void;
+
+  notificationsEnabled: boolean;
+  setNotificationsEnabled: (v: boolean) => void;
 }
 
 export const useStore = create<Store>()(
@@ -30,17 +48,35 @@ export const useStore = create<Store>()(
       slots: {},
       setSlotWidget: (slotId, widget) =>
         set((s) => ({ slots: { ...s.slots, [slotId]: widget } })),
+
       events: [],
       addEvent: (e) => set((s) => ({ events: [...s.events, e] })),
+      updateEvent: (e) => set((s) => ({ events: s.events.map(ev => ev.id === e.id ? e : ev) })),
       removeEvent: (id) => set((s) => ({ events: s.events.filter((e) => e.id !== id) })),
+
+      contacts: [],
+      addContact: (c) => set((s) => ({ contacts: [...s.contacts, c] })),
+      updateContact: (c) => set((s) => ({ contacts: s.contacts.map(x => x.id === c.id ? c : x) })),
+      removeContact: (id) => set((s) => ({ contacts: s.contacts.filter(c => c.id !== id) })),
+
+      planners: [],
+      addPlanner: (p) => set((s) => ({ planners: [...s.planners, p] })),
+      updatePlanner: (p) => set((s) => ({ planners: s.planners.map(x => x.id === p.id ? p : x) })),
+      removePlanner: (id) => set((s) => ({ planners: s.planners.filter(p => p.id !== id) })),
+
       skin: 'auto',
       setSkin: (skin) => set({ skin }),
+
       photos: [],
       addPhoto: (p) =>
         set((s) => ({ photos: s.photos.length >= 20 ? s.photos : [...s.photos, p] })),
       removePhoto: (id) => set((s) => ({ photos: s.photos.filter((p) => p.id !== id) })),
+
       hasOnboarded: false,
       setOnboarded: () => set({ hasOnboarded: true }),
+
+      notificationsEnabled: false,
+      setNotificationsEnabled: (v) => set({ notificationsEnabled: v }),
     }),
     { name: 'calendi-v1' }
   )
@@ -75,21 +111,26 @@ const COLOR_SKINS: Record<string, SkinColors> = {
 };
 
 const LANDSCAPE_SKINS: Record<string, SkinColors> = {
-  'aurora':     { color: '#67E8F9', glow: 'rgba(103,232,249,0.35)', dim: 'rgba(103,232,249,0.12)', isLandscape: true, scene: 'aurora' },
-  'sunset':     { color: '#FBBF24', glow: 'rgba(251,191,36,0.35)',  dim: 'rgba(251,191,36,0.12)',  isLandscape: true, scene: 'sunset' },
-  'night-sky':  { color: '#A78BFA', glow: 'rgba(167,139,250,0.35)', dim: 'rgba(167,139,250,0.12)', isLandscape: true, scene: 'night-sky' },
-  'deep-ocean': { color: '#38BDF8', glow: 'rgba(56,189,248,0.35)',  dim: 'rgba(56,189,248,0.12)',  isLandscape: true, scene: 'deep-ocean' },
-  'galaxy':     { color: '#C084FC', glow: 'rgba(192,132,252,0.35)', dim: 'rgba(192,132,252,0.12)', isLandscape: true, scene: 'galaxy' },
-  'forest':     { color: '#4ADE80', glow: 'rgba(74,222,128,0.35)',  dim: 'rgba(74,222,128,0.12)',  isLandscape: true, scene: 'forest' },
-  'desert':     { color: '#FB923C', glow: 'rgba(251,146,60,0.35)',  dim: 'rgba(251,146,60,0.12)',  isLandscape: true, scene: 'desert' },
-  'mountain':   { color: '#94A3B8', glow: 'rgba(148,163,184,0.35)', dim: 'rgba(148,163,184,0.12)', isLandscape: true, scene: 'mountain' },
+  'aurora':          { color: '#67E8F9', glow: 'rgba(103,232,249,0.35)', dim: 'rgba(103,232,249,0.12)', isLandscape: true, scene: 'aurora' },
+  'sunset':          { color: '#FBBF24', glow: 'rgba(251,191,36,0.35)',  dim: 'rgba(251,191,36,0.12)',  isLandscape: true, scene: 'sunset' },
+  'night-sky':       { color: '#A78BFA', glow: 'rgba(167,139,250,0.35)', dim: 'rgba(167,139,250,0.12)', isLandscape: true, scene: 'night-sky' },
+  'deep-ocean':      { color: '#38BDF8', glow: 'rgba(56,189,248,0.35)',  dim: 'rgba(56,189,248,0.12)',  isLandscape: true, scene: 'deep-ocean' },
+  'galaxy':          { color: '#C084FC', glow: 'rgba(192,132,252,0.35)', dim: 'rgba(192,132,252,0.12)', isLandscape: true, scene: 'galaxy' },
+  'forest':          { color: '#4ADE80', glow: 'rgba(74,222,128,0.35)',  dim: 'rgba(74,222,128,0.12)',  isLandscape: true, scene: 'forest' },
+  'desert':          { color: '#FB923C', glow: 'rgba(251,146,60,0.35)',  dim: 'rgba(251,146,60,0.12)',  isLandscape: true, scene: 'desert' },
+  'mountain':        { color: '#94A3B8', glow: 'rgba(148,163,184,0.35)', dim: 'rgba(148,163,184,0.12)', isLandscape: true, scene: 'mountain' },
+  'cherry-blossom':  { color: '#F9A8D4', glow: 'rgba(249,168,212,0.35)', dim: 'rgba(249,168,212,0.12)', isLandscape: true, scene: 'cherry-blossom' },
+  'winter-snow':     { color: '#BAE6FD', glow: 'rgba(186,230,253,0.35)', dim: 'rgba(186,230,253,0.12)', isLandscape: true, scene: 'winter-snow' },
+  'tropical-beach':  { color: '#34D399', glow: 'rgba(52,211,153,0.35)',  dim: 'rgba(52,211,153,0.12)',  isLandscape: true, scene: 'tropical-beach' },
+  'rainy-night':     { color: '#60A5FA', glow: 'rgba(96,165,250,0.35)',  dim: 'rgba(96,165,250,0.12)',  isLandscape: true, scene: 'rainy-night' },
+  'fireflies':       { color: '#A3E635', glow: 'rgba(163,230,53,0.35)',  dim: 'rgba(163,230,53,0.12)',  isLandscape: true, scene: 'fireflies' },
 };
 
 export function getSkinColors(skin: SkinId, date = new Date()): SkinColors {
   if (skin in LANDSCAPE_SKINS) return LANDSCAPE_SKINS[skin];
   if (skin === 'auto') {
     const resolved = getAutoSkinForDate(date);
-    return COLOR_SKINS[resolved] ?? COLOR_SKINS.violet;
+    return LANDSCAPE_SKINS[resolved] ?? COLOR_SKINS[resolved] ?? COLOR_SKINS.violet;
   }
   return COLOR_SKINS[skin as string] ?? COLOR_SKINS.violet;
 }

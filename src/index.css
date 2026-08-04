@@ -242,3 +242,52 @@
 .float-anim { animation: float-up 4s ease-in-out infinite; }
 .sparkle-anim { animation: sparkle-pop 3s ease-in-out infinite; }
 .fade-in-up { animation: fade-in-up 0.7s ease both; }
+
+/* Melted Skittles blob animations */
+@keyframes skittle-1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  25%  { transform: translate(90px, -70px) scale(1.12); }
+  50%  { transform: translate(140px, 50px) scale(0.94); }
+  75%  { transform: translate(-50px, 90px) scale(1.06); }
+}
+@keyframes skittle-2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33%  { transform: translate(-80px, 60px) scale(1.08); }
+  66%  { transform: translate(60px, -90px) scale(0.96); }
+}
+@keyframes skittle-3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  20%  { transform: translate(70px, 80px) scale(1.1); }
+  50%  { transform: translate(-90px, -60px) scale(0.92); }
+  80%  { transform: translate(50px, -30px) scale(1.05); }
+}
+@keyframes skittle-4 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  40%  { transform: translate(100px, -50px) scale(0.95); }
+  70%  { transform: translate(-40px, 70px) scale(1.1); }
+}
+@keyframes skittle-5 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  30%  { transform: translate(-70px, -80px) scale(1.08); }
+  60%  { transform: translate(80px, 60px) scale(0.93); }
+}
+@keyframes skittle-6 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  25%  { transform: translate(-60px, 80px) scale(1.06); }
+  55%  { transform: translate(100px, -40px) scale(0.97); }
+  80%  { transform: translate(20px, 60px) scale(1.04); }
+}
+
+/* App panel slide-in */
+@keyframes panel-slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+.panel-slide-in { animation: panel-slide-in 0.28s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* Print styles for calendar share */
+@media print {
+  body * { visibility: hidden !important; }
+  #cal-print-root, #cal-print-root * { visibility: visible !important; }
+  #cal-print-root { position: fixed !important; inset: 0 !important; background: #fff !important; color: #000 !important; padding: 20px !important; z-index: 9999 !important; }
+}

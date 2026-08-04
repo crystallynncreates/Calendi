@@ -10,6 +10,7 @@ import LayoutPicker from '../components/LayoutPicker';
 import LandscapeScene from '../components/LandscapeScene';
 import AdBanner from '../components/AdBanner';
 import SubscribeModal from '../components/SubscribeModal';
+import AppPanel from '../components/AppPanel';
 import type { WidgetType, SkinId } from '../types';
 
 const ClockWidget      = lazy(() => import('../components/widgets/ClockWidget'));
@@ -86,6 +87,7 @@ const LANDSCAPE_LABELS: Record<string, { label: string; preview: string }> = {
   'tropical-beach':  { label: 'tropical beach',  preview: 'linear-gradient(135deg, #006994, #00b4d8, #34d399)' },
   'rainy-night':     { label: 'rainy night',     preview: 'linear-gradient(135deg, #050a14, #0d1a2e, #60a5fa)' },
   'fireflies':       { label: 'fireflies',       preview: 'linear-gradient(135deg, #050e08, #0a1a0c, #a3e635)' },
+  'melted-skittles': { label: 'melted skittles', preview: 'linear-gradient(135deg, #0a0015, #FF00CC, #FF7A00, #00FF7A, #00AAFF)' },
 };
 
 const COLOR_SWATCH: Record<string, string> = {
@@ -207,7 +209,7 @@ function AddWidgetSheet({ onSelect, onClose, color }: { onSelect: (t: WidgetType
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { layoutId, slots, setSlotWidget, skin, isPremium, setIsPremium } = useStore();
+  const { layoutId, slots, setSlotWidget, skin, isPremium, setIsPremium, activeApp, setActiveApp } = useStore();
   const skinColors = getSkinColors(skin);
   const { color, glow, dim, isLandscape, scene } = skinColors;
   const layout = LAYOUTS.find(l => l.id === layoutId)!;
@@ -324,6 +326,7 @@ export default function Dashboard() {
       {showContacts && <ContactsModal onClose={() => setShowContacts(false)} />}
       {showPlanners && <PlannerSheet onClose={() => setShowPlanners(false)} />}
       {showSubscribe && <SubscribeModal onClose={() => setShowSubscribe(false)} />}
+      {activeApp && <AppPanel app={activeApp} onClose={() => setActiveApp(null)} />}
       {addingToSlot && (
         <AddWidgetSheet color={color} glow={glow}
           onClose={() => setAddingToSlot(null)}

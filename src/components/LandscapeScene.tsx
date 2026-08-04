@@ -16,6 +16,7 @@ export default function LandscapeScene({ scene }: Props) {
       {scene === 'tropical-beach' && <TropicalBeachScene />}
       {scene === 'rainy-night'    && <RainyNightScene />}
       {scene === 'fireflies'      && <FirefliesScene />}
+      {scene === 'melted-skittles' && <MeltedSkittlesScene />}
     </div>
   );
 }
@@ -305,6 +306,29 @@ function FirefliesScene() {
       <svg viewBox="0 0 1440 250" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, width: '100%', height: '35%' }}>
         <path d="M0,250 L0,60 L40,100 L60,40 L80,80 L100,20 L120,60 L150,5 L180,50 L210,0 L240,45 L270,10 L300,55 L340,5 L380,50 L420,0 L460,45 L500,10 L540,55 L580,5 L620,48 L660,8 L700,52 L740,5 L780,48 L820,10 L860,55 L900,5 L940,48 L980,8 L1020,52 L1060,5 L1100,48 L1140,10 L1180,55 L1220,8 L1260,50 L1300,12 L1340,55 L1380,15 L1440,50 L1440,250 Z" fill="rgba(4,14,6,0.97)" />
       </svg>
+    </div>
+  );
+}
+
+function MeltedSkittlesScene() {
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: '#0a0015', overflow: 'hidden' }}>
+      {/* Red */}
+      <div style={{ position: 'absolute', top: '-20%', left: '-15%', width: 650, height: 650, borderRadius: '50%', background: 'radial-gradient(circle, #FF1A44 0%, transparent 68%)', filter: 'blur(55px)', opacity: 0.75, animation: 'skittle-1 20s ease-in-out infinite' }} />
+      {/* Orange */}
+      <div style={{ position: 'absolute', top: '30%', right: '-18%', width: 580, height: 580, borderRadius: '50%', background: 'radial-gradient(circle, #FF7A00 0%, transparent 68%)', filter: 'blur(55px)', opacity: 0.7, animation: 'skittle-2 24s ease-in-out infinite' }} />
+      {/* Yellow */}
+      <div style={{ position: 'absolute', bottom: '-22%', left: '15%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, #FFE500 0%, transparent 68%)', filter: 'blur(65px)', opacity: 0.65, animation: 'skittle-3 18s ease-in-out infinite' }} />
+      {/* Green */}
+      <div style={{ position: 'absolute', top: '55%', left: '-8%', width: 520, height: 520, borderRadius: '50%', background: 'radial-gradient(circle, #00FF7A 0%, transparent 68%)', filter: 'blur(60px)', opacity: 0.6, animation: 'skittle-4 22s ease-in-out infinite' }} />
+      {/* Purple */}
+      <div style={{ position: 'absolute', top: '-8%', right: '18%', width: 560, height: 560, borderRadius: '50%', background: 'radial-gradient(circle, #AA00FF 0%, transparent 68%)', filter: 'blur(55px)', opacity: 0.7, animation: 'skittle-5 26s ease-in-out infinite' }} />
+      {/* Hot pink */}
+      <div style={{ position: 'absolute', bottom: '8%', right: '-12%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, #FF00CC 0%, transparent 68%)', filter: 'blur(50px)', opacity: 0.65, animation: 'skittle-6 21s ease-in-out infinite' }} />
+      {/* Blue raspberry — center mix */}
+      <div style={{ position: 'absolute', top: '30%', left: '30%', width: 450, height: 450, borderRadius: '50%', background: 'radial-gradient(circle, #00AAFF 0%, transparent 68%)', filter: 'blur(75px)', opacity: 0.5, animation: 'skittle-1 28s ease-in-out 5s infinite reverse' }} />
+      {/* Extra bright center shimmer */}
+      <div style={{ position: 'absolute', top: '20%', left: '20%', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)', filter: 'blur(40px)', animation: 'skittle-3 15s ease-in-out 2s infinite' }} />
     </div>
   );
 }

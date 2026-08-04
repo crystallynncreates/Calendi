@@ -71,7 +71,18 @@ export type SkinId =
   | 'aurora' | 'sunset' | 'night-sky' | 'deep-ocean'
   | 'galaxy' | 'forest' | 'desert' | 'mountain'
   | 'cherry-blossom' | 'winter-snow' | 'tropical-beach'
-  | 'rainy-night' | 'fireflies';
+  | 'rainy-night' | 'fireflies' | 'melted-skittles';
+
+export interface AppEntry {
+  id: string;
+  name: string;
+  url: string;
+  emoji: string;
+  color: string;
+  bgColor: string;
+  borderColor: string;
+  canEmbed: boolean;
+}
 
 export interface SkinColors {
   color: string; glow: string; dim: string;

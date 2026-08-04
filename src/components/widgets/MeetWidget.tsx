@@ -1,37 +1,44 @@
 import { useState } from 'react';
-import { Video, ExternalLink } from 'lucide-react';
+import { Video } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 import { GoogleMeetLogo, ZoomLogo } from '../BrandLogos';
+import type { AppEntry } from '../../types';
 
-function openInPopup(url: string, name: string) {
-  const w = Math.min(1280, window.screen.width - 100);
-  const h = Math.min(800, window.screen.height - 100);
-  const left = (window.screen.width - w) / 2;
-  const top = (window.screen.height - h) / 2;
-  window.open(url, `calendi-${name}`, `width=${w},height=${h},left=${left},top=${top},resizable=yes`);
-}
+const MEET_APP: AppEntry = {
+  id: 'meet', name: 'Google Meet', url: 'https://meet.google.com',
+  emoji: '🎥', color: '#00897B', bgColor: 'rgba(0,137,123,0.1)', borderColor: 'rgba(0,137,123,0.3)', canEmbed: true,
+};
+const ZOOM_APP: AppEntry = {
+  id: 'zoom', name: 'Zoom', url: 'https://zoom.us/join',
+  emoji: '📹', color: '#2D8CFF', bgColor: 'rgba(45,140,255,0.1)', borderColor: 'rgba(45,140,255,0.3)', canEmbed: true,
+};
 
 export default function MeetWidget() {
   const skin = useStore(s => s.skin);
+  const setActiveApp = useStore(s => s.setActiveApp);
   const { color, glow } = getSkinColors(skin);
   const [zoomId, setZoomId] = useState('');
   const [tab, setTab] = useState<'meet' | 'zoom'>('meet');
 
+  function openMeet(url: string) {
+    setActiveApp({ ...MEET_APP, url });
+  }
+
+  function openZoom(url: string) {
+    setActiveApp({ ...ZOOM_APP, url });
+  }
+
   return (
     <div className="widget-card h-full flex flex-col p-3">
-      {/* Tabs */}
       <div className="flex gap-1 mb-3 p-0.5 rounded-xl shrink-0" style={{ background: 'rgba(255,255,255,0.03)' }}>
         {(['meet', 'zoom'] as const).map(t => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
+          <button key={t} onClick={() => setTab(t)}
             className="flex-1 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all"
             style={{
               background: tab === t ? color : 'transparent',
               color: tab === t ? '#fff' : 'rgba(226,232,240,0.4)',
               boxShadow: tab === t ? `0 2px 8px ${glow}` : 'none',
-            }}
-          >
+            }}>
             {t === 'meet' ? 'google meet' : 'zoom'}
           </button>
         ))}
@@ -45,23 +52,17 @@ export default function MeetWidget() {
             </div>
             <div className="text-center">
               <p className="text-sm font-semibold" style={{ color: '#E2E8F0' }}>Google Meet</p>
-              <p className="text-xs mt-1" style={{ color: 'rgba(226,232,240,0.35)', lineHeight: 1.5 }}>
-                opens in a dedicated window
-              </p>
+              <p className="text-xs mt-1" style={{ color: 'rgba(226,232,240,0.35)', lineHeight: 1.5 }}>opens inside Calendi</p>
             </div>
             <div className="flex flex-col gap-2 w-full px-2">
-              <button
-                className="btn-pill w-full"
+              <button className="btn-pill w-full"
                 style={{ background: 'rgba(0,137,123,0.15)', color: '#4DB6AC', border: '1px solid rgba(0,137,123,0.3)' }}
-                onClick={() => openInPopup('https://meet.google.com/new', 'meet')}
-              >
+                onClick={() => openMeet('https://meet.google.com/new')}>
                 <Video size={13} /> new meeting
               </button>
-              <button
-                className="btn-pill w-full btn-ghost"
-                onClick={() => openInPopup('https://meet.google.com', 'meet')}
-              >
-                <ExternalLink size={13} /> join a meeting
+              <button className="btn-pill w-full btn-ghost"
+                onClick={() => openMeet('https://meet.google.com')}>
+                join a meeting
               </button>
             </div>
           </>
@@ -72,20 +73,12 @@ export default function MeetWidget() {
             </div>
             <p className="text-sm font-semibold" style={{ color: '#E2E8F0' }}>Zoom</p>
             <div className="w-full px-2">
-              <input
-                className="input-dark mb-2 text-xs"
-                placeholder="meeting ID (optional)"
+              <input className="input-dark mb-2 text-xs" placeholder="meeting ID (optional)"
                 value={zoomId}
-                onChange={e => setZoomId(e.target.value.replace(/\D/g, ''))}
-              />
-              <button
-                className="btn-pill w-full"
+                onChange={e => setZoomId(e.target.value.replace(/\D/g, ''))} />
+              <button className="btn-pill w-full"
                 style={{ background: 'rgba(45,140,255,0.15)', color: '#60A5FA', border: '1px solid rgba(45,140,255,0.3)' }}
-                onClick={() => openInPopup(
-                  zoomId ? `https://zoom.us/wc/${zoomId}/join` : 'https://zoom.us/join',
-                  'zoom'
-                )}
-              >
+                onClick={() => openZoom(zoomId ? `https://zoom.us/wc/${zoomId}/join` : 'https://zoom.us/join')}>
                 <Video size={13} /> {zoomId ? `join ${zoomId}` : 'open zoom'}
               </button>
             </div>

@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Plus, X, Bell, BellOff, Download, ExternalLink, User, Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, X, Bell, BellOff, Download, ExternalLink, User, Check, ChevronDown, ChevronUp, Share2 } from 'lucide-react';
+import CalendarShareModal from './CalendarShareModal';
 import {
   startOfMonth, endOfMonth, startOfWeek, endOfWeek,
   eachDayOfInterval, isSameMonth, isSameDay, isToday,
@@ -102,6 +103,7 @@ export default function CalendarWidget({ compact }: Props) {
   const [adding, setAdding] = useState(false);
   const [form, setForm] = useState<FormState>(BLANK);
   const [moreFields, setMoreFields] = useState(false);
+  const [showShare, setShowShare] = useState(false);
 
   const today = new Date();
   const panelDate = selected ?? today;
@@ -282,6 +284,9 @@ export default function CalendarWidget({ compact }: Props) {
                 <Download size={10} style={{ color }} />
               </button>
             )}
+            <button title="Share / Download" onClick={() => setShowShare(true)} className="btn-ghost btn-pill !px-1.5 !py-1">
+              <Share2 size={10} style={{ color }} />
+            </button>
             <button className="btn-ghost btn-pill !px-2 !py-1 gap-1"
               style={{ color, borderColor: `${color}40`, fontSize: '0.62rem' }}
               onClick={() => { setAdding(!adding); if (!adding) setMoreFields(false); }}>
@@ -454,6 +459,7 @@ export default function CalendarWidget({ compact }: Props) {
           )}
         </div>
       </div>
+      {showShare && <CalendarShareModal onClose={() => setShowShare(false)} />}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { LayoutId, WidgetType, CalEvent, SkinId, Photo, SkinColors, Contact, Planner } from './types';
+import type { LayoutId, WidgetType, CalEvent, SkinId, Photo, SkinColors, Contact, Planner, AppEntry } from './types';
 import { getAutoSkinForDate } from './data/holidays';
 
 interface SlotMap { [slotId: string]: WidgetType | null }
@@ -41,6 +41,9 @@ interface Store {
 
   isPremium: boolean;
   setIsPremium: (v: boolean) => void;
+
+  activeApp: AppEntry | null;
+  setActiveApp: (app: AppEntry | null) => void;
 }
 
 export const useStore = create<Store>()(
@@ -83,8 +86,18 @@ export const useStore = create<Store>()(
 
       isPremium: false,
       setIsPremium: (v) => set({ isPremium: v }),
+
+      activeApp: null,
+      setActiveApp: (app) => set({ activeApp: app }),
     }),
-    { name: 'calendi-v1' }
+    {
+      name: 'calendi-v1',
+      partialize: (state) => {
+        const { activeApp, ...rest } = state;
+        void activeApp;
+        return rest;
+      },
+    }
   )
 );
 
@@ -130,6 +143,7 @@ const LANDSCAPE_SKINS: Record<string, SkinColors> = {
   'tropical-beach':  { color: '#34D399', glow: 'rgba(52,211,153,0.35)',  dim: 'rgba(52,211,153,0.12)',  isLandscape: true, scene: 'tropical-beach' },
   'rainy-night':     { color: '#60A5FA', glow: 'rgba(96,165,250,0.35)',  dim: 'rgba(96,165,250,0.12)',  isLandscape: true, scene: 'rainy-night' },
   'fireflies':       { color: '#A3E635', glow: 'rgba(163,230,53,0.35)',  dim: 'rgba(163,230,53,0.12)',  isLandscape: true, scene: 'fireflies' },
+  'melted-skittles': { color: '#FF00CC', glow: 'rgba(255,0,204,0.4)',   dim: 'rgba(255,0,204,0.14)',   isLandscape: true, scene: 'melted-skittles' },
 };
 
 export function getSkinColors(skin: SkinId, date = new Date()): SkinColors {

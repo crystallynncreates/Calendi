@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, useEffect } from 'react';
+import { useState, lazy, Suspense, useEffect, type ReactNode, type CSSProperties } from 'react';
 import { LayoutGrid, Palette, Plus, X, Clock, Calculator, Timer, Image, Tv, Video, Globe, FileText, Youtube, Lock, Users, BookOpen, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useStore, LAYOUTS, getSkinColors, ALL_COLOR_SKINS, ALL_LANDSCAPE_SKINS } from '../store';
@@ -23,7 +23,7 @@ const MeetWidget       = lazy(() => import('../components/widgets/MeetWidget'));
 const BrowserWidget    = lazy(() => import('../components/widgets/BrowserWidget'));
 const NotesWidget      = lazy(() => import('../components/widgets/NotesWidget'));
 
-interface WidgetMeta { id: WidgetType; label: string; icon: React.ReactNode; desc: string }
+interface WidgetMeta { id: WidgetType; label: string; icon: ReactNode; desc: string }
 
 const WIDGET_LIST: WidgetMeta[] = [
   { id: 'clock',       label: 'clock',      icon: <Clock size={18} />,      desc: 'live time display' },
@@ -237,7 +237,7 @@ export default function Dashboard() {
   return (
     <div
       className="h-screen flex flex-col overflow-hidden"
-      style={{ background: isLandscape ? 'transparent' : '#06060F', '--skin-color': color, '--skin-glow': glow, '--skin-dim': dim } as React.CSSProperties}
+      style={{ background: isLandscape ? 'transparent' : '#06060F', '--skin-color': color, '--skin-glow': glow, '--skin-dim': dim } as CSSProperties}
     >
       {/* Landscape background scene */}
       {isLandscape && scene && <LandscapeScene scene={scene} />}

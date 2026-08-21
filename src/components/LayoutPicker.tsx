@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { LAYOUTS, useStore, getSkinColors } from '../store';
 import type { LayoutId } from '../types';
@@ -78,7 +79,7 @@ function LayoutThumb({ id, active, color }: { id: number; active: boolean; color
   return thumbs[id] ?? <div />;
 }
 
-function G({ a, c, r, children }: { a: string; c: string; r: string; children: React.ReactNode }) {
+function G({ a, c, r, children }: { a: string; c: string; r: string; children: ReactNode }) {
   return (
     <div style={{ display: 'grid', gap: 2, gridTemplateAreas: a, gridTemplateColumns: c, gridTemplateRows: r, height: 48 }}>
       {children}

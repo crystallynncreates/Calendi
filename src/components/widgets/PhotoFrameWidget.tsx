@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type ChangeEvent } from 'react';
 import { Upload, ChevronLeft, ChevronRight, Trash2, RefreshCw, Pause } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 
@@ -20,7 +20,7 @@ export default function PhotoFrameWidget() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [autoPlay, photos.length]);
 
-  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleFile(e: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files || []);
     files.forEach(file => {
       const reader = new FileReader();

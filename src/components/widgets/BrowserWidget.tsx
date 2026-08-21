@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, type FC } from 'react';
 import { ArrowLeft, ArrowRight, RefreshCw, Globe, X } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 import { GoogleLogo, YouTubeLogo, GoogleMapsLogo } from '../BrandLogos';
@@ -6,7 +6,7 @@ import { GoogleLogo, YouTubeLogo, GoogleMapsLogo } from '../BrandLogos';
 type QuickLink = {
   label: string;
   url: string;
-  Logo?: React.FC<{ size: number }>;
+  Logo?: FC<{ size: number }>;
   emoji?: string;
 };
 

@@ -1,44 +1,47 @@
-import { useState, useRef, useEffect, type CSSProperties, type FormEvent } from 'react';
+import { useState, useRef, useEffect, type CSSProperties, type FormEvent, type RefObject, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, ArrowRight, Download, CheckCircle, Sparkles, Star, Crown, Shield, Check } from 'lucide-react';
+import { Eye, EyeOff, Download, ChevronLeft, ChevronRight } from 'lucide-react';
 import { login, register, hasAnyUser } from '../auth';
 import { useStore } from '../store';
 import { CLCLogo } from '../components/CLCLogo';
-import LandscapeScene from '../components/LandscapeScene';
 
 type Mode = 'sign-in' | 'create';
 
-const BRAND_LOGOS = [
-  { src: '/logos/netflix.svg',    label: 'Netflix',   w: 80 },
-  { src: '/logos/youtube.svg',    label: 'YouTube',   w: 80 },
-  { src: '/logos/disneyplus.svg', label: 'Disney+',   w: 80 },
-  { src: '/logos/prime.svg',      label: 'Prime',     w: 76 },
-  { src: '/logos/facebook.svg',   label: 'Facebook',  w: 50 },
-  { src: '/logos/instagram.svg',  label: 'Instagram', w: 48 },
-  { src: '/logos/whatsapp.svg',   label: 'WhatsApp',  w: 50 },
-  { src: '/logos/zoom.svg',       label: 'Zoom',      w: 88 },
-  { src: '/logos/google.svg',     label: 'Google',    w: 86 },
-  { src: '/logos/chrome.svg',     label: 'Chrome',    w: 48 },
-  { src: '/logos/maps.svg',       label: 'Maps',      w: 44 },
-  { src: '/logos/meet.svg',       label: 'Meet',      w: 44 },
-];
+// ─── Colors ──────────────────────────────────────────────────────────────────
+const C = {
+  black:       '#000000',
+  white:       '#FFFFFF',
+  lavender:    '#8B5CF6',
+  lavLight:    '#C4B5FD',
+  lavDim:      'rgba(139,92,246,0.15)',
+  lavBorder:   'rgba(139,92,246,0.35)',
+  textDim:     'rgba(255,255,255,0.55)',
+  textFaint:   'rgba(255,255,255,0.25)',
+  cardBg:      'rgba(255,255,255,0.04)',
+  cardBorder:  'rgba(255,255,255,0.09)',
+  sectionAlt:  '#0a0a0a',
+};
 
+const CANDY = 'linear-gradient(135deg,#C084FC,#A855F7,#7C3AED,#6D28D9)';
+const FOOTER_CANDY = 'linear-gradient(90deg,#C4B5FD,#8B5CF6,#C4B5FD)';
+
+// ─── Feature data ─────────────────────────────────────────────────────────────
 const FEATURES = [
-  { emoji: '📅', title: 'Smart Calendar',        desc: 'Todos, birthdays, payday, gym, shopping lists, self-care, appointments & more — with reminders.' },
-  { emoji: '🎬', title: 'Streaming Apps',         desc: 'Netflix, Disney+, Prime Video, YouTube — all in a focused in-app window. No tab-switching.' },
-  { emoji: '👥', title: 'Social & Messaging',     desc: 'Facebook, WhatsApp, Instagram in one click. Saved contacts with quick-dial.' },
-  { emoji: '🎥', title: 'Video Calls',             desc: 'Google Meet and Zoom, ready to launch. One tap to join or start any meeting.' },
-  { emoji: '🧘', title: 'Planners & Routines',    desc: 'Date Night, Trip, and Special Event planners with checklists. Self-care & gym tracked.' },
-  { emoji: '🌈', title: '19 Beautiful Skins',     desc: '10 neon colors + 9 live animated landscapes — aurora, cherry blossom, melted skittles & more.' },
-  { emoji: '🌐', title: 'Built-in Browser',        desc: 'A full web browser inside your dashboard. Google, research, browse without leaving Calendi.' },
-  { emoji: '🎮', title: 'Games & More',            desc: 'Chess, Solitaire, Poki, Wordle, Sudoku built right in. Plus notes, calculator, timer & clock.' },
+  { emoji: '📅', title: 'Smart Calendar',     desc: 'Todos, birthdays, payday, gym, shopping lists, self-care, appointments & more — with reminders.' },
+  { emoji: '🎬', title: 'Streaming Apps',      desc: 'Netflix, Disney+, Prime Video, YouTube — all in a focused in-app window. No tab-switching.' },
+  { emoji: '👥', title: 'Social & Messaging',  desc: 'Facebook, WhatsApp, Instagram in one click. Saved contacts with quick-dial.' },
+  { emoji: '🎥', title: 'Video Calls',          desc: 'Google Meet and Zoom, ready to launch. One tap to join or start any meeting.' },
+  { emoji: '🧘', title: 'Planners & Routines', desc: 'Date Night, Trip, and Special Event planners with checklists. Self-care & gym tracked.' },
+  { emoji: '🌈', title: '19 Beautiful Skins',  desc: '10 neon colors + 9 live animated landscapes — aurora, cherry blossom, night sky & more.' },
+  { emoji: '🌐', title: 'Built-in Browser',     desc: 'A full web browser inside your dashboard. Google, research, browse without leaving Calendi.' },
+  { emoji: '🎮', title: 'Games & More',         desc: 'Chess, Solitaire, Poki, Wordle, Sudoku built right in. Plus notes, calculator, timer & clock.' },
 ];
 
-const FREE_PERKS  = ['All features — fully unlocked', 'Calendar, planners & contacts', '19 animated skins', 'Streaming, social, games & calls', 'Browser, notes, clock & more', 'Supported by ads'];
-const PRO_PERKS   = ['Everything in Free', 'Completely ad-free experience', 'Support CLC Premier Studios', 'Priority access to new features', 'Cancel anytime'];
+const FREE_PERKS = ['All features — fully unlocked', 'Calendar, planners & contacts', '19 animated skins', 'Streaming, social, games & calls', 'Browser, notes, clock & more', 'Supported by ads'];
+const PRO_PERKS  = ['Everything in Free', 'Completely ad-free experience', 'Support CLC Premier Studios', 'Priority access to new features', 'Cancel anytime'];
 
 const CALENDAR_DAYS = [
-  { d: 1,  dots: [] },
+  { d: 1,  dots: [] as string[] },
   { d: 2,  dots: ['#8B5CF6'] },
   { d: 3,  dots: [] },
   { d: 4,  dots: ['#EC4899', '#F59E0B'] },
@@ -72,65 +75,282 @@ const CALENDAR_DAYS = [
 ];
 
 const SAMPLE_EVENTS = [
-  { emoji: '💪', title: 'Gym',              time: '7:00am', color: '#10B981' },
+  { emoji: '💪', title: 'Gym',              time: '7:00am',  color: '#10B981' },
   { emoji: '📍', title: 'Dr. Appointment',  time: '10:30am', color: '#8B5CF6' },
   { emoji: '💰', title: 'Payday',           time: 'all day', color: '#22D3EE' },
   { emoji: '🌹', title: 'Date Night',       time: '7:00pm',  color: '#EC4899' },
 ];
 
-const EVENT_CHIPS = [
-  { emoji: '📅', label: 'Event',     c: '#8B5CF6' },
-  { emoji: '🔔', label: 'Reminder',  c: '#22D3EE' },
-  { emoji: '🎂', label: 'Birthday',  c: '#EC4899' },
-  { emoji: '💰', label: 'Payday',    c: '#10B981' },
-  { emoji: '🛍️', label: 'Shopping',  c: '#F59E0B' },
-  { emoji: '💪', label: 'Gym',       c: '#10B981' },
-  { emoji: '🧘', label: 'Self-Care', c: '#8B5CF6' },
-  { emoji: '🧾', label: 'Bill',      c: '#F59E0B' },
-  { emoji: '✈️', label: 'Trip',      c: '#22D3EE' },
-  { emoji: '🌹', label: 'Date Night', c: '#EC4899' },
+// ─── Product slider mockups ───────────────────────────────────────────────────
+const SLIDES = [
+  {
+    id: 'calendar',
+    label: 'Monthly Calendar',
+    tag: 'PLAN',
+    tagColor: '#8B5CF6',
+    headline: 'Every day at a glance',
+    sub: 'See all your events, reminders, and todos color-coded on a beautiful monthly grid.',
+  },
+  {
+    id: 'events',
+    label: 'Daily Events',
+    tag: 'ORGANIZE',
+    tagColor: '#EC4899',
+    headline: '55+ event types',
+    sub: 'Gym, Payday, Birthday, Date Night, Dr. Appointment, Self-care, Shopping & more.',
+  },
+  {
+    id: 'apps',
+    label: 'Built-in Apps',
+    tag: 'STREAM',
+    tagColor: '#22D3EE',
+    headline: 'Your world in one place',
+    sub: 'Netflix, Disney+, Instagram, Gmail, Zoom — all in a focused in-app panel.',
+  },
+  {
+    id: 'skins',
+    label: '19 Skins',
+    tag: 'CUSTOMIZE',
+    tagColor: '#F59E0B',
+    headline: 'Make it yours',
+    sub: 'From Aurora Borealis to Cherry Blossom — 19 animated themes to match your mood.',
+  },
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    tag: 'CONTROL',
+    tagColor: '#10B981',
+    headline: 'Everything you need',
+    sub: 'Calendar, clock, notes, contacts, browser, planner — all visible at once.',
+  },
 ];
 
-const light = '#F0E8FF';
-const mid   = 'rgba(240,232,255,0.55)';
-const faint = 'rgba(240,232,255,0.28)';
-const card  = 'rgba(10,0,21,0.68)';
-const cardBorder = 'rgba(255,255,255,0.1)';
-
-function glassCard(extra?: CSSProperties): CSSProperties {
-  return {
-    background: card,
-    backdropFilter: 'blur(24px)',
-    WebkitBackdropFilter: 'blur(24px)',
-    border: `1px solid ${cardBorder}`,
-    borderRadius: 24,
-    ...extra,
-  };
+// ─── Mockup renderers (CSS-drawn app screenshots) ────────────────────────────
+function MockupCalendar() {
+  const s: CSSProperties = { display: 'flex', flexDirection: 'column', gap: 0, height: '100%' };
+  const header: CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px 6px', borderBottom: `1px solid ${C.cardBorder}` };
+  const grid: CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 2, padding: '8px 8px 0' };
+  const dayH: CSSProperties = { textAlign: 'center', fontSize: '0.5rem', color: C.textFaint, fontWeight: 600, letterSpacing: '0.05em' };
+  const dayCell = (hasEvents: boolean): CSSProperties => ({ position: 'relative', aspectRatio: '1', borderRadius: 4, background: hasEvents ? 'rgba(139,92,246,0.1)' : 'transparent', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2 });
+  const num: CSSProperties = { fontSize: '0.5rem', color: C.textDim, lineHeight: 1 };
+  const dot = (c: string): CSSProperties => ({ width: 3, height: 3, borderRadius: '50%', background: c });
+  return (
+    <div style={s}>
+      <div style={header}>
+        <span style={{ fontSize: '0.65rem', color: C.lavLight, fontWeight: 700 }}>August 2026</span>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <span style={{ fontSize: '0.55rem', color: C.textFaint }}>‹</span>
+          <span style={{ fontSize: '0.55rem', color: C.textFaint }}>›</span>
+        </div>
+      </div>
+      <div style={grid}>
+        {['S','M','T','W','T','F','S'].map(d => <div key={d} style={dayH}>{d}</div>)}
+        {/* 4 blank start days */}
+        {[0,1,2,3].map(i => <div key={`b${i}`} />)}
+        {CALENDAR_DAYS.slice(0, 24).map(({ d, dots }) => (
+          <div key={d} style={dayCell(dots.length > 0)}>
+            <span style={{ ...num, color: d === 21 ? C.white : C.textDim, fontWeight: d === 21 ? 700 : 400 }}>{d}</span>
+            {dots.length > 0 && (
+              <div style={{ display: 'flex', gap: 1 }}>
+                {dots.slice(0, 2).map((c, i) => <div key={i} style={dot(c)} />)}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
+function MockupEvents() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '10px 12px', height: '100%' }}>
+      <div style={{ fontSize: '0.55rem', color: C.textFaint, fontWeight: 600, letterSpacing: '0.08em', marginBottom: 4 }}>TODAY — AUG 21</div>
+      {SAMPLE_EVENTS.map(ev => (
+        <div key={ev.title} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, background: `${ev.color}18`, borderLeft: `2px solid ${ev.color}` }}>
+          <span style={{ fontSize: '0.75rem' }}>{ev.emoji}</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '0.6rem', color: C.white, fontWeight: 600 }}>{ev.title}</div>
+            <div style={{ fontSize: '0.5rem', color: C.textFaint }}>{ev.time}</div>
+          </div>
+        </div>
+      ))}
+      <div style={{ marginTop: 'auto', padding: '6px 0' }}>
+        <div style={{ fontSize: '0.55rem', color: C.textFaint, marginBottom: 6 }}>Add event type</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+          {[['🎂','Birthday','#EC4899'],['💪','Gym','#10B981'],['🛍️','Shopping','#F59E0B'],['✈️','Trip','#22D3EE'],['🧾','Bill','#F59E0B'],['🧘','Self-Care','#8B5CF6']].map(([em, la, c]) => (
+            <div key={la as string} style={{ fontSize: '0.5rem', padding: '2px 6px', borderRadius: 20, background: `${c}20`, border: `1px solid ${c}40`, color: la as string === 'Trip' ? '#22D3EE' : c as string }}>{em} {la}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MockupApps() {
+  const tabs = ['Stream', 'Social', 'Work', 'Games'];
+  const apps = [
+    ['🎬','Netflix'],['🎭','Disney+'],['📦','Prime'],['▶️','YouTube'],
+    ['📸','Insta'],['📘','Facebook'],['💬','WhatsApp'],['✉️','Gmail'],
+  ];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div style={{ display: 'flex', borderBottom: `1px solid ${C.cardBorder}`, padding: '0 8px' }}>
+        {tabs.map((t, i) => (
+          <div key={t} style={{ fontSize: '0.5rem', padding: '6px 8px', color: i === 0 ? C.lavLight : C.textFaint, borderBottom: i === 0 ? `1px solid ${C.lavender}` : 'none', fontWeight: i === 0 ? 700 : 400, cursor: 'pointer' }}>{t}</div>
+        ))}
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 6, padding: '10px 10px', flex: 1 }}>
+        {apps.map(([em, name]) => (
+          <div key={name as string} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, padding: '8px 4px', borderRadius: 8, background: C.cardBg, cursor: 'pointer' }}>
+            <span style={{ fontSize: '1rem' }}>{em}</span>
+            <span style={{ fontSize: '0.42rem', color: C.textDim, textAlign: 'center' }}>{name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MockupSkins() {
+  const skins = [
+    { name: 'Aurora',    colors: ['#0ff','#f0f','#00f'] },
+    { name: 'Cherry',    colors: ['#FF9BAE','#FFD6E0','#FFEEF4'] },
+    { name: 'Night Sky', colors: ['#0B1026','#1B2B6B','#6D5ACF'] },
+    { name: 'Neon Mint', colors: ['#00FF9F','#00C9FF','#00FF9F'] },
+    { name: 'Sunset',    colors: ['#FF6B6B','#FFA07A','#FFD700'] },
+    { name: 'Cosmic',    colors: ['#4B0082','#9400D3','#FF69B4'] },
+  ];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '10px 10px', gap: 8 }}>
+      <div style={{ fontSize: '0.55rem', color: C.textFaint, fontWeight: 600, letterSpacing: '0.08em' }}>CHOOSE YOUR SKIN</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 6, flex: 1 }}>
+        {skins.map((sk, i) => (
+          <div key={sk.name} style={{ borderRadius: 8, overflow: 'hidden', border: i === 0 ? `2px solid ${C.lavender}` : `1px solid ${C.cardBorder}`, cursor: 'pointer', position: 'relative' }}>
+            <div style={{ height: '70%', background: `linear-gradient(135deg,${sk.colors.join(',')})` }} />
+            <div style={{ height: '30%', background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontSize: '0.38rem', color: C.textDim }}>{sk.name}</span>
+            </div>
+            {i === 0 && <div style={{ position: 'absolute', top: 3, right: 3, width: 8, height: 8, borderRadius: '50%', background: C.lavender, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.3rem', color: C.white }}>✓</div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MockupDashboard() {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 4, padding: 8, height: '100%' }}>
+      {[
+        { label: 'Calendar', emoji: '📅', col: C.lavender },
+        { label: 'Clock',    emoji: '🕐', col: '#22D3EE'  },
+        { label: 'Notes',    emoji: '📝', col: '#F59E0B'  },
+        { label: 'Contacts', emoji: '👥', col: '#EC4899'  },
+      ].map(({ label, emoji, col }) => (
+        <div key={label} style={{ borderRadius: 8, background: `${col}15`, border: `1px solid ${col}30`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+          <span style={{ fontSize: '1.1rem' }}>{emoji}</span>
+          <span style={{ fontSize: '0.42rem', color: C.textDim }}>{label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SlideVisual({ id }: { id: string }) {
+  const frame: CSSProperties = {
+    width: '100%',
+    height: 240,
+    borderRadius: 12,
+    background: 'rgba(20,10,40,0.85)',
+    border: `1px solid ${C.lavBorder}`,
+    overflow: 'hidden',
+    position: 'relative',
+  };
+  const titleBar: CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 5,
+    padding: '7px 10px',
+    borderBottom: `1px solid ${C.cardBorder}`,
+    background: 'rgba(0,0,0,0.4)',
+  };
+  return (
+    <div style={frame}>
+      <div style={titleBar}>
+        <div style={{ display: 'flex', gap: 4 }}>
+          {['#FF5F57','#FFBD2E','#28CA41'].map(c => <div key={c} style={{ width: 6, height: 6, borderRadius: '50%', background: c }} />)}
+        </div>
+        <div style={{ flex: 1, textAlign: 'center' }}>
+          <div style={{ width: 80, height: 6, borderRadius: 3, background: C.cardBorder, margin: '0 auto' }} />
+        </div>
+        <div style={{ width: 20, height: 6, borderRadius: 3, background: C.cardBorder }} />
+      </div>
+      <div style={{ height: 'calc(100% - 28px)', overflow: 'hidden' }}>
+        {id === 'calendar'   && <MockupCalendar />}
+        {id === 'events'     && <MockupEvents />}
+        {id === 'apps'       && <MockupApps />}
+        {id === 'skins'      && <MockupSkins />}
+        {id === 'dashboard'  && <MockupDashboard />}
+      </div>
+    </div>
+  );
+}
+
+// ─── Utility: password check ─────────────────────────────────────────────────
 function PwCheck({ label, met }: { label: string; met: boolean }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.68rem', color: met ? '#00FF7A' : faint, transition: 'color 0.2s' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.68rem', color: met ? '#A78BFA' : C.textFaint, transition: 'color 0.2s' }}>
       <span style={{ fontSize: '0.7rem' }}>{met ? '✓' : '○'}</span>
       {label}
     </div>
   );
 }
 
+// ─── Reveal-on-scroll hook ────────────────────────────────────────────────────
+function useReveal<T extends HTMLElement>(): [RefObject<T>, boolean] {
+  const ref = useRef<T>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.12 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, visible];
+}
+
+function RevealBox({ children, style, delay = 0 }: { children: ReactNode; style?: CSSProperties; delay?: number }) {
+  const [ref, visible] = useReveal<HTMLDivElement>();
+  return (
+    <div ref={ref} style={{
+      opacity: visible ? 1 : 0,
+      transform: visible ? 'translateY(0)' : 'translateY(32px)',
+      transition: `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s`,
+      ...style,
+    }}>
+      {children}
+    </div>
+  );
+}
+
+// ─── Main Login component ─────────────────────────────────────────────────────
 export default function Login() {
-  const navigate = useNavigate();
+  const navigate    = useNavigate();
   const { setIsPremium } = useStore();
   const isFirstTime = !hasAnyUser();
   const [mode, setMode] = useState<Mode>(isFirstTime ? 'create' : 'sign-in');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPw, setShowPw] = useState(false);
-  const [error, setError]   = useState('');
-  const [loading, setLoading] = useState(false);
-  const formRef = useRef<HTMLDivElement>(null);
+  const [username,  setUsername]  = useState('');
+  const [password,  setPassword]  = useState('');
+  const [showPw,    setShowPw]    = useState(false);
+  const [error,     setError]     = useState('');
+  const [loading,   setLoading]   = useState(false);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
-  const [installable, setInstallable]     = useState(false);
-  const [installed, setInstalled]         = useState(false);
+  const [installable,   setInstallable]   = useState(false);
+  const [installed,     setInstalled]     = useState(false);
+  const [slideIdx, setSlideIdx] = useState(0);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -153,408 +373,492 @@ export default function Login() {
     setInstallPrompt(null); setInstallable(false);
   }
 
+  function scrollSlider(dir: -1 | 1) {
+    const next = Math.max(0, Math.min(SLIDES.length - 1, slideIdx + dir));
+    setSlideIdx(next);
+    if (sliderRef.current) {
+      const cards = sliderRef.current.querySelectorAll('[data-slide]');
+      cards[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
+  }
+
   async function submit(e: FormEvent) {
-    e.preventDefault(); setError(''); setLoading(true);
+    e.preventDefault();
+    setError('');
+    setLoading(true);
     await new Promise(r => setTimeout(r, 380));
     if (mode === 'create') {
-      const result = register(username, password);
-      if (!result.ok) { setError(result.error || 'Registration failed'); setLoading(false); return; }
+      const res = register(username, password);
+      if (!res.ok) { setError(res.error ?? 'Registration failed'); setLoading(false); return; }
     } else {
-      const result = login(username, password);
-      if (!result.ok) { setError(result.error || 'Login failed'); setLoading(false); return; }
+      const res = login(username, password);
+      if (!res.ok) { setError(res.error ?? 'Incorrect username or password'); setLoading(false); return; }
     }
     navigate('/');
   }
 
-  function handleStripeSubscribe() {
-    const link = import.meta.env.VITE_STRIPE_PAYMENT_LINK;
-    if (link) {
-      window.open(`${link}?success_url=${encodeURIComponent(window.location.origin + '?sub=success')}`, '_blank');
-    } else {
-      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }
+  const pwHasLen     = password.length >= 8;
+  const pwHasUpper   = /[A-Z]/.test(password);
+  const pwHasNum     = /[0-9]/.test(password);
+  const pwHasSpecial = /[!@#$%^&*()\-_=+\[\]{};:'",.<>/?\\|`~]/.test(password);
 
-  const marqueeLogos = [...BRAND_LOGOS, ...BRAND_LOGOS];
+  // ── Shared styles ────────────────────────────────────────────────────────
+  const section = (bg = C.black): CSSProperties => ({
+    width: '100%',
+    background: bg,
+    position: 'relative',
+    overflow: 'hidden',
+  });
 
-  const pwChecks = [
-    { label: '8+ characters',      met: password.length >= 8 },
-    { label: 'Uppercase (A–Z)',     met: /[A-Z]/.test(password) },
-    { label: 'Number (0–9)',        met: /[0-9]/.test(password) },
-    { label: 'Special char (!@#…)', met: /[!@#$%^&*()\-_=+\[\]{};:'",.<>/?\\|`~]/.test(password) },
-  ];
+  const container: CSSProperties = {
+    maxWidth: 1200,
+    margin: '0 auto',
+    padding: '0 32px',
+  };
 
-  const candyGrad = 'linear-gradient(135deg,#FF00CC,#FF7A00,#FFE500,#00FF7A,#00AAFF,#AA00FF)';
-  const candyText: CSSProperties = { background: candyGrad, backgroundSize: '300% 100%', animation: 'gradient-shift 5s ease infinite', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' };
+  const input: CSSProperties = {
+    width: '100%',
+    padding: '14px 16px',
+    borderRadius: 10,
+    border: `1px solid ${C.cardBorder}`,
+    background: 'rgba(255,255,255,0.06)',
+    color: C.white,
+    fontSize: '0.95rem',
+    outline: 'none',
+    boxSizing: 'border-box',
+  };
 
   return (
-    <div style={{ background: '#0a0015', color: light, minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ background: C.black, color: C.white, fontFamily: 'system-ui, -apple-system, sans-serif', overflowX: 'hidden' }}>
 
-      {/* Animated candy background */}
-      <LandscapeScene scene="melted-skittles" />
-
-      <div style={{ position: 'relative', zIndex: 1 }}>
-
-        {/* ══════ HERO ══════ */}
-        <section style={{ maxWidth: 960, margin: '0 auto', padding: '64px 24px 40px', textAlign: 'center' }}>
-
-          {/* CLC Logo — inline SVG, no more broken image */}
-          <div className="float-anim fade-in-up" style={{ display: 'inline-block', marginBottom: 28 }}>
-            <div style={{ position: 'relative', width: 200, height: 200, margin: '0 auto' }}>
-              <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', boxShadow: '0 0 80px rgba(255,0,204,0.35), 0 8px 40px rgba(0,0,0,0.5)', border: '2.5px solid rgba(255,0,204,0.3)' }}>
-                <CLCLogo size={200} />
-              </div>
-              <div style={{ position: 'absolute', inset: -12, borderRadius: '50%', border: '1.5px solid rgba(255,170,0,0.18)', pointerEvents: 'none' }} />
-              <div style={{ position: 'absolute', inset: -24, borderRadius: '50%', border: '1px solid rgba(0,255,122,0.1)', pointerEvents: 'none' }} />
-            </div>
-          </div>
-
-          <div className="fade-in-up" style={{ animationDelay: '0.15s' }}>
-            <p style={{ fontSize: '0.72rem', fontFamily: 'monospace', letterSpacing: 6, textTransform: 'uppercase', color: '#FF00CC', marginBottom: 10 }}>by CLC Premier Studios</p>
-            <h1 style={{ fontSize: 'clamp(3.6rem, 11vw, 7.5rem)', fontWeight: 900, fontFamily: 'monospace', lineHeight: 0.9, letterSpacing: '-0.04em', marginBottom: 16, ...candyText }}>
-              calendi
-            </h1>
-            <p style={{ fontSize: 'clamp(1.1rem,3vw,1.5rem)', fontWeight: 800, color: light, marginBottom: 10, letterSpacing: '-0.01em' }}>
-              The calendar that does everything.
-            </p>
-            <p style={{ fontSize: 'clamp(0.9rem, 2.2vw, 1.1rem)', color: mid, maxWidth: 520, margin: '0 auto 38px', lineHeight: 1.65 }}>
-              Schedule, plan, stream, connect, browse & play — all from one beautiful personal dashboard.
-            </p>
-          </div>
-
-          <div className="fade-in-up" style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 18, animationDelay: '0.3s' }}>
-            <button onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 34px', borderRadius: 50, border: 'none', cursor: 'pointer', fontSize: '1rem', fontWeight: 800, background: 'linear-gradient(135deg,#FF00CC,#FF7A00)', color: '#fff', boxShadow: '0 8px 32px rgba(255,0,204,0.4)', letterSpacing: 0.3 }}>
-              {isFirstTime ? 'Start Free' : 'Sign In'} <ArrowRight size={16} />
+      {/* ── STICKY NAV ─────────────────────────────────────────────────── */}
+      <nav style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+        padding: '16px 32px',
+        background: 'rgba(0,0,0,0.75)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: `1px solid ${C.cardBorder}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <span style={{ fontWeight: 900, fontSize: '1.3rem', letterSpacing: '-0.02em', background: CANDY, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+          calendi
+        </span>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          {installable && !installed && (
+            <button onClick={handleInstall} style={{ padding: '8px 16px', borderRadius: 8, border: `1px solid ${C.lavBorder}`, background: C.lavDim, color: C.lavLight, fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Download size={13} /> Install App
             </button>
-            <button onClick={handleStripeSubscribe}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 34px', borderRadius: 50, border: 'none', cursor: 'pointer', fontSize: '1rem', fontWeight: 800, background: candyGrad, backgroundSize: '300% 100%', animation: 'gradient-shift 4s linear infinite', color: '#fff', boxShadow: '0 8px 28px rgba(170,0,255,0.35)' }}>
-              <Crown size={15} /> Go Premium · $4.99/mo
-            </button>
-            {installable && !installed && (
-              <button onClick={handleInstall}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 26px', borderRadius: 50, background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.2)', color: light, fontSize: '1rem', fontWeight: 700, cursor: 'pointer' }}>
-                <Download size={15} /> Install App
-              </button>
-            )}
-            {installed && (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 22px', borderRadius: 50, background: 'rgba(0,255,122,0.1)', border: '1.5px solid rgba(0,255,122,0.3)', color: '#00FF7A', fontSize: '0.95rem', fontWeight: 700 }}>
-                <CheckCircle size={15} /> Installed
-              </div>
-            )}
-          </div>
-
-          <div style={{ display: 'flex', gap: 22, justifyContent: 'center', flexWrap: 'wrap' }}>
-            {[['🤖','Android — install from Chrome'],['🍎','iOS — Share → Add to Home Screen'],['💻','Desktop — install from browser bar']].map(([icon, text], i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontSize: '0.95rem' }}>{icon}</span>
-                <span style={{ fontSize: '0.68rem', fontFamily: 'monospace', color: faint, letterSpacing: 0.5 }}>{text}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ══════ CALENDAR SHOWCASE ══════ */}
-        <section style={{ maxWidth: 1040, margin: '0 auto', padding: '20px 24px 60px' }}>
-          <div style={{ textAlign: 'center', marginBottom: 36 }}>
-            <p style={{ fontSize: '0.68rem', fontFamily: 'monospace', letterSpacing: 5, textTransform: 'uppercase', color: '#FF00CC', marginBottom: 12 }}>AT THE HEART OF CALENDI</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem,5vw,2.8rem)', fontWeight: 900, lineHeight: 1.1 }}>
-              A calendar built for <span style={candyText}>real life.</span>
-            </h2>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 18 }}>
-
-            {/* Mini calendar grid */}
-            <div style={{ ...glassCard({ padding: '22px' }) }}>
-              <p style={{ fontSize: '0.65rem', fontFamily: 'monospace', letterSpacing: 4, color: '#FF00CC', textTransform: 'uppercase', marginBottom: 14 }}>MONTHLY VIEW</p>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: 800, color: light }}>August 2026</span>
-                <div style={{ display: 'flex', gap: 4 }}>
-                  <span style={{ fontSize: '0.65rem', background: 'rgba(255,0,204,0.15)', border: '1px solid rgba(255,0,204,0.3)', color: '#FF00CC', borderRadius: 6, padding: '2px 7px', fontFamily: 'monospace' }}>today</span>
-                </div>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 2, marginBottom: 6 }}>
-                {['S','M','T','W','T','F','S'].map((d,i) => (
-                  <div key={i} style={{ textAlign: 'center', fontSize: '0.55rem', fontFamily: 'monospace', color: faint, padding: '2px 0' }}>{d}</div>
-                ))}
-                {/* Aug 2026 starts on Saturday (offset 6) */}
-                {Array.from({ length: 6 }, (_,i) => <div key={`e${i}`} />)}
-                {CALENDAR_DAYS.map((day) => (
-                  <div key={day.d} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, padding: '2px 0' }}>
-                    <span style={{
-                      fontSize: '0.62rem', fontWeight: day.d === 4 ? 800 : 400,
-                      color: day.d === 4 ? '#FF00CC' : 'rgba(240,232,255,0.7)',
-                      width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      borderRadius: '50%', background: day.d === 4 ? 'rgba(255,0,204,0.18)' : 'transparent',
-                      boxShadow: day.d === 4 ? '0 0 8px rgba(255,0,204,0.5)' : 'none',
-                    }}>{day.d}</span>
-                    <div style={{ display: 'flex', gap: 1 }}>
-                      {day.dots.slice(0,2).map((c,i) => <span key={i} style={{ width: 3, height: 3, borderRadius: '50%', background: c }} />)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <p style={{ fontSize: '0.62rem', color: faint, marginTop: 8, textAlign: 'center' }}>Color-coded events at a glance</p>
-            </div>
-
-            {/* Event chips */}
-            <div style={{ ...glassCard({ padding: '22px' }) }}>
-              <p style={{ fontSize: '0.65rem', fontFamily: 'monospace', letterSpacing: 4, color: '#00AAFF', textTransform: 'uppercase', marginBottom: 14 }}>55+ EVENT TYPES</p>
-              <p style={{ fontSize: '0.82rem', fontWeight: 700, color: light, marginBottom: 14 }}>Tap a chip, type a title, done.</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
-                {EVENT_CHIPS.map((chip, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '5px 10px', borderRadius: 20, background: `${chip.c}18`, border: `1px solid ${chip.c}40`, fontSize: '0.65rem', color: chip.c, fontWeight: 600 }}>
-                    <span style={{ fontSize: '0.75rem' }}>{chip.emoji}</span>
-                    {chip.label}
-                  </div>
-                ))}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '5px 10px', borderRadius: 20, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)', fontSize: '0.65rem', color: faint }}>
-                  +45 more...
-                </div>
-              </div>
-              <p style={{ fontSize: '0.62rem', color: faint, marginTop: 14 }}>Birthdays, payday, chores, self-care, gym & more</p>
-            </div>
-
-            {/* Daily events */}
-            <div style={{ ...glassCard({ padding: '22px' }) }}>
-              <p style={{ fontSize: '0.65rem', fontFamily: 'monospace', letterSpacing: 4, color: '#00FF7A', textTransform: 'uppercase', marginBottom: 14 }}>TODAY AT A GLANCE</p>
-              <p style={{ fontSize: '0.82rem', fontWeight: 700, color: light, marginBottom: 14 }}>Monday, Aug 4</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {SAMPLE_EVENTS.map((ev, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 12, background: `${ev.color}0D`, border: `1px solid ${ev.color}22` }}>
-                    <span style={{ fontSize: '1rem' }}>{ev.emoji}</span>
-                    <div style={{ flex: 1 }}>
-                      <p style={{ fontSize: '0.75rem', fontWeight: 700, color: light, margin: 0 }}>{ev.title}</p>
-                    </div>
-                    <span style={{ fontSize: '0.6rem', fontFamily: 'monospace', color: ev.color }}>{ev.time}</span>
-                  </div>
-                ))}
-              </div>
-              <div style={{ marginTop: 14, padding: '8px 12px', borderRadius: 12, background: 'rgba(255,0,204,0.08)', border: '1px solid rgba(255,0,204,0.2)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontSize: '0.75rem' }}>🔔</span>
-                <span style={{ fontSize: '0.68rem', color: 'rgba(240,232,255,0.5)' }}>Reminder 10 min before events</span>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* ══════ LOGO MARQUEE ══════ */}
-        <section style={{ padding: '40px 0', background: 'rgba(0,0,0,0.3)', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden' }}>
-          <p style={{ textAlign: 'center', fontSize: '0.68rem', fontFamily: 'monospace', letterSpacing: 5, textTransform: 'uppercase', color: faint, marginBottom: 26 }}>STREAM · CONNECT · BROWSE</p>
-          <div style={{ overflow: 'hidden', width: '100%' }}>
-            <div className="marquee-track" style={{ display: 'flex', gap: 52, alignItems: 'center', width: 'max-content' }}>
-              {marqueeLogos.map((logo, i) => (
-                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, flexShrink: 0, opacity: 0.7 }}>
-                  <img src={logo.src} alt={logo.label} style={{ width: logo.w, height: 38, objectFit: 'contain', filter: 'brightness(10) saturate(0)', opacity: 0.6 }} />
-                  <span style={{ fontSize: '0.6rem', fontFamily: 'monospace', color: faint, letterSpacing: 1 }}>{logo.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ══════ FEATURES ══════ */}
-        <section style={{ maxWidth: 1040, margin: '0 auto', padding: '72px 24px 56px' }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <p style={{ fontSize: '0.68rem', fontFamily: 'monospace', letterSpacing: 5, textTransform: 'uppercase', color: '#FF7A00', marginBottom: 14 }}>EVERYTHING IN ONE PLACE</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem,5vw,3rem)', fontWeight: 900, lineHeight: 1.1 }}>
-              Every widget you need.<br />
-              <span style={candyText}>Nothing you don't.</span>
-            </h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 14 }}>
-            {FEATURES.map((f, i) => (
-              <div key={i} style={{ ...glassCard({ padding: '22px 20px' }), transition: 'transform 0.2s, box-shadow 0.2s', cursor: 'default' }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLDivElement; el.style.transform = 'translateY(-4px)'; el.style.boxShadow = '0 12px 40px rgba(255,0,204,0.12)'; el.style.borderColor = 'rgba(255,0,204,0.2)'; }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLDivElement; el.style.transform = ''; el.style.boxShadow = ''; el.style.borderColor = cardBorder; }}>
-                <div style={{ fontSize: '2rem', marginBottom: 12 }}>{f.emoji}</div>
-                <h3 style={{ fontSize: '0.95rem', fontWeight: 800, marginBottom: 8, lineHeight: 1.2, color: light }}>{f.title}</h3>
-                <p style={{ fontSize: '0.78rem', color: mid, lineHeight: 1.6, margin: 0 }}>{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ══════ REAL LOGOS SHOWCASE ══════ */}
-        <section style={{ background: 'rgba(0,0,0,0.45)', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '64px 24px' }}>
-          <div style={{ maxWidth: 860, margin: '0 auto', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.68rem', fontFamily: 'monospace', letterSpacing: 5, textTransform: 'uppercase', color: 'rgba(255,0,204,0.6)', marginBottom: 14 }}>YOUR FAVORITE APPS</p>
-            <h2 style={{ fontSize: 'clamp(1.7rem,4vw,2.5rem)', fontWeight: 900, color: light, marginBottom: 44, lineHeight: 1.15 }}>
-              All the apps you love,<br />
-              <span style={candyText}>in one dashboard.</span>
-            </h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center', alignItems: 'center' }}>
-              {BRAND_LOGOS.map((logo, i) => (
-                <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid rgba(255,255,255,0.1)`, borderRadius: 18, padding: '14px 18px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, minWidth: 88, transition: 'background 0.2s, transform 0.2s', cursor: 'default' }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLDivElement; el.style.background = 'rgba(255,255,255,0.1)'; el.style.transform = 'scale(1.07)'; }}
-                  onMouseLeave={e => { const el = e.currentTarget as HTMLDivElement; el.style.background = 'rgba(255,255,255,0.05)'; el.style.transform = ''; }}>
-                  <img src={logo.src} alt={logo.label} style={{ width: logo.w, height: 34, objectFit: 'contain', filter: 'brightness(10) saturate(0)', opacity: 0.8 }} />
-                  <span style={{ fontSize: '0.58rem', fontFamily: 'monospace', color: faint, letterSpacing: 1 }}>{logo.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ══════ PRICING ══════ */}
-        <section style={{ maxWidth: 860, margin: '0 auto', padding: '76px 24px' }}>
-          <div style={{ textAlign: 'center', marginBottom: 52 }}>
-            <p style={{ fontSize: '0.68rem', fontFamily: 'monospace', letterSpacing: 5, textTransform: 'uppercase', color: '#FFE500', marginBottom: 14 }}>SIMPLE PRICING</p>
-            <h2 style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 900, lineHeight: 1.1 }}>
-              Free forever.<br />
-              <span style={candyText}>Premium for $4.99/mo.</span>
-            </h2>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 22 }}>
-
-            <div style={{ ...glassCard({ padding: 30 }), display: 'flex', flexDirection: 'column' }}>
-              <p style={{ fontSize: '0.7rem', fontFamily: 'monospace', letterSpacing: 3, color: faint, textTransform: 'uppercase', marginBottom: 8 }}>Free</p>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 8 }}>
-                <span style={{ fontSize: '3rem', fontWeight: 900, lineHeight: 1, color: light }}>$0</span>
-                <span style={{ fontSize: '0.95rem', color: mid }}>/month</span>
-              </div>
-              <p style={{ fontSize: '0.78rem', color: mid, marginBottom: 24 }}>Supported by ads — keeps Calendi free for everyone</p>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 26 }}>
-                {FREE_PERKS.map((p, i) => (
-                  <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'flex-start' }}>
-                    <div style={{ width: 17, height: 17, borderRadius: 5, background: 'rgba(255,255,255,0.06)', border: `1px solid rgba(255,255,255,0.15)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
-                      <Check size={10} style={{ color: light }} />
-                    </div>
-                    <span style={{ fontSize: '0.83rem', color: mid, lineHeight: 1.4 }}>{p}</span>
-                  </div>
-                ))}
-              </div>
-              <button onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
-                style={{ width: '100%', padding: '13px 0', borderRadius: 14, border: `2px solid rgba(255,255,255,0.3)`, background: 'transparent', color: light, fontSize: '0.92rem', fontWeight: 800, cursor: 'pointer' }}>
-                Start Free
-              </button>
-            </div>
-
-            <div style={{ ...glassCard({ padding: 30, borderColor: 'rgba(255,0,204,0.3)' }), display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden', boxShadow: '0 20px 60px rgba(255,0,204,0.15)' }}>
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: candyGrad, backgroundSize: '300% 100%', animation: 'gradient-shift 3s linear infinite' }} />
-              <div style={{ position: 'absolute', top: 18, right: 18, background: 'linear-gradient(135deg,#FF00CC,#FF7A00)', borderRadius: 20, padding: '3px 11px', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <Star size={9} style={{ color: '#fff' }} />
-                <span style={{ fontSize: '0.62rem', fontWeight: 800, color: '#fff', letterSpacing: 0.4 }}>POPULAR</span>
-              </div>
-              <p style={{ fontSize: '0.7rem', fontFamily: 'monospace', letterSpacing: 3, color: 'rgba(255,0,204,0.75)', textTransform: 'uppercase', marginBottom: 8, marginTop: 10 }}>Premium</p>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 8 }}>
-                <span style={{ fontSize: '3rem', fontWeight: 900, color: light, lineHeight: 1 }}>$4.99</span>
-                <span style={{ fontSize: '0.95rem', color: mid }}>/month</span>
-              </div>
-              <p style={{ fontSize: '0.78rem', color: mid, marginBottom: 24 }}>Cancel anytime · billed monthly via Stripe</p>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 26 }}>
-                {PRO_PERKS.map((p, i) => (
-                  <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'flex-start' }}>
-                    <div style={{ width: 17, height: 17, borderRadius: 5, background: 'rgba(255,0,204,0.18)', border: '1px solid rgba(255,0,204,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
-                      <Check size={10} style={{ color: '#FF00CC' }} />
-                    </div>
-                    <span style={{ fontSize: '0.83rem', color: mid, lineHeight: 1.4 }}>{p}</span>
-                  </div>
-                ))}
-              </div>
-              <button onClick={handleStripeSubscribe}
-                style={{ width: '100%', padding: '13px 0', borderRadius: 14, border: 'none', background: candyGrad, backgroundSize: '300% 100%', animation: 'gradient-shift 3s linear infinite', color: '#fff', fontSize: '0.92rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: '0 8px 28px rgba(255,0,204,0.3)', marginBottom: 10 }}>
-                <Sparkles size={14} /> Subscribe Now
-              </button>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                <Shield size={10} style={{ color: faint }} />
-                <span style={{ fontSize: '0.62rem', color: faint, fontFamily: 'monospace' }}>Secure · Stripe · Cancel anytime</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ══════ AUTH FORM ══════ */}
-        <section ref={formRef} style={{ maxWidth: 440, margin: '0 auto', padding: '10px 24px 64px' }}>
-          <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <div style={{ width: 72, height: 72, borderRadius: '50%', margin: '0 auto 14px', overflow: 'hidden', border: '2px solid rgba(255,0,204,0.35)', boxShadow: '0 0 32px rgba(255,0,204,0.25)' }}>
-              <CLCLogo size={72} />
-            </div>
-            <h2 style={{ fontSize: '1.7rem', fontWeight: 900, marginBottom: 5, ...candyText }}>
-              {isFirstTime ? 'Create Your Space' : 'Welcome Back'}
-            </h2>
-            <p style={{ fontSize: '0.8rem', color: faint }}>
-              {isFirstTime ? 'Your data stays on this device — private, always' : 'Your dashboard is waiting'}
-            </p>
-          </div>
-
-          {!isFirstTime && (
-            <div style={{ display: 'flex', gap: 4, marginBottom: 18, padding: 4, borderRadius: 16, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              {(['sign-in', 'create'] as Mode[]).map(m => (
-                <button key={m} onClick={() => { setMode(m); setError(''); }} style={{
-                  flex: 1, background: mode === m ? 'linear-gradient(135deg,#FF00CC,#FF7A00)' : 'transparent',
-                  color: mode === m ? '#fff' : mid,
-                  boxShadow: mode === m ? '0 2px 12px rgba(255,0,204,0.3)' : 'none',
-                  fontSize: '0.78rem', fontWeight: 700, border: 'none', borderRadius: 12, padding: '9px 0', cursor: 'pointer',
-                }}>
-                  {m === 'sign-in' ? 'Sign In' : 'Create Account'}
-                </button>
-              ))}
-            </div>
           )}
+          {installed && <span style={{ fontSize: '0.75rem', color: C.textFaint }}>✓ Installed</span>}
+          <button
+            onClick={() => document.getElementById('auth-section')?.scrollIntoView({ behavior: 'smooth' })}
+            style={{ padding: '9px 20px', borderRadius: 8, background: C.lavender, color: C.white, border: 'none', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', letterSpacing: '0.02em' }}
+          >
+            {mode === 'create' ? 'Get Started' : 'Sign In'}
+          </button>
+        </div>
+      </nav>
 
-          <form onSubmit={submit} style={{ ...glassCard({ padding: '26px 26px 22px' }) }}>
-            <div style={{ marginBottom: 14 }}>
-              <label style={{ display: 'block', fontSize: '0.7rem', fontFamily: 'monospace', color: faint, marginBottom: 6, letterSpacing: 1 }}>USERNAME</label>
-              <input style={{ background: 'rgba(255,255,255,0.05)', border: `1.5px solid rgba(255,255,255,0.12)`, borderRadius: 12, padding: '10px 13px', color: light, fontSize: '0.88rem', outline: 'none', width: '100%', boxSizing: 'border-box' }}
-                placeholder="your username" value={username} onChange={e => { setUsername(e.target.value); setError(''); }}
-                autoCapitalize="none" autoComplete={mode === 'create' ? 'new-password' : 'username'} />
-            </div>
-            <div style={{ marginBottom: mode === 'create' ? 10 : 22 }}>
-              <label style={{ display: 'block', fontSize: '0.7rem', fontFamily: 'monospace', color: faint, marginBottom: 6, letterSpacing: 1 }}>PASSWORD</label>
-              <div style={{ position: 'relative' }}>
-                <input style={{ background: 'rgba(255,255,255,0.05)', border: `1.5px solid rgba(255,255,255,0.12)`, borderRadius: 12, padding: '10px 38px 10px 13px', color: light, fontSize: '0.88rem', outline: 'none', width: '100%', boxSizing: 'border-box' }}
-                  type={showPw ? 'text' : 'password'}
-                  placeholder={mode === 'create' ? 'min 8 chars · uppercase · number · symbol' : 'your password'}
-                  value={password} onChange={e => { setPassword(e.target.value); setError(''); }}
-                  autoComplete={mode === 'create' ? 'new-password' : 'current-password'} />
-                <button type="button" onClick={() => setShowPw(!showPw)} style={{ position: 'absolute', right: 11, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: faint, padding: 2 }}>
-                  {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
-                </button>
-              </div>
-            </div>
+      {/* ── HERO ───────────────────────────────────────────────────────── */}
+      <section style={{ ...section(), minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: 80, position: 'relative' }}>
+        {/* Background grid */}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 0,
+          backgroundImage: `linear-gradient(${C.lavDim} 1px, transparent 1px), linear-gradient(90deg, ${C.lavDim} 1px, transparent 1px)`,
+          backgroundSize: '60px 60px',
+          opacity: 0.4,
+        }} />
+        {/* Glow */}
+        <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%)', zIndex: 0 }} />
 
-            {mode === 'create' && password.length > 0 && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 12px', marginBottom: 16, padding: '10px 12px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                {pwChecks.map(c => <PwCheck key={c.label} label={c.label} met={c.met} />)}
-              </div>
-            )}
-
-            {error && (
-              <div style={{ marginBottom: 14, padding: '7px 11px', borderRadius: 10, background: 'rgba(255,0,0,0.08)', border: '1px solid rgba(255,0,0,0.25)', color: '#FF6B6B', fontSize: '0.78rem' }}>{error}</div>
-            )}
-            <button type="submit" disabled={loading || !username || !password} style={{
-              width: '100%', padding: '12px 0', borderRadius: 13, border: 'none',
-              cursor: loading || !username || !password ? 'not-allowed' : 'pointer',
-              background: loading || !username || !password ? 'rgba(255,255,255,0.08)' : 'linear-gradient(135deg,#FF00CC,#FF7A00)',
-              color: loading || !username || !password ? faint : '#fff',
-              fontSize: '0.92rem', fontWeight: 800,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              boxShadow: loading || !username || !password ? 'none' : '0 6px 24px rgba(255,0,204,0.3)',
-            }}>
-              {loading ? 'Unlocking...' : <>{mode === 'create' ? 'Create Account' : 'Sign In'} <ArrowRight size={14} /></>}
-            </button>
-          </form>
-          <p style={{ textAlign: 'center', fontSize: '0.66rem', marginTop: 13, color: faint, fontFamily: 'monospace' }}>
-            🔒 Data stored locally · Never sent anywhere
-          </p>
-        </section>
-
-        {/* ══════ FOOTER ══════ */}
-        <footer style={{ borderTop: '1px solid rgba(255,255,255,0.07)', padding: '34px 24px 50px', textAlign: 'center', background: 'rgba(0,0,0,0.35)' }}>
-          <div style={{ width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', margin: '0 auto 14px', border: '1.5px solid rgba(255,0,204,0.3)', boxShadow: '0 0 32px rgba(255,0,204,0.2), 0 4px 18px rgba(0,0,0,0.4)' }}>
-            <CLCLogo size={80} />
+        <div style={{ ...container, zIndex: 1, width: '100%', textAlign: 'center' }}>
+          <div style={{ marginBottom: 24 }}>
+            <CLCLogo size={72} />
           </div>
-          <p style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: 3, color: light }}>calendi</p>
-          <p style={{ fontSize: '0.72rem', color: mid, marginBottom: 7 }}>by Crystal Lynn Creates · CLC Premier Studios</p>
-          <a href="mailto:crystallynncreates@gmail.com" style={{ fontSize: '0.68rem', fontFamily: 'monospace', color: faint, letterSpacing: 0.8, textDecoration: 'none' }}>crystallynncreates@gmail.com</a>
-          <p style={{ fontSize: '0.62rem', color: 'rgba(240,232,255,0.15)', marginTop: 16 }}>© 2026 CLC Premier Studios · All rights reserved</p>
-        </footer>
+          <div style={{ fontSize: '0.75rem', color: C.textFaint, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 24 }}>
+            by CLC Premier Studios
+          </div>
 
-      </div>
+          {/* Big block "calendi" */}
+          <h1 style={{
+            fontSize: 'clamp(64px, 14vw, 180px)',
+            fontWeight: 900,
+            letterSpacing: '-0.04em',
+            lineHeight: 0.9,
+            margin: '0 0 24px',
+            background: CANDY,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>
+            calendi
+          </h1>
+
+          <p style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.6rem)', color: C.textDim, maxWidth: 640, margin: '0 auto 40px', lineHeight: 1.5, fontWeight: 300 }}>
+            The calendar that does everything. Stream, socialize, plan, and play — all in one beautiful place.
+          </p>
+
+          <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => document.getElementById('auth-section')?.scrollIntoView({ behavior: 'smooth' })}
+              style={{ padding: '16px 36px', borderRadius: 10, background: C.lavender, color: C.white, border: 'none', fontWeight: 800, fontSize: '1rem', cursor: 'pointer', letterSpacing: '0.02em' }}
+            >
+              {isFirstTime ? 'Create Free Account' : 'Sign In'}
+            </button>
+            <button
+              onClick={() => document.getElementById('slider-section')?.scrollIntoView({ behavior: 'smooth' })}
+              style={{ padding: '16px 36px', borderRadius: 10, background: 'transparent', color: C.lavLight, border: `1px solid ${C.lavBorder}`, fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}
+            >
+              {"See What's Inside ↓"}
+            </button>
+          </div>
+
+          {/* Scroll hint */}
+          <div style={{ marginTop: 80, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, opacity: 0.4 }}>
+            <div style={{ width: 1, height: 40, background: `linear-gradient(to bottom, ${C.lavender}, transparent)` }} />
+            <span style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: C.textFaint }}>scroll</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRODUCT SLIDER ─────────────────────────────────────────────── */}
+      <section id="slider-section" style={{ ...section(C.sectionAlt), padding: '100px 0' }}>
+        <div style={container}>
+          <RevealBox style={{ marginBottom: 48, textAlign: 'center' }}>
+            <div style={{ fontSize: '0.7rem', color: C.lavender, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>PRODUCT OVERVIEW</div>
+            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, letterSpacing: '-0.03em', margin: '0 0 16px' }}>
+              See Calendi in action
+            </h2>
+            <p style={{ fontSize: '1.05rem', color: C.textDim, maxWidth: 520, margin: '0 auto' }}>
+              Built for modern life — five powerful features in one seamless experience.
+            </p>
+          </RevealBox>
+
+          {/* Slider controls */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 16 }}>
+            <button onClick={() => scrollSlider(-1)} disabled={slideIdx === 0}
+              style={{ width: 40, height: 40, borderRadius: '50%', border: `1px solid ${C.lavBorder}`, background: C.lavDim, color: slideIdx === 0 ? C.textFaint : C.lavLight, cursor: slideIdx === 0 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ChevronLeft size={18} />
+            </button>
+            <button onClick={() => scrollSlider(1)} disabled={slideIdx === SLIDES.length - 1}
+              style={{ width: 40, height: 40, borderRadius: '50%', border: `1px solid ${C.lavBorder}`, background: C.lavDim, color: slideIdx === SLIDES.length - 1 ? C.textFaint : C.lavLight, cursor: slideIdx === SLIDES.length - 1 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ChevronRight size={18} />
+            </button>
+          </div>
+
+          {/* Scrollable slide track */}
+          <div ref={sliderRef} style={{ display: 'flex', gap: 20, overflowX: 'auto', scrollSnapType: 'x mandatory', scrollbarWidth: 'none', paddingBottom: 8 }}>
+            {SLIDES.map((slide, i) => (
+              <div key={slide.id} data-slide={i}
+                onClick={() => setSlideIdx(i)}
+                style={{
+                  scrollSnapAlign: 'start',
+                  flexShrink: 0,
+                  width: 'clamp(260px, 30vw, 320px)',
+                  background: i === slideIdx ? C.lavDim : C.cardBg,
+                  border: `1px solid ${i === slideIdx ? C.lavBorder : C.cardBorder}`,
+                  borderRadius: 16,
+                  padding: 20,
+                  cursor: 'pointer',
+                  transition: 'background 0.3s, border-color 0.3s',
+                }}>
+                <div style={{ display: 'inline-block', padding: '3px 10px', borderRadius: 20, background: `${slide.tagColor}20`, border: `1px solid ${slide.tagColor}40`, color: slide.tagColor, fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', marginBottom: 12 }}>
+                  {slide.tag}
+                </div>
+                <SlideVisual id={slide.id} />
+                <div style={{ marginTop: 16 }}>
+                  <div style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: 6 }}>{slide.headline}</div>
+                  <div style={{ fontSize: '0.82rem', color: C.textDim, lineHeight: 1.5 }}>{slide.sub}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Dot indicators */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 24 }}>
+            {SLIDES.map((_, i) => (
+              <div key={i} onClick={() => setSlideIdx(i)}
+                style={{ width: i === slideIdx ? 24 : 6, height: 6, borderRadius: 3, background: i === slideIdx ? C.lavender : C.textFaint, cursor: 'pointer', transition: 'all 0.3s' }} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FEATURE 1: Calendar ───────────────────────────────────────── */}
+      <section style={{ ...section(), padding: '100px 0', borderTop: `1px solid ${C.cardBorder}` }}>
+        <div style={{ ...container, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px,1fr))', gap: 64, alignItems: 'center' }}>
+          <RevealBox>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+              {CALENDAR_DAYS.filter(({ dots }) => dots.length > 0).slice(0, 3).map(({ d, dots }) => (
+                <div key={d} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px', borderRadius: 10, background: C.cardBg, border: `1px solid ${C.cardBorder}` }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 8, background: `${dots[0]}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 700, color: dots[0] }}>{d}</div>
+                  <div style={{ display: 'flex', gap: 4 }}>
+                    {dots.map(c => <div key={c} style={{ width: 8, height: 8, borderRadius: '50%', background: c }} />)}
+                  </div>
+                  <span style={{ fontSize: '0.75rem', color: C.textDim }}>Aug {d}</span>
+                </div>
+              ))}
+            </div>
+            {/* Mini calendar grid */}
+            <div style={{ background: C.cardBg, border: `1px solid ${C.cardBorder}`, borderRadius: 16, padding: '16px', maxWidth: 340 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <span style={{ fontWeight: 700, color: C.lavLight }}>August 2026</span>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <ChevronLeft size={14} style={{ color: C.textFaint }} />
+                  <ChevronRight size={14} style={{ color: C.textFaint }} />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 4 }}>
+                {['S','M','T','W','T','F','S'].map(d => <div key={d} style={{ textAlign: 'center', fontSize: '0.6rem', color: C.textFaint, fontWeight: 600 }}>{d}</div>)}
+                {[null,null,null,null].map((_, i) => <div key={`e${i}`} />)}
+                {CALENDAR_DAYS.slice(0, 18).map(({ d, dots }) => (
+                  <div key={d} style={{ aspectRatio: '1', borderRadius: 6, background: d === 21 ? C.lavender : dots.length ? `${dots[0]}18` : 'transparent', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, cursor: 'pointer' }}>
+                    <span style={{ fontSize: '0.65rem', fontWeight: d === 21 ? 700 : 400, color: d === 21 ? C.white : C.textDim }}>{d}</span>
+                    {dots.length > 0 && d !== 21 && <div style={{ display: 'flex', gap: 1 }}>{dots.slice(0,2).map(c => <div key={c} style={{ width: 3, height: 3, borderRadius: '50%', background: c }} />)}</div>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </RevealBox>
+          <RevealBox delay={0.15}>
+            <div style={{ fontSize: '0.7rem', color: C.lavender, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 16 }}>CALENDAR</div>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.1, margin: '0 0 20px' }}>
+              Life organized.<br />Nothing missed.
+            </h2>
+            <p style={{ fontSize: '1.05rem', color: C.textDim, lineHeight: 1.7, marginBottom: 28 }}>
+              55+ event types — birthdays, payday, gym, shopping, self-care, appointments, and more. Color-coded, reminder-ready, and always in view.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {['📅 Events', '🔔 Reminders', '🎂 Birthdays', '💰 Payday', '💪 Gym', '🧘 Self-Care', '✈️ Trips', '🛍️ Shopping'].map(t => (
+                <div key={t} style={{ padding: '6px 14px', borderRadius: 20, background: C.cardBg, border: `1px solid ${C.cardBorder}`, fontSize: '0.78rem', color: C.textDim }}>{t}</div>
+              ))}
+            </div>
+          </RevealBox>
+        </div>
+      </section>
+
+      {/* ── FEATURE 2: Apps ──────────────────────────────────────────── */}
+      <section style={{ ...section(C.sectionAlt), padding: '100px 0' }}>
+        <div style={{ ...container, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px,1fr))', gap: 64, alignItems: 'center' }}>
+          <RevealBox delay={0.1}>
+            <div style={{ fontSize: '0.7rem', color: '#22D3EE', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 16 }}>BUILT-IN APPS</div>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.1, margin: '0 0 20px' }}>
+              Every app.<br />One place.
+            </h2>
+            <p style={{ fontSize: '1.05rem', color: C.textDim, lineHeight: 1.7, marginBottom: 28 }}>
+              No more tab-switching. Netflix, Disney+, Gmail, Instagram, Zoom — all open inside Calendi. Stream, chat, work, and call without ever leaving.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, maxWidth: 340 }}>
+              {[['🎬','Netflix'],['🎭','Disney+'],['📦','Prime'],['▶️','YouTube'],['📸','Instagram'],['📘','Facebook'],['✉️','Gmail'],['🎥','Zoom']].map(([em, n]) => (
+                <div key={n as string} style={{ background: C.cardBg, border: `1px solid ${C.cardBorder}`, borderRadius: 12, padding: '12px 6px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '1.4rem', marginBottom: 4 }}>{em}</div>
+                  <div style={{ fontSize: '0.55rem', color: C.textFaint }}>{n}</div>
+                </div>
+              ))}
+            </div>
+          </RevealBox>
+          <RevealBox delay={0.2}>
+            <div style={{ background: C.cardBg, border: `1px solid ${C.cardBorder}`, borderRadius: 20, overflow: 'hidden', maxWidth: 380 }}>
+              <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px 16px', borderBottom: `1px solid ${C.cardBorder}`, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 5 }}>{['#FF5F57','#FFBD2E','#28CA41'].map(c => <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />)}</div>
+                <div style={{ fontWeight: 700, fontSize: '0.8rem', color: C.textDim }}>Calendi — Apps</div>
+              </div>
+              <MockupApps />
+            </div>
+          </RevealBox>
+        </div>
+      </section>
+
+      {/* ── FEATURE GRID ─────────────────────────────────────────────── */}
+      <section style={{ ...section(), padding: '100px 0', borderTop: `1px solid ${C.cardBorder}` }}>
+        <div style={container}>
+          <RevealBox style={{ textAlign: 'center', marginBottom: 60 }}>
+            <div style={{ fontSize: '0.7rem', color: C.lavender, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>FEATURES</div>
+            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, letterSpacing: '-0.03em', margin: '0 0 16px' }}>
+              Everything you need
+            </h2>
+            <p style={{ fontSize: '1.05rem', color: C.textDim, maxWidth: 520, margin: '0 auto' }}>
+              One app that replaces your planner, your launcher, and your entertainment hub.
+            </p>
+          </RevealBox>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
+            {FEATURES.map((f, i) => (
+              <RevealBox key={f.title} delay={i * 0.05} style={{
+                background: C.cardBg,
+                border: `1px solid ${C.cardBorder}`,
+                borderRadius: 16,
+                padding: '28px 24px',
+                transition: 'border-color 0.2s',
+              }}>
+                <div style={{ fontSize: '2rem', marginBottom: 14 }}>{f.emoji}</div>
+                <div style={{ fontWeight: 800, fontSize: '1rem', marginBottom: 8 }}>{f.title}</div>
+                <div style={{ fontSize: '0.83rem', color: C.textDim, lineHeight: 1.6 }}>{f.desc}</div>
+              </RevealBox>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRICING ──────────────────────────────────────────────────── */}
+      <section style={{ ...section(C.sectionAlt), padding: '100px 0' }}>
+        <div style={container}>
+          <RevealBox style={{ textAlign: 'center', marginBottom: 60 }}>
+            <div style={{ fontSize: '0.7rem', color: C.lavender, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 12 }}>PRICING</div>
+            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, letterSpacing: '-0.03em', margin: 0 }}>
+              Start free. Stay free.
+            </h2>
+          </RevealBox>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 24, maxWidth: 720, margin: '0 auto' }}>
+            {/* Free */}
+            <RevealBox style={{ background: C.cardBg, border: `1px solid ${C.cardBorder}`, borderRadius: 20, padding: '32px 28px' }}>
+              <div style={{ fontWeight: 800, fontSize: '1.2rem', marginBottom: 4 }}>Free</div>
+              <div style={{ fontWeight: 900, fontSize: '2.5rem', letterSpacing: '-0.03em', margin: '8px 0 24px' }}>$0<span style={{ fontSize: '1rem', fontWeight: 400, color: C.textDim }}>/mo</span></div>
+              {FREE_PERKS.map(p => (
+                <div key={p} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 12, fontSize: '0.88rem', color: C.textDim }}>
+                  <span style={{ color: C.lavLight, marginTop: 2 }}>✓</span>{p}
+                </div>
+              ))}
+              <button
+                onClick={() => document.getElementById('auth-section')?.scrollIntoView({ behavior: 'smooth' })}
+                style={{ width: '100%', padding: '13px', borderRadius: 10, border: `1px solid ${C.lavBorder}`, background: 'transparent', color: C.lavLight, fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer', marginTop: 16 }}>
+                Get Started Free
+              </button>
+            </RevealBox>
+            {/* Pro */}
+            <RevealBox delay={0.1} style={{ background: `linear-gradient(145deg, rgba(139,92,246,0.2), rgba(139,92,246,0.06))`, border: `1px solid ${C.lavBorder}`, borderRadius: 20, padding: '32px 28px', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', top: 16, right: 16, padding: '3px 10px', borderRadius: 20, background: C.lavender, color: C.white, fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em' }}>PREMIUM</div>
+              <div style={{ fontWeight: 800, fontSize: '1.2rem', marginBottom: 4 }}>Premium</div>
+              <div style={{ fontWeight: 900, fontSize: '2.5rem', letterSpacing: '-0.03em', margin: '8px 0 24px' }}>$4.99<span style={{ fontSize: '1rem', fontWeight: 400, color: C.textDim }}>/mo</span></div>
+              {PRO_PERKS.map(p => (
+                <div key={p} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 12, fontSize: '0.88rem', color: C.textDim }}>
+                  <span style={{ color: '#A78BFA', marginTop: 2 }}>✓</span>{p}
+                </div>
+              ))}
+              <button style={{ width: '100%', padding: '13px', borderRadius: 10, border: 'none', background: C.lavender, color: C.white, fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer', marginTop: 16 }}>
+                Upgrade to Premium
+              </button>
+            </RevealBox>
+          </div>
+        </div>
+      </section>
+
+      {/* ── AUTH FORM ────────────────────────────────────────────────── */}
+      <section id="auth-section" style={{ ...section(), padding: '100px 0', borderTop: `1px solid ${C.cardBorder}` }}>
+        <div style={{ ...container, maxWidth: 480, textAlign: 'center' }}>
+          <RevealBox>
+            <div style={{ marginBottom: 8 }}><CLCLogo size={56} /></div>
+            <h2 style={{ fontSize: '2rem', fontWeight: 900, letterSpacing: '-0.03em', marginBottom: 8 }}>
+              {mode === 'create' ? 'Create your account' : 'Welcome back'}
+            </h2>
+            <p style={{ color: C.textDim, fontSize: '0.9rem', marginBottom: 32 }}>
+              {mode === 'create' ? 'Free forever. No credit card required.' : 'Sign in to continue to Calendi.'}
+            </p>
+
+            <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 14, textAlign: 'left' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: 6, color: C.textDim, letterSpacing: '0.05em' }}>USERNAME</label>
+                <input
+                  type="text" value={username} onChange={e => setUsername(e.target.value)}
+                  placeholder="yourname" required autoComplete="username"
+                  style={input}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: 6, color: C.textDim, letterSpacing: '0.05em' }}>PASSWORD</label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showPw ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)}
+                    placeholder={mode === 'create' ? 'Min 8 chars, uppercase, number, special' : '••••••••'}
+                    required autoComplete={mode === 'create' ? 'new-password' : 'current-password'}
+                    style={{ ...input, paddingRight: 44 }}
+                  />
+                  <button type="button" onClick={() => setShowPw(p => !p)}
+                    style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: C.textFaint, cursor: 'pointer', padding: 4 }}>
+                    {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {mode === 'create' && password.length > 0 && (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px', marginTop: 10, padding: '10px 14px', borderRadius: 10, background: 'rgba(139,92,246,0.07)', border: `1px solid ${C.lavDim}` }}>
+                    <PwCheck label="8+ characters" met={pwHasLen} />
+                    <PwCheck label="Uppercase letter" met={pwHasUpper} />
+                    <PwCheck label="Number (0–9)" met={pwHasNum} />
+                    <PwCheck label="Special character" met={pwHasSpecial} />
+                  </div>
+                )}
+              </div>
+
+              {error && (
+                <div style={{ padding: '10px 14px', borderRadius: 8, background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#FCA5A5', fontSize: '0.82rem' }}>
+                  {error}
+                </div>
+              )}
+
+              <button type="submit" disabled={loading}
+                style={{ padding: '15px', borderRadius: 10, border: 'none', background: loading ? C.lavDim : C.lavender, color: loading ? C.textFaint : C.white, fontWeight: 800, fontSize: '1rem', cursor: loading ? 'not-allowed' : 'pointer', letterSpacing: '0.02em', transition: 'background 0.2s' }}>
+                {loading ? 'Just a moment…' : (mode === 'create' ? 'Create Account' : 'Sign In')}
+              </button>
+            </form>
+
+            <div style={{ textAlign: 'center', marginTop: 20, fontSize: '0.83rem', color: C.textDim }}>
+              {mode === 'create' ? 'Already have an account?' : 'New to Calendi?'}{' '}
+              <button onClick={() => { setMode(mode === 'create' ? 'sign-in' : 'create'); setError(''); }}
+                style={{ background: 'none', border: 'none', color: C.lavLight, fontWeight: 700, cursor: 'pointer', fontSize: '0.83rem' }}>
+                {mode === 'create' ? 'Sign in' : 'Create a free account'}
+              </button>
+            </div>
+          </RevealBox>
+        </div>
+      </section>
+
+      {/* ── BIG FOOTER ───────────────────────────────────────────────── */}
+      <footer style={{ background: C.black, borderTop: `1px solid ${C.cardBorder}`, overflow: 'hidden' }}>
+        {/* Footer links row */}
+        <div style={{ ...container, padding: '48px 32px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <CLCLogo size={40} />
+            <span style={{ fontSize: '0.8rem', color: C.textFaint }}>© 2026 CLC Premier Studios</span>
+          </div>
+          <div style={{ display: 'flex', gap: 24 }}>
+            {['Privacy', 'Terms', 'Support'].map(l => (
+              <span key={l} style={{ fontSize: '0.8rem', color: C.textFaint, cursor: 'pointer' }}>{l}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* BIG BLOCK LETTERS */}
+        <div style={{ padding: '20px 0 0', borderTop: `1px solid ${C.cardBorder}`, overflow: 'hidden' }}>
+          {/* "calendi" */}
+          <div style={{
+            fontSize: 'clamp(48px, 11vw, 140px)',
+            fontWeight: 900,
+            letterSpacing: '-0.04em',
+            lineHeight: 0.88,
+            padding: '0 24px',
+            background: CANDY,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>
+            calendi
+          </div>
+
+          {/* "CLC PREMIER STUDIOS" */}
+          <div style={{
+            fontSize: 'clamp(22px, 5.5vw, 80px)',
+            fontWeight: 900,
+            letterSpacing: '-0.02em',
+            lineHeight: 1,
+            padding: '4px 24px 32px',
+            background: FOOTER_CANDY,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>
+            CLC PREMIER STUDIOS
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

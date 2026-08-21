@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type CSSProperties, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, ArrowRight, Download, CheckCircle, Sparkles, Star, Crown, Shield, Check, Zap } from 'lucide-react';
-import { login, register, hasAnyUser, validatePassword } from '../auth';
+import { Eye, EyeOff, ArrowRight, Download, CheckCircle, Sparkles, Star, Crown, Shield, Check } from 'lucide-react';
+import { login, register, hasAnyUser } from '../auth';
 import { useStore } from '../store';
 import { CLCLogo } from '../components/CLCLogo';
 import LandscapeScene from '../components/LandscapeScene';
@@ -97,7 +97,7 @@ const faint = 'rgba(240,232,255,0.28)';
 const card  = 'rgba(10,0,21,0.68)';
 const cardBorder = 'rgba(255,255,255,0.1)';
 
-function glassCard(extra?: React.CSSProperties): React.CSSProperties {
+function glassCard(extra?: CSSProperties): CSSProperties {
   return {
     background: card,
     backdropFilter: 'blur(24px)',
@@ -153,7 +153,7 @@ export default function Login() {
     setInstallPrompt(null); setInstallable(false);
   }
 
-  async function submit(e: React.FormEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault(); setError(''); setLoading(true);
     await new Promise(r => setTimeout(r, 380));
     if (mode === 'create') {
@@ -185,7 +185,7 @@ export default function Login() {
   ];
 
   const candyGrad = 'linear-gradient(135deg,#FF00CC,#FF7A00,#FFE500,#00FF7A,#00AAFF,#AA00FF)';
-  const candyText: React.CSSProperties = { background: candyGrad, backgroundSize: '300% 100%', animation: 'gradient-shift 5s ease infinite', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' };
+  const candyText: CSSProperties = { background: candyGrad, backgroundSize: '300% 100%', animation: 'gradient-shift 5s ease infinite', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' };
 
   return (
     <div style={{ background: '#0a0015', color: light, minHeight: '100vh', overflowX: 'hidden' }}>

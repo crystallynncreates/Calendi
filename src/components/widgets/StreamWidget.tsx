@@ -19,11 +19,12 @@ const SOCIAL_APPS: AppEntry[] = [
 ];
 
 const WORK_APPS: AppEntry[] = [
-  { id: 'gmail',     name: 'Gmail',      url: 'https://mail.google.com',      emoji: '📧', color: '#EA4335', bgColor: 'rgba(234,67,53,0.1)',    borderColor: 'rgba(234,67,53,0.3)',   canEmbed: false },
-  { id: 'outlook',   name: 'Outlook',    url: 'https://outlook.live.com',     emoji: '📨', color: '#0078D4', bgColor: 'rgba(0,120,212,0.12)',   borderColor: 'rgba(0,120,212,0.3)',   canEmbed: true  },
-  { id: 'teams',     name: 'Teams',      url: 'https://teams.microsoft.com',  emoji: '🏢', color: '#6264A7', bgColor: 'rgba(98,100,167,0.12)',  borderColor: 'rgba(98,100,167,0.3)',  canEmbed: false },
-  { id: 'meet',      name: 'Meet',       url: 'https://meet.google.com',      emoji: '🎥', color: '#00897B', bgColor: 'rgba(0,137,123,0.1)',    borderColor: 'rgba(0,137,123,0.3)',   canEmbed: true  },
-  { id: 'zoom',      name: 'Zoom',       url: 'https://zoom.us/join',         emoji: '📹', color: '#2D8CFF', bgColor: 'rgba(45,140,255,0.1)',   borderColor: 'rgba(45,140,255,0.3)',  canEmbed: true  },
+  { id: 'gmail',     name: 'Gmail',      url: 'https://mail.google.com',                       emoji: '📧', color: '#EA4335', bgColor: 'rgba(234,67,53,0.1)',    borderColor: 'rgba(234,67,53,0.3)',   canEmbed: false },
+  { id: 'outlook',   name: 'Outlook',    url: 'https://outlook.live.com',                      emoji: '📨', color: '#0078D4', bgColor: 'rgba(0,120,212,0.12)',   borderColor: 'rgba(0,120,212,0.3)',   canEmbed: true  },
+  { id: 'teams',     name: 'Teams',      url: 'https://teams.microsoft.com',                   emoji: '🏢', color: '#6264A7', bgColor: 'rgba(98,100,167,0.12)',  borderColor: 'rgba(98,100,167,0.3)',  canEmbed: false },
+  { id: 'meet',      name: 'Meet',       url: 'https://meet.google.com',                       emoji: '🎥', color: '#00897B', bgColor: 'rgba(0,137,123,0.1)',    borderColor: 'rgba(0,137,123,0.3)',   canEmbed: true  },
+  { id: 'zoom',      name: 'Zoom',       url: 'https://zoom.us/join',                          emoji: '📹', color: '#2D8CFF', bgColor: 'rgba(45,140,255,0.1)',   borderColor: 'rgba(45,140,255,0.3)',  canEmbed: true  },
+  { id: 'canvas',    name: 'Canvas',     url: 'https://cloud.canvaslms.net/login/canvas',      emoji: '🎓', color: '#E66000', bgColor: 'rgba(230,96,0,0.1)',     borderColor: 'rgba(230,96,0,0.3)',    canEmbed: true  },
 ];
 
 const GAME_APPS: AppEntry[] = [

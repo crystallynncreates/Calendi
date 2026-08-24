@@ -269,13 +269,13 @@ function ProductCard({ icon, title, desc, color, delay = 0 }: { icon: string; ti
 
 // ─── Spotlight section (Adobe alternating) ────────────────────────────────────
 function Spotlight({
-  visual, eyebrow, headline, body, chips = [], cta, reverse = false, bg = W,
+  visual, eyebrow, headline, body, chips = [], cta, reverse = false, bg = W, dark = false, className = '',
 }: {
   visual: ReactNode; eyebrow: string; headline: string; body: string;
-  chips?: string[]; cta?: string; reverse?: boolean; bg?: string;
+  chips?: string[]; cta?: string; reverse?: boolean; bg?: string; dark?: boolean; className?: string;
 }) {
   return (
-    <section style={{ background: bg, padding: '100px 0' }}>
+    <section className={className} style={{ background: bg, padding: '100px 0' }}>
       <div style={{
         maxWidth: 1160, margin: '0 auto', padding: '0 48px',
         display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center',
@@ -283,16 +283,16 @@ function Spotlight({
       } as CSSProperties}>
         <Reveal style={{ direction: 'ltr' } as CSSProperties}>{visual}</Reveal>
         <Reveal delay={0.1} style={{ direction: 'ltr' } as CSSProperties}>
-          <div style={{ fontSize: '0.62rem', color: LAV, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 14 }}>{eyebrow}</div>
-          <h2 style={{ fontSize: 'clamp(2rem,3.2vw,2.8rem)', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.12, margin: '0 0 20px', color: B }} dangerouslySetInnerHTML={{ __html: headline }}/>
-          <p style={{ fontSize: '1.05rem', color: GRY, lineHeight: 1.78, marginBottom: chips.length || cta ? 24 : 0 }}>{body}</p>
+          <div style={{ fontSize: '0.62rem', color: dark ? LAV3 : LAV, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 14 }}>{eyebrow}</div>
+          <h2 style={{ fontSize: 'clamp(2rem,3.2vw,2.8rem)', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.12, margin: '0 0 20px', color: dark ? W : B }} dangerouslySetInnerHTML={{ __html: headline }}/>
+          <p style={{ fontSize: '1.05rem', color: dark ? 'rgba(255,255,255,0.54)' : GRY, lineHeight: 1.78, marginBottom: chips.length || cta ? 24 : 0 }}>{body}</p>
           {chips.length > 0 && (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: cta ? 24 : 0 }}>
-              {chips.map(c => <div key={c} style={{ padding: '5px 14px', borderRadius: 20, background: LAV4, border: `1px solid ${LAV2}30`, fontSize: '0.78rem', color: LAV, fontWeight: 500 }}>{c}</div>)}
+              {chips.map(c => <div key={c} style={{ padding: '5px 14px', borderRadius: 20, background: dark ? 'rgba(196,181,253,.08)' : LAV4, border: `1px solid ${dark ? 'rgba(196,181,253,.28)' : LAV2 + '30'}`, fontSize: '0.78rem', color: dark ? LAV3 : LAV, fontWeight: 500 }}>{c}</div>)}
             </div>
           )}
           {cta && (
-            <button style={{ padding: '12px 28px', borderRadius: 8, background: LAV, color: W, border: 'none', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' }}>{cta}</button>
+            <button style={{ padding: '12px 28px', borderRadius: 8, background: dark ? LAV2 : LAV, color: W, border: 'none', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' }}>{cta}</button>
           )}
         </Reveal>
       </div>
@@ -312,6 +312,8 @@ export default function Login() {
   const [error,    setError]    = useState('');
   const [loading,  setLoading]  = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const STEP = 320;
   const [installPrompt, setInstallPrompt] = useState<any>(null);
   const [installable,   setInstallable]   = useState(false);
   const [installed,     setInstalled]     = useState(false);
@@ -365,6 +367,16 @@ export default function Login() {
 
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
+  function slideLeft() {
+    if (!sliderRef.current) return;
+    sliderRef.current.scrollLeft = Math.max(0, sliderRef.current.scrollLeft - STEP);
+  }
+  function slideRight() {
+    if (!sliderRef.current) return;
+    const max = sliderRef.current.scrollWidth - sliderRef.current.clientWidth;
+    sliderRef.current.scrollLeft = Math.min(max, sliderRef.current.scrollLeft + STEP);
+  }
+
   const products = [
     { icon: '📅', title: 'Smart Calendar',       desc: '55+ event types — birthdays, payday, gym, appointments, trips and more.',       color: LAV },
     { icon: '🎬', title: 'Streaming & Social',   desc: 'Netflix, Disney+, Prime, Facebook, Instagram, WhatsApp — all in one panel.',   color: '#E50914' },
@@ -378,6 +390,20 @@ export default function Login() {
 
   return (
     <div style={{ fontFamily: 'system-ui,-apple-system,sans-serif', color: B, background: W, overflowX: 'hidden' }}>
+      <style>{`
+        @keyframes iri { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+        .calendi-iri {
+          background: linear-gradient(135deg,#FF00CC,#FF7A00,#FFE500,#00FF7A,#00AAFF,#AA00FF,#FF00CC);
+          background-size: 300% 300%;
+          -webkit-background-clip: text; background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: iri 5s ease infinite;
+          display: block;
+        }
+        .layer-black { position: relative; z-index: 20; border-radius: 32px 32px 0 0; box-shadow: 0 -20px 60px rgba(0,0,0,.5); overflow: hidden; }
+        .layer-white { position: relative; z-index: 10; }
+        .feat-slider::-webkit-scrollbar { display: none; }
+      `}</style>
 
       {/* ══ NAV — Adobe-style sticky top ════════════════════════════════════ */}
       <nav style={{
@@ -425,18 +451,18 @@ export default function Login() {
       </nav>
 
       {/* ══ HERO — two column, headline + auth form ══════════════════════════ */}
-      <section id="about" style={{ paddingTop: 60, background: W }}>
+      <section id="about" className="layer-white" style={{ paddingTop: 60, background: W }}>
         <div style={{ maxWidth: 1260, margin: '0 auto', padding: '80px 48px 80px', display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 64, alignItems: 'center', boxSizing: 'border-box' }}>
 
           {/* Left */}
           <div>
             <div style={{ fontSize: '0.65rem', color: GRY, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 20 }}>CLC Premier Studios</div>
 
-            {/* Outlined block letters */}
-            <h1 style={{ fontSize: 'clamp(64px,11vw,152px)', fontWeight: 900, letterSpacing: '-0.05em', lineHeight: 0.88, margin: '0', WebkitTextStroke: `3px ${LAV}`, color: 'transparent' }}>
+            {/* Iridescent block letters */}
+            <h1 className="calendi-iri" style={{ fontSize: 'clamp(64px,11vw,152px)', fontWeight: 900, letterSpacing: '-0.05em', lineHeight: 0.88, margin: 0 }}>
               calendi
             </h1>
-            <h1 aria-hidden="true" style={{ fontSize: 'clamp(64px,11vw,152px)', fontWeight: 900, letterSpacing: '-0.05em', lineHeight: 0.88, margin: '-0.88em 0 28px', color: LAV, opacity: 0.06, pointerEvents: 'none', userSelect: 'none' }}>
+            <h1 aria-hidden="true" style={{ fontSize: 'clamp(64px,11vw,152px)', fontWeight: 900, letterSpacing: '-0.05em', lineHeight: 0.88, margin: '-0.88em 0 28px', WebkitTextStroke: '2px rgba(124,58,237,.22)', color: 'transparent', pointerEvents: 'none', userSelect: 'none' }}>
               calendi
             </h1>
 
@@ -526,16 +552,29 @@ export default function Login() {
         </div>
       </section>
 
-      {/* ══ PRODUCT GRID — "Explore what's inside" (Adobe product grid style) */}
-      <section id="features" style={{ background: OFF, padding: '96px 0' }}>
+      {/* ══ FEATURE SLIDER — black section with square cards ════════════════ */}
+      <section id="features" className="layer-black" style={{ background: B, padding: '96px 0' }}>
         <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
-          <Reveal style={{ marginBottom: 52 }}>
-            <div style={{ fontSize: '0.65rem', color: LAV, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 14 }}>EVERYTHING INSIDE</div>
-            <h2 style={{ fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 900, letterSpacing: '-0.03em', margin: '0 0 14px', color: B }}>Explore what{"'"}s inside Calendi</h2>
-            <p style={{ fontSize: '1rem', color: GRY, maxWidth: 540, lineHeight: 1.7, margin: 0 }}>Every feature you need in one place — no tab-switching, no extra subscriptions for the basics.</p>
+          <Reveal style={{ marginBottom: 52, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+            <div>
+              <div style={{ fontSize: '0.65rem', color: LAV3, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 14 }}>EVERYTHING INSIDE</div>
+              <h2 style={{ fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 900, letterSpacing: '-0.03em', margin: '0 0 14px', color: W }}>Explore what{"'"}s inside Calendi</h2>
+              <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.5)', maxWidth: 540, lineHeight: 1.7, margin: 0 }}>Every feature you need in one place — no tab-switching, no extra subscriptions.</p>
+            </div>
+            <div style={{ display: 'flex', gap: 10, flexShrink: 0 }}>
+              <button onClick={slideLeft} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.18)', color: W, fontSize: '1.3rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
+              <button onClick={slideRight} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.18)', color: W, fontSize: '1.3rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>›</button>
+            </div>
           </Reveal>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 20 }}>
-            {products.map((p, i) => <ProductCard key={p.title} {...p} delay={i * 0.04}/>)}
+          <div ref={sliderRef} className="feat-slider" style={{ display: 'flex', gap: 20, overflowX: 'auto', scrollBehavior: 'smooth', scrollbarWidth: 'none', paddingBottom: 8 }}>
+            {products.map((p) => (
+              <div key={p.title} style={{ width: 300, minWidth: 300, height: 300, flexShrink: 0, borderRadius: 20, padding: '32px 28px', background: 'rgba(255,255,255,.04)', border: '1.5px solid rgba(196,181,253,.18)', display: 'flex', flexDirection: 'column', gap: 18, boxSizing: 'border-box' }}>
+                <div style={{ width: 54, height: 54, borderRadius: 14, background: `${p.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem' }}>{p.icon}</div>
+                <div style={{ fontWeight: 800, fontSize: '1.05rem', color: W }}>{p.title}</div>
+                <div style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>{p.desc}</div>
+                <div style={{ marginTop: 'auto', fontSize: '0.82rem', color: p.color, fontWeight: 600 }}>Learn more ›</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -550,6 +589,7 @@ export default function Login() {
           chips={['📅 Calendar','📝 Notes','🕐 Clock','🧮 Calculator','🖼️ Photos']}
           cta="See the dashboard"
           bg={W}
+          className="layer-white"
         />
         <Spotlight
           visual={<AppFrame h={440}><MockApps/></AppFrame>}
@@ -559,7 +599,9 @@ export default function Login() {
           chips={['🎬 Netflix','🎭 Disney+','📘 Facebook','📸 Instagram','💬 WhatsApp','🎓 Canvas']}
           cta="See all apps"
           reverse
-          bg={OFF}
+          bg={B}
+          dark
+          className="layer-black"
         />
       </div>
 
@@ -572,6 +614,7 @@ export default function Login() {
           chips={['🌐 Google','🎓 Canvas LMS','▶️ YouTube','🗺️ Maps','🔍 Any website']}
           cta="Try the browser"
           bg={W}
+          className="layer-white"
         />
         <Spotlight
           visual={<AppFrame h={400}><MockSkins/></AppFrame>}
@@ -580,12 +623,14 @@ export default function Login() {
           body="10 neon color themes and 9 live animated landscape skins — Aurora Borealis, Cherry Blossom, Night Sky, Melted Skittles, Cosmic, and more. Switch in one tap."
           chips={['🌌 Aurora','🌸 Cherry Blossom','🌃 Night Sky','🍬 Melted Skittles','🪐 Cosmic']}
           reverse
-          bg={OFF}
+          bg={B}
+          dark
+          className="layer-black"
         />
       </div>
 
       {/* ══ PRICING ══════════════════════════════════════════════════════════ */}
-      <section id="pricing" style={{ background: W, padding: '100px 0' }}>
+      <section id="pricing" className="layer-white" style={{ background: W, padding: '100px 0' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 48px' }}>
           <Reveal style={{ textAlign: 'center', marginBottom: 56 }}>
             <div style={{ fontSize: '0.65rem', color: LAV, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 14 }}>PRICING</div>

@@ -389,8 +389,9 @@ export default function Login() {
   ];
 
   return (
-    <div style={{ fontFamily: 'system-ui,-apple-system,sans-serif', color: B, background: W, overflowX: 'clip' }}>
+    <div style={{ fontFamily: 'system-ui,-apple-system,sans-serif', color: B, background: W }}>
       <style>{`
+        html, body { overflow-x: clip; }
         @keyframes iri { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
         .calendi-iri {
           background: linear-gradient(135deg,#FF00CC,#FF7A00,#FFE500,#00FF7A,#00AAFF,#AA00FF,#FF00CC);
@@ -400,8 +401,17 @@ export default function Login() {
           animation: iri 5s ease infinite;
           display: block;
         }
-        .layer-black { position: relative; z-index: 20; border-radius: 32px 32px 0 0; box-shadow: 0 -20px 60px rgba(0,0,0,.5); overflow: hidden; }
-        .layer-white { position: sticky; top: 0; z-index: 10; }
+        .layer-black {
+          position: relative; z-index: 20;
+          border-radius: 32px 32px 0 0;
+          box-shadow: 0 -20px 60px rgba(0,0,0,.6);
+          overflow: hidden;
+        }
+        .layer-white {
+          position: sticky; top: 0; z-index: 10;
+          min-height: 100vh;
+          display: flex; flex-direction: column; justify-content: center;
+        }
         .feat-slider::-webkit-scrollbar { display: none; }
       `}</style>
 

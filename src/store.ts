@@ -42,6 +42,9 @@ interface Store {
   isPremium: boolean;
   setIsPremium: (v: boolean) => void;
 
+  colorMode: 'light' | 'dark';
+  setColorMode: (m: 'light' | 'dark') => void;
+
   activeApp: AppEntry | null;
   setActiveApp: (app: AppEntry | null) => void;
 }
@@ -86,6 +89,9 @@ export const useStore = create<Store>()(
 
       isPremium: false,
       setIsPremium: (v) => set({ isPremium: v }),
+
+      colorMode: 'light',
+      setColorMode: (m) => set({ colorMode: m }),
 
       activeApp: null,
       setActiveApp: (app) => set({ activeApp: app }),
@@ -146,8 +152,36 @@ const LANDSCAPE_SKINS: Record<string, SkinColors> = {
   'melted-skittles': { color: '#FF00CC', glow: 'rgba(255,0,204,0.4)',   dim: 'rgba(255,0,204,0.14)',   isLandscape: true, scene: 'melted-skittles' },
 };
 
+const PHOTO_SKINS: Record<string, SkinColors> = {
+  'photo-landscape-1': { color: '#4A7C59', glow: 'rgba(74,124,89,0.35)',   dim: 'rgba(74,124,89,0.12)',   isLandscape: true, scene: 'photo-landscape-1' },
+  'photo-landscape-2': { color: '#5B8FA8', glow: 'rgba(91,143,168,0.35)',  dim: 'rgba(91,143,168,0.12)',  isLandscape: true, scene: 'photo-landscape-2' },
+  'photo-landscape-3': { color: '#6B9E6B', glow: 'rgba(107,158,107,0.35)', dim: 'rgba(107,158,107,0.12)', isLandscape: true, scene: 'photo-landscape-3' },
+  'photo-landscape-4': { color: '#8BA0A0', glow: 'rgba(139,160,160,0.35)', dim: 'rgba(139,160,160,0.12)', isLandscape: true, scene: 'photo-landscape-4' },
+  'photo-christmas-1': { color: '#EF4444', glow: 'rgba(239,68,68,0.35)',   dim: 'rgba(239,68,68,0.12)',   isLandscape: true, scene: 'photo-christmas-1' },
+  'photo-christmas-2': { color: '#22C55E', glow: 'rgba(34,197,94,0.35)',   dim: 'rgba(34,197,94,0.12)',   isLandscape: true, scene: 'photo-christmas-2' },
+  'photo-christmas-3': { color: '#FCD34D', glow: 'rgba(252,211,77,0.35)',  dim: 'rgba(252,211,77,0.12)',  isLandscape: true, scene: 'photo-christmas-3' },
+  'photo-christmas-4': { color: '#F87171', glow: 'rgba(248,113,113,0.35)', dim: 'rgba(248,113,113,0.12)', isLandscape: true, scene: 'photo-christmas-4' },
+  'photo-easter-1':    { color: '#C084FC', glow: 'rgba(192,132,252,0.35)', dim: 'rgba(192,132,252,0.12)', isLandscape: true, scene: 'photo-easter-1' },
+  'photo-easter-2':    { color: '#F9A8D4', glow: 'rgba(249,168,212,0.35)', dim: 'rgba(249,168,212,0.12)', isLandscape: true, scene: 'photo-easter-2' },
+  'photo-easter-3':    { color: '#86EFAC', glow: 'rgba(134,239,172,0.35)', dim: 'rgba(134,239,172,0.12)', isLandscape: true, scene: 'photo-easter-3' },
+  'photo-easter-4':    { color: '#FDE68A', glow: 'rgba(253,230,138,0.35)', dim: 'rgba(253,230,138,0.12)', isLandscape: true, scene: 'photo-easter-4' },
+  'photo-spring-1':    { color: '#EC4899', glow: 'rgba(236,72,153,0.35)',  dim: 'rgba(236,72,153,0.12)',  isLandscape: true, scene: 'photo-spring-1' },
+  'photo-spring-2':    { color: '#34D399', glow: 'rgba(52,211,153,0.35)',  dim: 'rgba(52,211,153,0.12)',  isLandscape: true, scene: 'photo-spring-2' },
+  'photo-spring-3':    { color: '#A3E635', glow: 'rgba(163,230,53,0.35)',  dim: 'rgba(163,230,53,0.12)',  isLandscape: true, scene: 'photo-spring-3' },
+  'photo-spring-4':    { color: '#FB923C', glow: 'rgba(251,146,60,0.35)',  dim: 'rgba(251,146,60,0.12)',  isLandscape: true, scene: 'photo-spring-4' },
+  'photo-fall-1':      { color: '#F59E0B', glow: 'rgba(245,158,11,0.35)',  dim: 'rgba(245,158,11,0.12)',  isLandscape: true, scene: 'photo-fall-1' },
+  'photo-fall-2':      { color: '#D97706', glow: 'rgba(217,119,6,0.35)',   dim: 'rgba(217,119,6,0.12)',   isLandscape: true, scene: 'photo-fall-2' },
+  'photo-fall-3':      { color: '#EF4444', glow: 'rgba(239,68,68,0.35)',   dim: 'rgba(239,68,68,0.12)',   isLandscape: true, scene: 'photo-fall-3' },
+  'photo-fall-4':      { color: '#B45309', glow: 'rgba(180,83,9,0.35)',    dim: 'rgba(180,83,9,0.12)',    isLandscape: true, scene: 'photo-fall-4' },
+  'photo-winter-1':    { color: '#BAE6FD', glow: 'rgba(186,230,253,0.35)', dim: 'rgba(186,230,253,0.12)', isLandscape: true, scene: 'photo-winter-1' },
+  'photo-winter-2':    { color: '#93C5FD', glow: 'rgba(147,197,253,0.35)', dim: 'rgba(147,197,253,0.12)', isLandscape: true, scene: 'photo-winter-2' },
+  'photo-winter-3':    { color: '#E0E7FF', glow: 'rgba(224,231,255,0.35)', dim: 'rgba(224,231,255,0.12)', isLandscape: true, scene: 'photo-winter-3' },
+  'photo-winter-4':    { color: '#BFDBFE', glow: 'rgba(191,219,254,0.35)', dim: 'rgba(191,219,254,0.12)', isLandscape: true, scene: 'photo-winter-4' },
+};
+
 export function getSkinColors(skin: SkinId, date = new Date()): SkinColors {
   if (skin in LANDSCAPE_SKINS) return LANDSCAPE_SKINS[skin];
+  if (skin in PHOTO_SKINS) return PHOTO_SKINS[skin];
   if (skin === 'auto') {
     const resolved = getAutoSkinForDate(date);
     return LANDSCAPE_SKINS[resolved] ?? COLOR_SKINS[resolved] ?? COLOR_SKINS.violet;
@@ -157,3 +191,4 @@ export function getSkinColors(skin: SkinId, date = new Date()): SkinColors {
 
 export const ALL_COLOR_SKINS = Object.keys(COLOR_SKINS) as SkinId[];
 export const ALL_LANDSCAPE_SKINS = Object.keys(LANDSCAPE_SKINS) as SkinId[];
+export const ALL_PHOTO_SKINS = Object.keys(PHOTO_SKINS) as SkinId[];

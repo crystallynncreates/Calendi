@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Plus, X, Bell, BellOff, Download, ExternalLink, User, Check, ChevronDown, ChevronUp, Share2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, X, Bell, BellOff, Download, ExternalLink, User, Check, ChevronDown, ChevronUp, Share2, Trash2 } from 'lucide-react';
 import CalendarShareModal from './CalendarShareModal';
 import {
   startOfMonth, endOfMonth, startOfWeek, endOfWeek,
@@ -101,6 +101,7 @@ export default function CalendarWidget({ compact }: Props) {
   const [viewDate, setViewDate] = useState(new Date());
   const [selected, setSelected] = useState<Date | null>(null);
   const [adding, setAdding] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [form, setForm] = useState<FormState>(BLANK);
   const [moreFields, setMoreFields] = useState(false);
   const [showShare, setShowShare] = useState(false);
@@ -288,8 +289,14 @@ export default function CalendarWidget({ compact }: Props) {
               <Share2 size={10} style={{ color }} />
             </button>
             <button className="btn-ghost btn-pill !px-2 !py-1 gap-1"
+              style={{ color: deleting ? '#EF4444' : 'rgba(226,232,240,0.45)', borderColor: deleting ? 'rgba(239,68,68,0.4)' : 'rgba(226,232,240,0.12)', fontSize: '0.62rem' }}
+              onClick={() => { setDeleting(!deleting); setAdding(false); }}
+              title="delete events">
+              <Trash2 size={10} /> delete
+            </button>
+            <button className="btn-ghost btn-pill !px-2 !py-1 gap-1"
               style={{ color, borderColor: `${color}40`, fontSize: '0.62rem' }}
-              onClick={() => { setAdding(!adding); if (!adding) setMoreFields(false); }}>
+              onClick={() => { setAdding(!adding); setDeleting(false); if (!adding) setMoreFields(false); }}>
               <Plus size={10} /> add
             </button>
           </div>
@@ -341,9 +348,18 @@ export default function CalendarWidget({ compact }: Props) {
                     )}
                   </div>
                   <div className="flex flex-col gap-1 items-end shrink-0">
-                    <button onClick={() => removeEvent(e.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.16)', padding: 2 }}>
-                      <X size={10} />
-                    </button>
+                    {deleting ? (
+                      <button onClick={() => { removeEvent(e.id); setDeleting(false); }}
+                        style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.35)', borderRadius: 8, cursor: 'pointer', color: '#EF4444', padding: '4px 6px', display: 'flex', alignItems: 'center', gap: 3, fontSize: '0.6rem', fontWeight: 600 }}>
+                        <Trash2 size={10} /> remove
+                      </button>
+                    ) : (
+                      <button onClick={() => removeEvent(e.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.4)', padding: 2 }}
+                        onMouseEnter={el => (el.currentTarget as HTMLButtonElement).style.color = '#EF4444'}
+                        onMouseLeave={el => (el.currentTarget as HTMLButtonElement).style.color = 'rgba(226,232,240,0.4)'}>
+                        <X size={10} />
+                      </button>
+                    )}
                     <a href={googleCalLink(e)} target="_blank" rel="noopener noreferrer" title="Add to Google Calendar">
                       <ExternalLink size={9} style={{ color: 'rgba(226,232,240,0.18)' }} />
                     </a>

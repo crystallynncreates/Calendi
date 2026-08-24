@@ -1,7 +1,8 @@
 export type WidgetType =
   | 'clock' | 'calculator' | 'timer' | 'photo-frame'
   | 'streaming' | 'youtube' | 'meet' | 'browser' | 'notes'
-  | 'netflix' | 'disney' | 'prime' | 'messaging' | 'phone' | 'zoom';
+  | 'netflix' | 'disney' | 'prime' | 'messaging' | 'phone' | 'zoom'
+  | 'canvas-lms' | 'study-game';
 
 export type LayoutId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
@@ -71,7 +72,13 @@ export type SkinId =
   | 'aurora' | 'sunset' | 'night-sky' | 'deep-ocean'
   | 'galaxy' | 'forest' | 'desert' | 'mountain'
   | 'cherry-blossom' | 'winter-snow' | 'tropical-beach'
-  | 'rainy-night' | 'fireflies' | 'melted-skittles';
+  | 'rainy-night' | 'fireflies' | 'melted-skittles'
+  | 'photo-landscape-1' | 'photo-landscape-2' | 'photo-landscape-3' | 'photo-landscape-4'
+  | 'photo-christmas-1' | 'photo-christmas-2' | 'photo-christmas-3' | 'photo-christmas-4'
+  | 'photo-easter-1' | 'photo-easter-2' | 'photo-easter-3' | 'photo-easter-4'
+  | 'photo-spring-1' | 'photo-spring-2' | 'photo-spring-3' | 'photo-spring-4'
+  | 'photo-fall-1' | 'photo-fall-2' | 'photo-fall-3' | 'photo-fall-4'
+  | 'photo-winter-1' | 'photo-winter-2' | 'photo-winter-3' | 'photo-winter-4';
 
 export interface AppEntry {
   id: string;

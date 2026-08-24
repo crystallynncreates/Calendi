@@ -19,12 +19,14 @@ const QUICK_LINKS: QuickLink[] = [
   { label: 'Weather',   url: 'https://weather.com',                emoji: '🌤️' },
 ];
 
-export default function BrowserWidget() {
+interface BrowserProps { initialUrl?: string }
+
+export default function BrowserWidget({ initialUrl }: BrowserProps) {
   const skin = useStore(s => s.skin);
   const { color, glow } = getSkinColors(skin);
-  const [url, setUrl] = useState('');
-  const [activeUrl, setActiveUrl] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [url, setUrl] = useState(initialUrl ?? '');
+  const [activeUrl, setActiveUrl] = useState(initialUrl ?? '');
+  const [loading, setLoading] = useState(!!initialUrl);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   function navigate(target: string) {

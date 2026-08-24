@@ -1,6 +1,42 @@
+const PHOTO_URLS: Record<string, string> = {
+  'photo-landscape-1': 'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=1920&q=80',
+  'photo-landscape-2': 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&q=80',
+  'photo-landscape-3': 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1920&q=80',
+  'photo-landscape-4': 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80',
+  'photo-christmas-1': 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=1920&q=80',
+  'photo-christmas-2': 'https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=1920&q=80',
+  'photo-christmas-3': 'https://images.unsplash.com/photo-1481900694672-24c5370cff58?w=1920&q=80',
+  'photo-christmas-4': 'https://images.unsplash.com/photo-1467810563316-b5476525c0f9?w=1920&q=80',
+  'photo-easter-1':    'https://images.unsplash.com/photo-1490750967868-88df5691cc55?w=1920&q=80',
+  'photo-easter-2':    'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=1920&q=80',
+  'photo-easter-3':    'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=1920&q=80',
+  'photo-easter-4':    'https://images.unsplash.com/photo-1618759287629-ca56e4e4f2d6?w=1920&q=80',
+  'photo-spring-1':    'https://images.unsplash.com/photo-1462275646964-a0e3386b89ae?w=1920&q=80',
+  'photo-spring-2':    'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1920&q=80',
+  'photo-spring-3':    'https://images.unsplash.com/photo-1496412705862-e0088f16f791?w=1920&q=80',
+  'photo-spring-4':    'https://images.unsplash.com/photo-1520412099551-62b6bafeb5bb?w=1920&q=80',
+  'photo-fall-1':      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80',
+  'photo-fall-2':      'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=1920&q=80',
+  'photo-fall-3':      'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=1920&q=80',
+  'photo-fall-4':      'https://images.unsplash.com/photo-1531266591226-04c57a8b3e37?w=1920&q=80',
+  'photo-winter-1':    'https://images.unsplash.com/photo-1418985991994-5c90052f0084?w=1920&q=80',
+  'photo-winter-2':    'https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=1920&q=80',
+  'photo-winter-3':    'https://images.unsplash.com/photo-1511131341194-24e2e636b57b?w=1920&q=80',
+  'photo-winter-4':    'https://images.unsplash.com/photo-1547981609-c47a5a6f0c58?w=1920&q=80',
+};
+
 interface Props { scene: string }
 
 export default function LandscapeScene({ scene }: Props) {
+  if (scene.startsWith('photo-')) {
+    const url = PHOTO_URLS[scene];
+    return (
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+        <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.25)' }} />
+      </div>
+    );
+  }
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
       {scene === 'aurora'         && <AuroraScene />}

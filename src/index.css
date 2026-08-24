@@ -88,6 +88,25 @@
   }
   .btn-ghost:hover { background: rgba(255,255,255,0.09); color: #E2E8F0; }
 
+  /* ── Light mode overrides ─────────────────────────────────────────────────── */
+  [data-theme="light"] .widget-card {
+    background: rgba(8,4,24,0.84);
+    border-color: rgba(255,255,255,0.07);
+    box-shadow: 0 6px 32px rgba(0,0,0,0.16), 0 1px 0 rgba(255,255,255,0.04) inset;
+  }
+  [data-theme="light"] .widget-card:hover {
+    border-color: rgba(255,255,255,0.14);
+  }
+  [data-theme="light"] .btn-ghost {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(0,0,0,0.1);
+    color: rgba(20,10,40,0.6);
+  }
+  [data-theme="light"] .btn-ghost:hover {
+    background: rgba(0,0,0,0.08);
+    color: rgba(20,10,40,0.88);
+  }
+
   .tag {
     display: inline-flex;
     align-items: center;

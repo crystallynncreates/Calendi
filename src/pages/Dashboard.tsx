@@ -62,13 +62,15 @@ function WidgetRenderer({ type }: { type: WidgetType }) {
   }
 }
 
-function EmptySlot({ slotId, onAdd, color }: { slotId: string; onAdd: (id: string) => void; color: string }) {
+function EmptySlot({ slotId, onAdd, color, isLight }: { slotId: string; onAdd: (id: string) => void; color: string; isLight: boolean }) {
+  const idleBorder = isLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.1)';
+  const idleText   = isLight ? 'rgba(20,10,40,0.22)' : 'rgba(226,232,240,0.2)';
   return (
     <button
       className="w-full h-full rounded-2xl flex flex-col items-center justify-center gap-2 transition-all"
-      style={{ background: 'rgba(255,255,255,0.015)', border: '1px dashed rgba(255,255,255,0.1)', cursor: 'pointer', color: 'rgba(226,232,240,0.2)' }}
+      style={{ background: isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.015)', border: `1px dashed ${idleBorder}`, cursor: 'pointer', color: idleText }}
       onMouseEnter={e => { e.currentTarget.style.borderColor = `${color}50`; e.currentTarget.style.color = color; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(226,232,240,0.2)'; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = idleBorder; e.currentTarget.style.color = idleText; }}
       onClick={() => onAdd(slotId)}
     >
       <Plus size={20} />
@@ -333,6 +335,7 @@ export default function Dashboard() {
   return (
     <div
       className="h-screen flex flex-col overflow-hidden"
+      data-theme={isLight && !isLandscape ? 'light' : undefined}
       style={{ background: isLandscape ? 'transparent' : (isLight ? '#F7F7FC' : '#06060F'), '--skin-color': color, '--skin-glow': glow, '--skin-dim': dim } as CSSProperties}
     >
       {/* Landscape background scene */}
@@ -417,7 +420,7 @@ export default function Dashboard() {
                   </button>
                 </div>
               ) : (
-                <EmptySlot slotId={slotId} onAdd={setAddingToSlot} color={color} />
+                <EmptySlot slotId={slotId} onAdd={setAddingToSlot} color={color} isLight={isLight} />
               )}
             </div>
           );

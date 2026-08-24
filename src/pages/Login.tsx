@@ -269,13 +269,13 @@ function ProductCard({ icon, title, desc, color, delay = 0 }: { icon: string; ti
 
 // ─── Spotlight section (Adobe alternating) ────────────────────────────────────
 function Spotlight({
-  visual, eyebrow, headline, body, chips = [], cta, reverse = false, bg = W, dark = false, className = '',
+  visual, eyebrow, headline, body, chips = [], cta, reverse = false, bg = W, dark = false, className = '', id,
 }: {
   visual: ReactNode; eyebrow: string; headline: string; body: string;
-  chips?: string[]; cta?: string; reverse?: boolean; bg?: string; dark?: boolean; className?: string;
+  chips?: string[]; cta?: string; reverse?: boolean; bg?: string; dark?: boolean; className?: string; id?: string;
 }) {
   return (
-    <section className={className} style={{ background: bg, padding: '100px 0' }}>
+    <section id={id} className={className} style={{ background: bg, padding: '100px 0' }}>
       <div style={{
         maxWidth: 1160, margin: '0 auto', padding: '0 48px',
         display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center',
@@ -579,55 +579,52 @@ export default function Login() {
         </div>
       </section>
 
-      {/* ══ SPOTLIGHT SECTIONS — Adobe alternating ══════════════════════════ */}
-      <div id="apps">
-        <Spotlight
-          visual={<AppFrame h={440}><MockDashboard/></AppFrame>}
-          eyebrow="YOUR DASHBOARD"
-          headline="Everything you need,<br/>beautifully organized."
-          body="Your calendar, notes, clock, browser, apps, and calculator — all visible at once on one gorgeous dashboard. No more hunting through apps or switching tabs."
-          chips={['📅 Calendar','📝 Notes','🕐 Clock','🧮 Calculator','🖼️ Photos']}
-          cta="See the dashboard"
-          bg={W}
-          className="layer-white"
-        />
-        <Spotlight
-          visual={<AppFrame h={440}><MockApps/></AppFrame>}
-          eyebrow="BUILT-IN APPS"
-          headline="Every app.<br/>One place."
-          body="Netflix, Disney+, Prime Video, Facebook, Instagram, WhatsApp, Gmail, Zoom, Canvas LMS — all open inside Calendi in a focused panel. No tab-switching, ever."
-          chips={['🎬 Netflix','🎭 Disney+','📘 Facebook','📸 Instagram','💬 WhatsApp','🎓 Canvas']}
-          cta="See all apps"
-          reverse
-          bg={B}
-          dark
-          className="layer-black"
-        />
-      </div>
-
-      <div id="skins">
-        <Spotlight
-          visual={<AppFrame h={400}><MockBrowser/></AppFrame>}
-          eyebrow="BUILT-IN BROWSER"
-          headline="Browse without<br/>leaving Calendi."
-          body="A full web browser built right into your dashboard. Google, Canvas LMS for classroom learning, YouTube, and any site — all without switching tabs or apps."
-          chips={['🌐 Google','🎓 Canvas LMS','▶️ YouTube','🗺️ Maps','🔍 Any website']}
-          cta="Try the browser"
-          bg={W}
-          className="layer-white"
-        />
-        <Spotlight
-          visual={<AppFrame h={400}><MockSkins/></AppFrame>}
-          eyebrow="19 BEAUTIFUL SKINS"
-          headline="Make it yours.<br/>Change it anytime."
-          body="10 neon color themes and 9 live animated landscape skins — Aurora Borealis, Cherry Blossom, Night Sky, Melted Skittles, Cosmic, and more. Switch in one tap."
-          chips={['🌌 Aurora','🌸 Cherry Blossom','🌃 Night Sky','🍬 Melted Skittles','🪐 Cosmic']}
-          reverse
-          bg={B}
-          dark
-          className="layer-black"
-        />
-      </div>
+      {/* ══ SPOTLIGHT SECTIONS — alternating sticky-white / scrolling-black ══ */}
+      <Spotlight
+        id="apps"
+        visual={<AppFrame h={440}><MockDashboard/></AppFrame>}
+        eyebrow="YOUR DASHBOARD"
+        headline="Everything you need,<br/>beautifully organized."
+        body="Your calendar, notes, clock, browser, apps, and calculator — all visible at once on one gorgeous dashboard. No more hunting through apps or switching tabs."
+        chips={['📅 Calendar','📝 Notes','🕐 Clock','🧮 Calculator','🖼️ Photos']}
+        cta="See the dashboard"
+        bg={W}
+        className="layer-white"
+      />
+      <Spotlight
+        visual={<AppFrame h={440}><MockApps/></AppFrame>}
+        eyebrow="BUILT-IN APPS"
+        headline="Every app.<br/>One place."
+        body="Netflix, Disney+, Prime Video, Facebook, Instagram, WhatsApp, Gmail, Zoom, Canvas LMS — all open inside Calendi in a focused panel. No tab-switching, ever."
+        chips={['🎬 Netflix','🎭 Disney+','📘 Facebook','📸 Instagram','💬 WhatsApp','🎓 Canvas']}
+        cta="See all apps"
+        reverse
+        bg={B}
+        dark
+        className="layer-black"
+      />
+      <Spotlight
+        id="skins"
+        visual={<AppFrame h={400}><MockBrowser/></AppFrame>}
+        eyebrow="BUILT-IN BROWSER"
+        headline="Browse without<br/>leaving Calendi."
+        body="A full web browser built right into your dashboard. Google, Canvas LMS for classroom learning, YouTube, and any site — all without switching tabs or apps."
+        chips={['🌐 Google','🎓 Canvas LMS','▶️ YouTube','🗺️ Maps','🔍 Any website']}
+        cta="Try the browser"
+        bg={W}
+        className="layer-white"
+      />
+      <Spotlight
+        visual={<AppFrame h={400}><MockSkins/></AppFrame>}
+        eyebrow="19 BEAUTIFUL SKINS"
+        headline="Make it yours.<br/>Change it anytime."
+        body="10 neon color themes and 9 live animated landscape skins — Aurora Borealis, Cherry Blossom, Night Sky, Melted Skittles, Cosmic, and more. Switch in one tap."
+        chips={['🌌 Aurora','🌸 Cherry Blossom','🌃 Night Sky','🍬 Melted Skittles','🪐 Cosmic']}
+        reverse
+        bg={B}
+        dark
+        className="layer-black"
+      />
 
       {/* ══ PRICING ══════════════════════════════════════════════════════════ */}
       <section id="pricing" className="layer-white" style={{ background: W, padding: '100px 0' }}>
@@ -670,7 +667,7 @@ export default function Login() {
       </section>
 
       {/* ══ FOOTER ════════════════════════════════════════════════════════════ */}
-      <footer style={{ background: B, overflow: 'hidden' }}>
+      <footer className="layer-black" style={{ background: B, overflow: 'hidden' }}>
         <div style={{ maxWidth: 1160, margin: '0 auto', padding: '60px 48px 48px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(160px,1fr))', gap: 40 }}>
             {[

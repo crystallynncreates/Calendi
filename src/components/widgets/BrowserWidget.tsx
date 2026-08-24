@@ -16,7 +16,7 @@ const QUICK_LINKS: QuickLink[] = [
   { label: 'YouTube',   url: 'https://www.youtube.com',            Logo: YouTubeLogo },
   { label: 'Maps',      url: 'https://maps.google.com',            Logo: GoogleMapsLogo },
   { label: 'Translate', url: 'https://translate.google.com',       emoji: '🌐' },
-  { label: 'Weather',   url: 'https://weather.com',                emoji: '🌤️' },
+  { label: 'Weather',   url: 'https://wttr.in/?theme=dark',        emoji: '🌤️' },
 ];
 
 interface BrowserProps { initialUrl?: string }

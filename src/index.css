@@ -125,6 +125,22 @@
   [data-theme="light"] .input-dark:focus { border-color: var(--skin-color, #8B5CF6); }
   [data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); }
 
+  /* ── Theme-aware CSS variables (usable in inline styles via var()) ─────── */
+  :root {
+    --w-text-dim:   rgba(226,232,240,0.4);
+    --w-text-faint: rgba(226,232,240,0.22);
+    --w-text-main:  #E2E8F0;
+    --w-bg-subtle:  rgba(255,255,255,0.04);
+    --w-border:     rgba(255,255,255,0.08);
+  }
+  [data-theme="light"] {
+    --w-text-dim:   rgba(18,16,58,0.52);
+    --w-text-faint: rgba(18,16,58,0.32);
+    --w-text-main:  #12103a;
+    --w-bg-subtle:  rgba(0,0,0,0.03);
+    --w-border:     rgba(0,0,0,0.1);
+  }
+
   .tag {
     display: inline-flex;
     align-items: center;
@@ -162,6 +178,12 @@
     opacity: 0.03;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   }
+}
+
+/* Light mode — make html/body background match dashboard */
+html:has([data-theme="light"]),
+body:has([data-theme="light"]) {
+  background: #f5f6ff;
 }
 
 @keyframes spin-ring {

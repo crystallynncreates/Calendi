@@ -44,7 +44,10 @@ export default function YouTubeWidget() {
       <div className="flex items-center justify-between px-3 pt-3 pb-2 shrink-0">
         <div className="flex items-center gap-2">
           <YouTubeLogo size={22} />
-          <span className="text-xs font-mono uppercase tracking-widest" style={{ color:'rgba(226,232,240,0.3)' }}>youtube</span>
+          <div>
+            <span className="text-xs font-mono uppercase tracking-widest" style={{ color:'var(--w-text-dim)' }}>youtube</span>
+            <p style={{ fontSize:'0.45rem', color:'var(--w-text-faint)', margin:'1px 0 0', fontFamily:'monospace' }}>paste a link or search — watch right here</p>
+          </div>
         </div>
         <div className="flex items-center gap-1.5">
           {mode === 'player' && (

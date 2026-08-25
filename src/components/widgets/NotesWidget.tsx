@@ -113,7 +113,9 @@ export default function NotesWidget() {
   useEffect(() => () => { if (saveTimer.current) clearTimeout(saveTimer.current); }, []);
 
   return (
-    <div className="widget-card h-full flex" style={{ borderColor:`${color}25` }}>
+    <div className="widget-card h-full flex flex-col" style={{ borderColor:`${color}25` }}>
+      <p style={{ fontSize:'0.48rem', color:'var(--w-text-faint)', margin:'5px 10px 0', fontFamily:'monospace', letterSpacing:0.3, flexShrink:0 }}>📝 notes — write, bold, highlight &amp; save — your thoughts always within reach</p>
+      <div className="flex flex-1 min-h-0">
       {/* Note list sidebar */}
       {notes.length > 1 && (
         <div style={{ width:100, borderRight:'1px solid rgba(255,255,255,0.06)', overflowY:'auto', flexShrink:0 }}>
@@ -259,6 +261,7 @@ export default function NotesWidget() {
           pointer-events: none;
         }
       `}</style>
+      </div>
     </div>
   );
 }

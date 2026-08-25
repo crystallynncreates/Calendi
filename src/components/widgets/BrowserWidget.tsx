@@ -51,6 +51,10 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
 
   return (
     <div className="widget-card h-full flex flex-col" style={{ borderColor: `${color}25` }}>
+      {/* Header tagline */}
+      <div style={{ padding:'6px 10px 2px', flexShrink:0 }}>
+        <p style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', margin:0, fontFamily:'monospace', letterSpacing:0.3 }}>🌐 browser — search the web, open any site, explore quick links</p>
+      </div>
       {/* Address bar */}
       <div className="flex items-center gap-1.5 px-2 py-2 shrink-0" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <Globe size={12} style={{ color: 'rgba(226,232,240,0.3)', flexShrink: 0 }} />

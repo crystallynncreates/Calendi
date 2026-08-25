@@ -250,18 +250,283 @@ const VOCAB_BANKS: Record<string, FlashCard[]> = {
     { term:'LPN Delegation',     def:'Can delegate ADLs, vitals, ambulation to CNA; CANNOT delegate assessments, patient teaching, IV push meds', category:'Management' },
     { term:'Foley Catheter',     def:'Sterile insertion; maintain closed drainage system; bag always below bladder; document I&O every shift', category:'Procedures' },
   ],
+  'sight-words-1': [
+    { term:'the',   def:'The most common word in English — "The cat sat on the mat."', category:'Grade 1' },
+    { term:'and',   def:'Joins two things together — "Dogs and cats are pets."', category:'Grade 1' },
+    { term:'a',     def:'Used before a word — "A bird flew by."', category:'Grade 1' },
+    { term:'to',    def:'Shows direction or purpose — "I go to school."', category:'Grade 1' },
+    { term:'said',  def:'Past tense of say — "She said hello."', category:'Grade 1' },
+    { term:'in',    def:'Inside something — "The fish is in the water."', category:'Grade 1' },
+    { term:'is',    def:'Describes what something is — "The sky is blue."', category:'Grade 1' },
+    { term:'it',    def:'Refers to a thing — "It is raining today."', category:'Grade 1' },
+    { term:'was',   def:'Past tense of is — "It was sunny yesterday."', category:'Grade 1' },
+    { term:'he',    def:'Refers to a boy or man — "He ran fast."', category:'Grade 1' },
+    { term:'for',   def:'Shows purpose — "This gift is for you."', category:'Grade 1' },
+    { term:'on',    def:'On top of — "The book is on the table."', category:'Grade 1' },
+    { term:'are',   def:'Plural of is — "They are my friends."', category:'Grade 1' },
+    { term:'but',   def:'Shows a contrast — "I tried but I fell."', category:'Grade 1' },
+    { term:'have',  def:'To own or possess — "I have a puppy."', category:'Grade 1' },
+    { term:'you',   def:'The person being spoken to — "Can you help me?"', category:'Grade 1' },
+    { term:'that',  def:'Points to something — "That house is big."', category:'Grade 1' },
+    { term:'with',  def:'Together or alongside — "I walk with my friend."', category:'Grade 1' },
+    { term:'she',   def:'Refers to a girl or woman — "She loves to read."', category:'Grade 1' },
+    { term:'they',  def:'More than one person or thing — "They are playing."', category:'Grade 1' },
+  ],
+  'sight-words-2': [
+    { term:'because', def:'Gives a reason — "I stayed inside because it rained."', category:'Grade 2' },
+    { term:'friend',  def:'Someone you like and trust — "My best friend is kind."', category:'Grade 2' },
+    { term:'every',   def:'Each one — "Every student must read."', category:'Grade 2' },
+    { term:'people',  def:'More than one person — "People live in houses."', category:'Grade 2' },
+    { term:'could',   def:'Was able to — "She could jump very high."', category:'Grade 2' },
+    { term:'would',   def:'Was willing to — "He would help if he could."', category:'Grade 2' },
+    { term:'should',  def:'Ought to — "You should drink water daily."', category:'Grade 2' },
+    { term:'their',   def:'Belonging to them — "It is their turn to play."', category:'Grade 2' },
+    { term:'there',   def:'In that place — "Put the box over there."', category:'Grade 2' },
+    { term:'where',   def:'In what place — "Where is the library?"', category:'Grade 2' },
+    { term:'which',   def:'Asks about a choice — "Which book do you want?"', category:'Grade 2' },
+    { term:'once',    def:'One time — "I once saw a shooting star."', category:'Grade 2' },
+    { term:'around',  def:'In a circle or near — "We ran around the track."', category:'Grade 2' },
+    { term:'always',  def:'Every time, without exception — "She always brushes her teeth."', category:'Grade 2' },
+    { term:'never',   def:'Not at any time — "He never forgets his lunch."', category:'Grade 2' },
+  ],
+  'sight-words-3': [
+    { term:'beautiful', def:'Very pretty — "The sunset was beautiful."', category:'Grade 3' },
+    { term:'different',  def:'Not the same — "Each snowflake is different."', category:'Grade 3' },
+    { term:'important',  def:'Very meaningful — "Reading is important for learning."', category:'Grade 3' },
+    { term:'together',   def:'With each other — "Let's work together."', category:'Grade 3' },
+    { term:'question',   def:'Something you ask — "She raised her hand to ask a question."', category:'Grade 3' },
+    { term:'favorite',   def:'Liked best — "Pizza is my favorite food."', category:'Grade 3' },
+    { term:'enough',     def:'As much as needed — "Did you get enough sleep?"', category:'Grade 3' },
+    { term:'especially', def:'More than usual — "I especially love music class."', category:'Grade 3' },
+    { term:'thought',    def:'Past tense of think — "I thought it would rain."', category:'Grade 3' },
+    { term:'government', def:'The leaders who run a country or city — "The government makes laws."', category:'Grade 3' },
+    { term:'knowledge',  def:'What you know from learning — "Reading builds knowledge."', category:'Grade 3' },
+    { term:'imagine',    def:'To picture something in your mind — "Imagine a flying horse!"', category:'Grade 3' },
+    { term:'probably',   def:'Most likely — "It will probably snow tomorrow."', category:'Grade 3' },
+    { term:'possible',   def:'Able to happen — "Anything is possible with practice."', category:'Grade 3' },
+    { term:'mystery',    def:'Something unknown or unexplained — "The missing sock is a mystery."', category:'Grade 3' },
+  ],
+  'algebra': [
+    { term:'Variable',        def:'A letter (x, y) representing an unknown number — "Solve for x in 2x + 3 = 11"', category:'Concepts' },
+    { term:'Order of Operations', def:'PEMDAS: Parentheses, Exponents, Multiply/Divide (left→right), Add/Subtract (left→right)', category:'Concepts' },
+    { term:'Slope',           def:'Rise over run: m = (y2−y1)/(x2−x1); steepness of a line', category:'Linear' },
+    { term:'Slope-Intercept', def:'y = mx + b; m = slope, b = y-intercept where line crosses y-axis', category:'Linear' },
+    { term:'Quadratic Formula', def:'x = (−b ± √(b²−4ac)) / 2a; solves ax² + bx + c = 0', category:'Quadratics' },
+    { term:'Factoring',       def:'Rewrite expression as a product: x²+5x+6 = (x+2)(x+3); FOIL to check', category:'Quadratics' },
+    { term:'Distributive Property', def:'a(b+c) = ab + ac; multiply outside term by each inside term', category:'Properties' },
+    { term:'Systems of Equations', def:'Two equations, two unknowns; solve by substitution, elimination, or graphing', category:'Systems' },
+    { term:'Inequality',      def:'< > ≤ ≥; flip sign when multiplying/dividing by a negative number', category:'Concepts' },
+    { term:'Exponent Rules',  def:'xᵃ·xᵇ = xᵃ⁺ᵇ; (xᵃ)ᵇ = xᵃᵇ; x⁰ = 1; x⁻¹ = 1/x', category:'Exponents' },
+    { term:'Function',        def:'Each input (x) gives exactly one output f(x); vertical line test confirms a function', category:'Functions' },
+    { term:'Domain & Range',  def:'Domain = all valid x-inputs; Range = all resulting y-outputs', category:'Functions' },
+    { term:'Absolute Value',  def:'|x| = distance from 0; always positive; |−5| = 5', category:'Concepts' },
+    { term:'Radical / Square Root', def:'√x = number that times itself equals x; √49 = 7; rationalize by removing √ from denominator', category:'Radicals' },
+  ],
+  'geometry': [
+    { term:'Pythagorean Theorem', def:'a² + b² = c²; c = hypotenuse (longest side of right triangle)', category:'Triangles' },
+    { term:'Area of Triangle', def:'A = ½ × base × height', category:'Area' },
+    { term:'Area of Circle',  def:'A = πr²; Circumference = 2πr; π ≈ 3.14159', category:'Area' },
+    { term:'Supplementary Angles', def:'Two angles that add to 180°; linear pair', category:'Angles' },
+    { term:'Complementary Angles', def:'Two angles that add to 90°; together form a right angle', category:'Angles' },
+    { term:'Parallel Lines',  def:'Never intersect; cut by a transversal creates alternate interior (equal) and co-interior (supplementary) angles', category:'Lines' },
+    { term:'Congruent vs Similar', def:'Congruent: same shape AND size (≅); Similar: same shape, proportional size (~)', category:'Polygons' },
+    { term:'Quadrilateral Types', def:'Rectangle (4 right angles), Rhombus (4 equal sides), Parallelogram (opp. sides parallel), Trapezoid (1 pair parallel)', category:'Polygons' },
+    { term:'Volume of Prism', def:'V = base area × height', category:'3D Shapes' },
+    { term:'Volume of Sphere', def:'V = (4/3)πr³; Surface area = 4πr²', category:'3D Shapes' },
+    { term:'Transformation Types', def:'Translation (slide), Rotation (turn), Reflection (flip), Dilation (resize)', category:'Transformations' },
+    { term:'Coordinate Midpoint', def:'Midpoint = ((x1+x2)/2, (y1+y2)/2); Distance = √((x2−x1)²+(y2−y1)²)', category:'Coordinate' },
+  ],
+  'biology': [
+    { term:'Cell Theory',     def:'All living things are made of cells; the cell is the basic unit of life; all cells come from existing cells', category:'Cells' },
+    { term:'Mitosis',         def:'Cell division producing 2 identical diploid daughter cells; PMAT: Prophase, Metaphase, Anaphase, Telophase', category:'Cell Division' },
+    { term:'Photosynthesis',  def:'6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂; occurs in chloroplasts; light and dark reactions', category:'Energy' },
+    { term:'Cellular Respiration', def:'C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + 38 ATP; glycolysis → Krebs → electron transport chain', category:'Energy' },
+    { term:'DNA Structure',   def:'Double helix; A pairs with T, G pairs with C; sugar-phosphate backbone; antiparallel strands', category:'Genetics' },
+    { term:'Natural Selection', def:'Individuals with traits suited to environment survive and reproduce more; drives evolution over generations', category:'Evolution' },
+    { term:'Ecosystem',       def:'Biotic (living) + abiotic (non-living) components; producers → consumers → decomposers', category:'Ecology' },
+    { term:'Homeostasis',     def:'Maintaining stable internal conditions (temp, pH, glucose); controlled by feedback loops', category:'Physiology' },
+    { term:'Protein Synthesis', def:'Transcription (DNA→mRNA in nucleus) + Translation (mRNA→protein at ribosomes)', category:'Genetics' },
+    { term:'Classification',  def:'Domain → Kingdom → Phylum → Class → Order → Family → Genus → Species (DKPCOFGS)', category:'Taxonomy' },
+    { term:'Osmosis',         def:'Water moves across semi-permeable membrane from low to high solute concentration', category:'Cells' },
+    { term:'Immune System',   def:'Innate (non-specific, fast) vs Adaptive (specific, memory B/T cells); antigens trigger antibody production', category:'Physiology' },
+  ],
+  'chemistry': [
+    { term:'Periodic Table',  def:'Elements arranged by atomic number; periods = rows (energy levels); groups = columns (same valence electrons)', category:'Fundamentals' },
+    { term:'Atomic Structure', def:'Protons+neutrons in nucleus; electrons in shells; atomic number = protons; mass number = protons+neutrons', category:'Fundamentals' },
+    { term:'Covalent Bond',   def:'Atoms share electrons; nonmetals + nonmetals; polar if electrons shared unequally (e.g. H₂O)', category:'Bonding' },
+    { term:'Ionic Bond',      def:'Electron transfer from metal to nonmetal; opposite charges attract; forms crystalline solids (NaCl)', category:'Bonding' },
+    { term:'Molarity',        def:'M = moles of solute / liters of solution; 2 mol NaCl in 1 L = 2 M solution', category:'Solutions' },
+    { term:'pH Scale',        def:'0–14; pH = −log[H⁺]; <7 = acid; 7 = neutral; >7 = base; each unit = 10× concentration change', category:'Acids & Bases' },
+    { term:'Balancing Equations', def:'Same number of each atom on both sides; coefficient multiplies entire formula; law of conservation of mass', category:'Reactions' },
+    { term:'Ideal Gas Law',   def:'PV = nRT; P=pressure, V=volume, n=moles, R=8.314 J/(mol·K), T=Kelvin temperature', category:'Gas Laws' },
+    { term:'Oxidation Numbers', def:'OIL RIG: Oxidation Is Loss; Reduction Is Gain of electrons; oxidizing agent gets reduced', category:'Redox' },
+    { term:'Enthalpy',        def:'ΔH = heat change; negative ΔH = exothermic (releases heat); positive ΔH = endothermic (absorbs heat)', category:'Thermochemistry' },
+    { term:'Intermolecular Forces', def:'Hydrogen bonds (strongest) > dipole-dipole > London dispersion; determine boiling point and solubility', category:'Bonding' },
+    { term:'Electronegativity', def:'Fluorine highest (4.0); increases up/right on periodic table; difference >1.7 = ionic bond', category:'Bonding' },
+  ],
+  'physics': [
+    { term:"Newton's 1st Law",  def:'An object at rest stays at rest; in motion stays in motion — unless acted upon by a net force (inertia)', category:'Motion' },
+    { term:"Newton's 2nd Law",  def:'F = ma; force equals mass times acceleration; units: Newtons (kg·m/s²)', category:'Motion' },
+    { term:"Newton's 3rd Law",  def:'Every action has an equal and opposite reaction; forces come in pairs', category:'Motion' },
+    { term:'Kinematic Equations', def:'v=v₀+at; x=v₀t+½at²; v²=v₀²+2ax; for constant acceleration in one direction', category:'Motion' },
+    { term:'Conservation of Energy', def:'Energy cannot be created or destroyed; KE + PE = constant; KE=½mv², PE=mgh', category:'Energy' },
+    { term:'Momentum',           def:'p = mv; Conservation: total momentum before = after collision; impulse = FΔt = Δp', category:'Momentum' },
+    { term:'Work',               def:'W = Fd·cosθ; only force component in direction of motion does work; units: Joules', category:'Energy' },
+    { term:'Ohm\'s Law',         def:'V = IR; voltage = current × resistance; P = IV = I²R = V²/R', category:'Electricity' },
+    { term:'Wave Properties',    def:'v = fλ; speed = frequency × wavelength; amplitude = height; transverse vs longitudinal', category:'Waves' },
+    { term:'Gravity',            def:'F = Gm₁m₂/r²; g = 9.8 m/s² at Earth\'s surface; weight W = mg', category:'Forces' },
+    { term:'Projectile Motion',  def:'Horizontal: constant velocity; Vertical: free fall (a=−9.8 m/s²); independent components', category:'Motion' },
+    { term:'Centripetal Acceleration', def:'a = v²/r; directed toward center of circle; F = mv²/r', category:'Circular Motion' },
+  ],
+  'us-history': [
+    { term:'Declaration of Independence', def:'1776; written by Jefferson; declares natural rights (life, liberty, pursuit of happiness) and colonial independence from Britain', category:'Founding' },
+    { term:'Constitutional Convention', def:'1787 Philadelphia; drafted U.S. Constitution; Great Compromise: bicameral Congress (Senate + House)', category:'Founding' },
+    { term:'Bill of Rights',     def:'First 10 Amendments (1791); freedoms of speech, religion, press, assembly; protects individual rights from government', category:'Founding' },
+    { term:'Manifest Destiny',   def:'19th century belief that U.S. was destined to expand westward; led to westward expansion and Native displacement', category:'Expansion' },
+    { term:'Civil War',          def:'1861–1865; North (Union) vs South (Confederacy) over slavery and states\' rights; Union victory; slavery abolished', category:'Civil War' },
+    { term:'Emancipation Proclamation', def:'1863 by Lincoln; freed enslaved people in Confederate states; war aim shifted to include abolition', category:'Civil War' },
+    { term:'Reconstruction',     def:'1865–1877; rebuilding South after Civil War; 13th, 14th, 15th Amendments; ended with Compromise of 1877', category:'Post-Civil War' },
+    { term:'Progressive Era',    def:'1890s–1920s; reforms addressing corruption, workers\' rights, women\'s suffrage, trust-busting, food safety', category:'Reform' },
+    { term:'Great Depression',   def:'1929–1939; stock market crash; 25% unemployment; FDR\'s New Deal programs created relief and reform', category:'20th Century' },
+    { term:'Cold War',           def:'1947–1991; ideological conflict: U.S. (democracy/capitalism) vs USSR (communism); arms race, space race, proxy wars', category:'20th Century' },
+    { term:'Civil Rights Movement', def:'1950s–1960s; MLK Jr., Rosa Parks, SNCC, NAACP; Civil Rights Act 1964, Voting Rights Act 1965', category:'Civil Rights' },
+    { term:'Vietnam War',        def:'1955–1975; U.S. involvement 1965–1973; cold war proxy conflict; 58,000 U.S. deaths; massive anti-war protests', category:'20th Century' },
+  ],
+  'anatomy': [
+    { term:'Cardiac Cycle',      def:'Systole (ventricle contracts → pumps blood) + Diastole (heart relaxes → fills with blood); normal HR 60–100 bpm', category:'Cardiovascular' },
+    { term:'Respiratory System', def:'Nose/mouth → pharynx → larynx → trachea → bronchi → bronchioles → alveoli; gas exchange occurs in alveoli', category:'Respiratory' },
+    { term:'Nervous System',     def:'CNS (brain + spinal cord) + PNS; somatic (voluntary) vs autonomic (involuntary: sympathetic/parasympathetic)', category:'Neurology' },
+    { term:'Digestive Process',  def:'Mouth → esophagus → stomach → small intestine (absorption) → large intestine → rectum; liver/pancreas are accessory organs', category:'Digestive' },
+    { term:'Skeletal System',    def:'206 bones in adults; axial (skull/spine/ribs) + appendicular (limbs/girdles); functions: support, protection, movement, blood production', category:'Skeletal' },
+    { term:'Muscular Contraction', def:'Sliding filament theory: actin + myosin; needs Ca²⁺ and ATP; neuromuscular junction uses acetylcholine', category:'Muscular' },
+    { term:'Endocrine System',   def:'Hormone-secreting glands: hypothalamus, pituitary (master), thyroid, adrenal, pancreas (insulin/glucagon)', category:'Endocrine' },
+    { term:'Lymphatic System',   def:'Collects tissue fluid, returns to blood; lymph nodes filter pathogens; spleen = largest lymph organ', category:'Immune' },
+    { term:'Urinary System',     def:'Kidneys filter blood → urine → ureters → bladder → urethra; nephron = functional unit; regulates fluid/electrolyte balance', category:'Urinary' },
+    { term:'Reproductive System',def:'Male: testes produce sperm + testosterone; Female: ovaries produce eggs + estrogen/progesterone; fertilization in fallopian tube', category:'Reproductive' },
+    { term:'Integumentary System',def:'Skin (epidermis + dermis + hypodermis) + hair + nails; largest organ; protection, thermoregulation, sensation, vitamin D synthesis', category:'Integumentary' },
+    { term:'Blood Components',   def:'Plasma (55%): water + proteins; RBCs (O₂ transport, no nucleus); WBCs (immune); Platelets (clotting)', category:'Cardiovascular' },
+  ],
+  'pharmacology': [
+    { term:'Drug Absorption',    def:'Entry into bloodstream; affected by route (IV=100%, oral varies), first-pass metabolism, food, pH', category:'Pharmacokinetics' },
+    { term:'First-Pass Effect',  def:'Oral drugs metabolized by liver before reaching systemic circulation; reduces bioavailability (e.g. morphine, nitroglycerin)', category:'Pharmacokinetics' },
+    { term:'Half-Life',          def:'Time for drug concentration to decrease by 50%; ~4–5 half-lives to reach steady state or full elimination', category:'Pharmacokinetics' },
+    { term:'Agonist vs Antagonist', def:'Agonist = activates receptor (mimics natural ligand); Antagonist = blocks receptor (e.g. naloxone blocks opioids)', category:'Pharmacodynamics' },
+    { term:'Beta Blockers',      def:'Block β-adrenergic receptors; ↓HR/BP/contractility; used: HTN, angina, arrhythmia, post-MI; SE: bradycardia, bronchospasm', category:'Cardiovascular' },
+    { term:'ACE Inhibitors',     def:'Block angiotensin-converting enzyme; ↓BP; used: HTN, HF, CKD protection; SE: dry cough (bradykinin), angioedema', category:'Cardiovascular' },
+    { term:'Statins (HMG-CoA)', def:'Block cholesterol synthesis in liver; lower LDL; used: hyperlipidemia, CV prevention; SE: myopathy, ↑liver enzymes', category:'Cardiovascular' },
+    { term:'Benzodiazepines',    def:'Enhance GABA; anxiolytic, sedative, anticonvulsant; risk: dependence, respiratory depression; reversed by flumazenil', category:'CNS' },
+    { term:'SSRIs',              def:'Selective Serotonin Reuptake Inhibitors; 1st-line antidepressants; SE: GI upset, sexual dysfunction, serotonin syndrome at toxic levels', category:'CNS' },
+    { term:'NSAIDs',             def:'Block COX-1/COX-2; anti-inflammatory, analgesic, antipyretic; SE: GI bleeding, renal impairment, cardiovascular risk', category:'Pain' },
+    { term:'Antibiotic Classes', def:'Penicillins (cell wall); Aminoglycosides (protein synthesis 30S); Fluoroquinolones (DNA gyrase); Macrolides (50S ribosome)', category:'Anti-infectives' },
+    { term:'Insulin Types',      def:'Rapid (Lispro/Aspart, 15 min); Short (Regular, 30 min); Intermediate (NPH, 2h); Long (Glargine, no peak, 24h)', category:'Endocrine' },
+  ],
+  'discrete-math': [
+    { term:'Set Theory',         def:'Sets: collection of distinct elements; A∪B (union), A∩B (intersection), A\' (complement), A⊆B (subset)', category:'Sets' },
+    { term:'Propositional Logic', def:'Logical connectives: ∧ (AND), ∨ (OR), ¬ (NOT), → (implies), ↔ (biconditional); truth tables determine validity', category:'Logic' },
+    { term:'Proof by Induction', def:'Base case (n=1) + Inductive step (assume n=k, prove n=k+1); proves statements for all natural numbers', category:'Proofs' },
+    { term:'Graph Theory',       def:'G=(V,E); vertices + edges; degree = edges per vertex; directed (digraph) vs undirected; trees are acyclic connected graphs', category:'Graphs' },
+    { term:'Big O Notation',     def:'O(1)<O(log n)<O(n)<O(n log n)<O(n²)<O(2ⁿ)<O(n!); describes algorithm time/space complexity as input grows', category:'Algorithms' },
+    { term:'Modular Arithmetic', def:'a ≡ b (mod n) means n divides (a−b); "clock arithmetic"; used in cryptography, hashing', category:'Number Theory' },
+    { term:'Permutations',       def:'P(n,r) = n!/(n−r)!; ordered arrangements of r items from n; order matters', category:'Combinatorics' },
+    { term:'Combinations',       def:'C(n,r) = n!/[r!(n−r)!]; unordered selections; order doesn\'t matter; Pascal\'s triangle', category:'Combinatorics' },
+    { term:'Euler\'s Formula',   def:'For connected planar graphs: V − E + F = 2 (V=vertices, E=edges, F=faces including outer)', category:'Graphs' },
+    { term:'Binary & Hex',       def:'Binary: base 2 (0,1); Hex: base 16 (0–9, A–F); 1010₂ = A₁₆ = 10₁₀; used in computer science', category:'Number Theory' },
+    { term:'DFA vs NFA',         def:'Deterministic Finite Automaton: one transition per input; NFA: multiple; both recognize same regular languages', category:'Automata' },
+    { term:'Inclusion-Exclusion', def:'|A∪B| = |A|+|B|−|A∩B|; for three sets: +|A|+|B|+|C|−|A∩B|−|A∩C|−|B∩C|+|A∩B∩C|', category:'Combinatorics' },
+  ],
+  'midwifery': [
+    { term:'Naegele\'s Rule',    def:'EDD = LMP + 9 months + 7 days; assumes 28-day cycle; adjust for cycle length variations', category:'Antepartum' },
+    { term:'Stages of Labor',   def:'1st: dilation (latent 0–6cm, active 6–10cm); 2nd: pushing/birth; 3rd: placenta delivery; 4th: recovery (1–2hr)', category:'Labor' },
+    { term:'Leopold\'s Maneuvers', def:'4 abdominal palpation steps to determine fetal position, presentation, and engagement', category:'Assessment' },
+    { term:'Fetal Heart Rate',  def:'Normal FHR 110–160 bpm; accelerations = reassuring; late decelerations = concerning (uteroplacental insufficiency)', category:'Monitoring' },
+    { term:'Bishop Score',      def:'Cervical readiness: dilation, effacement, station, consistency, position; >8 = favorable for induction', category:'Labor' },
+    { term:'Postpartum Hemorrhage', def:'>500 mL blood loss (vaginal) or >1000 mL (C-section); causes: uterine atony, lacerations, retained placenta, coagulopathy', category:'Complications' },
+    { term:'Preeclampsia',      def:'BP ≥140/90 after 20 weeks + proteinuria; risk: severe features (BP≥160/110, HELLP); tx: MgSO₄, delivery', category:'Complications' },
+    { term:'APGAR Score',       def:'At 1 and 5 min: Activity, Pulse, Grimace, Appearance, Respiration; 0–10; ≥7 normal; <4 needs resuscitation', category:'Neonatal' },
+    { term:'Shoulder Dystocia', def:'Anterior shoulder stuck behind pubic symphysis after head delivery; McRoberts maneuver first-line response', category:'Complications' },
+    { term:'Breastfeeding Support', def:'Latch: deep, wide mouth, lips flanged; supply established 6–8 feeds/day; colostrum first 3–4 days then mature milk', category:'Postpartum' },
+    { term:'Newborn Assessment', def:'APGAR, weight, length, head circumference, reflexes (Moro, rooting, sucking, Babinski), skin, fontanelles', category:'Neonatal' },
+    { term:'GBS Screening',     def:'Group B Strep swab at 35–37 weeks; if positive → IV penicillin during labor to prevent neonatal infection', category:'Antepartum' },
+  ],
+  'spanish': [
+    { term:'ser vs estar',      def:'ser = permanent (identity, origin, profession); estar = temporary (emotion, location, condition); both mean "to be"', category:'Verbs' },
+    { term:'Preterite vs Imperfect', def:'Preterite: completed action (-é/-aste/-ó/-amos/-aron); Imperfect: ongoing past habit/description (-aba/-ía)', category:'Past Tense' },
+    { term:'Subjunctive Mood',  def:'Expresses doubt, emotion, wishes, impersonal expressions (es importante que…); present: -e/-a endings for irregular stems', category:'Mood' },
+    { term:'Direct Object Pronouns', def:'me, te, lo/la, nos, os, los/las; replace the direct object; placed before conjugated verb or attached to infinitive', category:'Pronouns' },
+    { term:'Reflexive Verbs',   def:'Action done to oneself: me llamo (I call myself); reflexive pronouns: me, te, se, nos, os, se', category:'Pronouns' },
+    { term:'Numbers 1–20',      def:'uno, dos, tres, cuatro, cinco, seis, siete, ocho, nueve, diez, once, doce, trece, catorce, quince, dieciséis–veinte', category:'Numbers' },
+    { term:'Days of the Week',  def:'lunes, martes, miércoles, jueves, viernes, sábado, domingo; lowercase in Spanish; la semana = the week', category:'Vocabulary' },
+    { term:'Colors',            def:'rojo (red), azul (blue), verde (green), amarillo (yellow), negro (black), blanco (white), naranja (orange)', category:'Vocabulary' },
+    { term:'Family Vocabulary', def:'madre/mamá, padre/papá, hermano/a, abuelo/a, tío/a, primo/a, esposo/a, hijo/a', category:'Vocabulary' },
+    { term:'Common Irregular Verbs', def:'ir (voy/vas/va), tener (tengo/tienes), hacer (hago/haces), decir (digo/dices), poder (puedo/puedes)', category:'Verbs' },
+    { term:'Por vs Para',       def:'por = cause/exchange/duration/agent; para = purpose/destination/recipient/deadline; both translate to "for"', category:'Prepositions' },
+    { term:'Gustar conjugation', def:'me/te/le/nos/les + gusta (singular) / gustan (plural); subject comes after verb: Me gustan los tacos', category:'Verbs' },
+  ],
+  'psychology': [
+    { term:'Classical Conditioning', def:'Pavlov: neutral stimulus paired with UCS → becomes CS that elicits CR; extinction without UCS; spontaneous recovery', category:'Behavioral' },
+    { term:'Operant Conditioning', def:'Skinner: behavior shaped by consequences; positive reinforcement, negative reinforcement, punishment, extinction', category:'Behavioral' },
+    { term:'Maslow\'s Hierarchy', def:'Physiological → Safety → Love/Belonging → Esteem → Self-actualization; lower needs must be met first', category:'Motivation' },
+    { term:'Defense Mechanisms', def:'Freud: unconscious strategies to reduce anxiety; repression, denial, projection, rationalization, displacement, sublimation', category:'Psychoanalytic' },
+    { term:'Piaget\'s Stages',  def:'Sensorimotor (0–2), Preoperational (2–7), Concrete Operations (7–11), Formal Operations (12+)', category:'Development' },
+    { term:'Erikson\'s Stages', def:'8 psychosocial stages; each has a conflict; e.g. Trust vs Mistrust (infant); Identity vs Role Confusion (adolescent)', category:'Development' },
+    { term:'Cognitive Biases',  def:'Confirmation bias (seek info that confirms), availability heuristic (recent=common), anchoring, fundamental attribution error', category:'Cognition' },
+    { term:'Memory Types',      def:'Sensory (< 1 sec), Working/Short-term (7±2 items, <30 sec), Long-term (procedural, declarative, episodic, semantic)', category:'Cognition' },
+    { term:'Observational Learning', def:'Bandura\'s social learning; learn by watching others (model); influenced by attention, retention, reproduction, motivation', category:'Behavioral' },
+    { term:'Nature vs Nurture', def:'Genetics (nature) vs environment (nurture) debate; modern view: epigenetics shows interaction; both shape behavior', category:'Development' },
+    { term:'Psychological Disorders', def:'DSM-5 categories: mood (depression, bipolar), anxiety, psychotic (schizophrenia), personality, neurodevelopmental (ADHD, autism)', category:'Abnormal' },
+    { term:'Neurotransmitters', def:'Dopamine (reward/movement), Serotonin (mood/sleep), GABA (inhibitory), Glutamate (excitatory), Norepinephrine (arousal/attention)', category:'Biological' },
+  ],
+  'economics': [
+    { term:'Supply & Demand',    def:'Price rises when demand↑ or supply↓; price falls when demand↓ or supply↑; equilibrium where curves intersect', category:'Microeconomics' },
+    { term:'Elasticity',         def:'Price elasticity of demand = %ΔQd / %ΔP; >1 elastic (luxuries), <1 inelastic (necessities like insulin)', category:'Microeconomics' },
+    { term:'GDP',                def:'Gross Domestic Product = C + I + G + (X−M); total value of goods/services produced in a country in a year', category:'Macroeconomics' },
+    { term:'Inflation vs Deflation', def:'Inflation: ↑prices, ↓purchasing power; Deflation: ↓prices (can cause spending delays, recession); measured by CPI', category:'Macroeconomics' },
+    { term:'Monetary Policy',    def:'Central bank (Federal Reserve) controls money supply + interest rates; expansionary (↓rates) or contractionary (↑rates)', category:'Policy' },
+    { term:'Fiscal Policy',      def:'Government spending and tax policy; expansionary (↑spending/↓taxes) during recession; contractionary during inflation', category:'Policy' },
+    { term:'Opportunity Cost',   def:'Value of the next best alternative given up; "there\'s no such thing as a free lunch" — every choice has a cost', category:'Concepts' },
+    { term:'Comparative Advantage', def:'Produce what you have lower opportunity cost for; basis for international trade and specialization', category:'Trade' },
+    { term:'Market Structures',  def:'Perfect competition (price-takers), Monopoly (single seller), Oligopoly (few firms), Monopolistic competition (differentiated products)', category:'Microeconomics' },
+    { term:'Phillips Curve',     def:'Inverse short-run relationship between unemployment and inflation; stagflation broke this in 1970s', category:'Macroeconomics' },
+    { term:'Externalities',      def:'Costs/benefits not reflected in price; negative (pollution), positive (education); corrected by taxes/subsidies (Pigouvian)', category:'Market Failure' },
+    { term:'Business Cycle',     def:'Expansion → Peak → Recession (2+ quarters negative GDP growth) → Trough → Recovery; measured by GDP, employment, output', category:'Macroeconomics' },
+  ],
 };
 
-const CHIPS = ['Network+','NCLEX','CCNA','Security+','A+','MCAT','GRE','LSAT','AWS','CISSP','Azure','PMP','LPN','CNA','USMLE'];
+const CHIPS = ['Network+','NCLEX','CCNA','Security+','A+','MCAT','GRE','LSAT','AWS','CISSP','Azure','PMP','LPN','CNA','USMLE',
+  '1st Grade Words','2nd Grade Words','3rd Grade Words','Algebra','Geometry','Biology','Chemistry','Physics',
+  'U.S. History','Anatomy','Pharmacology','Discrete Math','Midwifery','Spanish','Psychology','Economics'];
 
 function matchExam(query: string): FlashCard[] {
   const q = query.toLowerCase().trim();
   for (const [key, cards] of Object.entries(VOCAB_BANKS)) {
     if (q.includes(key) || key.includes(q.split(/\s+/)[0])) return cards;
   }
+  /* Grade-level sight words */
+  if (/1st.*(grade|word|sight)|kindergarten|kinder|grade 1/.test(q)) return VOCAB_BANKS['sight-words-1'];
+  if (/2nd.*(grade|word|sight)|grade 2/.test(q)) return VOCAB_BANKS['sight-words-2'];
+  if (/3rd.*(grade|word|sight)|4th|5th|grade [345]/.test(q)) return VOCAB_BANKS['sight-words-3'];
+  if (/sight.word|dolch|fry.word/.test(q)) return VOCAB_BANKS['sight-words-1'];
+  /* K-12 math */
+  if (/alg(ebra)?|linear equat|quadratic|polynomial|variable|slope/.test(q)) return VOCAB_BANKS['algebra'];
+  if (/geo(metry)?|triangle|pythagor|angle|polygon|circle area/.test(q)) return VOCAB_BANKS['geometry'];
+  /* K-12 sciences */
+  if (/bio(logy)?|cell|evolut|ecosystem|photosyn|mitosis/.test(q)) return VOCAB_BANKS['biology'];
+  if (/chem(istry)?|periodic|element|atom|molecule|bond/.test(q)) return VOCAB_BANKS['chemistry'];
+  if (/physics|force|newton|motion|energy|wave|momentum/.test(q)) return VOCAB_BANKS['physics'];
+  /* Social studies */
+  if (/us.hist|american.hist|civil.war|revolution|constitution/.test(q)) return VOCAB_BANKS['us-history'];
+  /* College / trades */
+  if (/anatomy|body|organ|muscl|skeletal|cardiovasc/.test(q)) return VOCAB_BANKS['anatomy'];
+  if (/pharm(acology)?|drug|medication|agonist|half.life|dosage/.test(q)) return VOCAB_BANKS['pharmacology'];
+  if (/discrete.math|set.theory|graph.theory|logic.gate|combinat|modular/.test(q)) return VOCAB_BANKS['discrete-math'];
+  if (/midwif|obstetric|labor|birth|postpartum|antepartum|apgar/.test(q)) return VOCAB_BANKS['midwifery'];
+  if (/spanish|español|espanol|sp vocab|sp verb/.test(q)) return VOCAB_BANKS['spanish'];
+  if (/psych(ology)?|freud|piaget|erikson|skinner|pavlov|behavior/.test(q)) return VOCAB_BANKS['psychology'];
+  if (/econ(omics)?|supply|demand|gdp|inflation|fiscal|monetary/.test(q)) return VOCAB_BANKS['economics'];
+  /* Existing exams */
   if (/lpn|practical nurse|lvn/.test(q)) return VOCAB_BANKS['lpn'];
   if (/cna|nursing assistant|aide/.test(q)) return VOCAB_BANKS['cna'];
-  if (/usmle|step 1|step1|medical board|usmle/.test(q)) return VOCAB_BANKS['usmle'];
+  if (/usmle|step 1|step1|medical board/.test(q)) return VOCAB_BANKS['usmle'];
   if (/mcat|med school|medical college/.test(q)) return VOCAB_BANKS['mcat'];
   if (/gre|grad school|graduate record/.test(q)) return VOCAB_BANKS['gre'];
   if (/lsat|law school/.test(q)) return VOCAB_BANKS['lsat'];
@@ -277,37 +542,52 @@ function matchExam(query: string): FlashCard[] {
 }
 
 function generateLyrics(exam: string, cards: FlashCard[]): string {
-  const terms = cards.slice(0, 12).map(c => c.term);
+  const first = (c: FlashCard) => c.def.split(';')[0].split('–')[0].split(':')[0].trim().slice(0, 60);
   const cats = [...new Set(cards.map(c => c.category))].slice(0, 4);
+  const c = (n: number) => cards[n % cards.length];
   return `🎵 "${exam.toUpperCase()} STUDY ANTHEM" 🎵
 
 [Verse 1]
-Sit down, open up your books and let's get in the zone,
-${terms[0]} and ${terms[1]}, yeah I'll make it my own,
-${terms[2]} on the left, and ${terms[3]} on the right,
-Study hard every day and we'll ace it tonight!
+Open up your brain, let's lock this in today,
+${c(0).term} — ${first(c(0))},
+${c(1).term} — remember it this way,
+${first(c(1))}, hey!
+
+[Pre-Chorus]
+${c(2).term}, ${c(3).term},
+Write them down, say them loud, feel them in your soul,
+Every definition building up your ${cats[0]} goals!
 
 [Chorus]
-Oh-oh-oh, I know my ${cats[0]},
-Oh-oh-oh, I learned my ${cats[1] || cats[0]},
+Oh-oh, I know my ${cats[0]}, I know my ${cats[1] || cats[0]},
 Every term, every fact, locked into my brain,
+${c(4).term} — ${first(c(4))},
 Flash cards in my hand, gonna ace this exam!
 
 [Verse 2]
-${terms[4]} is fundamental, gotta understand the flow,
-${terms[5]} connects the dots everywhere that we go,
-${terms[6]} and ${terms[7]}, they all play a part,
-${terms[8]}? I know it all — it's already in my heart!
+${c(5).term} — that's ${first(c(5))},
+${c(6).term} — you know what that means,
+${c(7).term}: ${first(c(7))},
+Study hard, it's not as tough as it seems!
 
 [Bridge]
-${cats[2] || 'Concepts'} concepts, line by line,
-${cats[3] || 'Skills'} and skills, gonna shine,
-${terms[9] || terms[0]} — I define it every time,
-${terms[10] || terms[1]} — the answer is all mine!
+${cats[2] || 'Key concepts'}, line by line,
+${c(8).term} — ${first(c(8))},
+${c(9).term} — now you're doing fine,
+${cats[3] || 'Keep going'} — every answer's mine!
+
+[Verse 3]
+${c(10).term}? ${first(c(10))},
+${c(11).term}? ${first(c(11))},
+Two more to go, I've got them memorized,
+${exam.toUpperCase()}, I came here authorized!
 
 [Outro]
 Study smart, not just hard — you've got this today,
-${exam.toUpperCase()} — I'm ready, I'll pass, no delay! 🎓`;
+${exam.toUpperCase()} — I'm ready, I'll pass, no delay! 🎓
+
+💡 Key Definitions:
+${cards.slice(0,6).map(cd => `• ${cd.term}: ${cd.def.slice(0,80)}${cd.def.length>80?'…':''}`).join('\n')}`;
 }
 
 function buildQuiz(cards: FlashCard[]): QuizQ[] {
@@ -323,6 +603,7 @@ type Tab = 'cards' | 'quiz' | 'song' | 'video';
 
 export default function StudyGameWidget() {
   const skin = useStore(s => s.skin);
+  const setActiveApp = useStore(s => s.setActiveApp);
   const { color, glow } = getSkinColors(skin);
   const [query, setQuery] = useState('');
   const [exam, setExam] = useState('');
@@ -404,9 +685,6 @@ export default function StudyGameWidget() {
   useEffect(() => () => { window.speechSynthesis?.cancel(); }, []);
 
   const card = cards[cardIdx];
-  const videoSrc = videoSearch
-    ? `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(videoSearch + ' tutorial')}`
-    : '';
   const quizDone = quiz.length > 0 && quizIdx >= quiz.length;
   const quizQ = quiz[quizIdx] as QuizQ | undefined;
   const pct = quizDone ? Math.round((quizScore / quiz.length) * 100) : 0;
@@ -423,14 +701,17 @@ export default function StudyGameWidget() {
     <div className="widget-card h-full flex flex-col" style={{ borderColor:`${color}25` }}>
       {/* Header */}
       <div className="px-3 pt-3 pb-2 shrink-0">
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-1">
           <span style={{ fontSize:'1.1rem' }}>🧠</span>
-          <span className="text-xs font-mono uppercase tracking-widest" style={{ color:'rgba(226,232,240,0.3)' }}>study game</span>
+          <div>
+            <span className="text-xs font-mono uppercase tracking-widest" style={{ color:'var(--w-text-dim)' }}>study game</span>
+            <p style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', margin:'1px 0 0', letterSpacing:0.3 }}>Type any subject — get flash cards, quiz, a study song &amp; video instantly</p>
+          </div>
         </div>
         <form onSubmit={e => { e.preventDefault(); start(); }} style={{ display:'flex', gap:6 }}>
           <input
             className="input-dark flex-1 !py-1.5 text-xs"
-            placeholder="NCLEX, AWS, MCAT, LSAT, PMP…"
+            placeholder="NCLEX, 1st grade words, Algebra, Pharmacology…"
             value={query}
             onChange={e => setQuery(e.target.value)}
           />
@@ -629,15 +910,52 @@ export default function StudyGameWidget() {
 
             {/* ── VIDEO ── */}
             {tab === 'video' && (
-              <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:8 }}>
-                <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'rgba(226,232,240,0.3)', textTransform:'uppercase', letterSpacing:1 }}>📹 study video</span>
-                {videoSrc ? (
-                  <div style={{ flex:1, borderRadius:10, overflow:'hidden', background:'#000' }}>
-                    <iframe src={videoSrc} title="Study Video" allow="autoplay; fullscreen" allowFullScreen
-                      style={{ width:'100%', height:'100%', border:'none' }} />
+              <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:10 }}>
+                <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'var(--w-text-faint)', textTransform:'uppercase', letterSpacing:1 }}>📹 study video</span>
+                {videoSearch ? (
+                  <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                    {[
+                      { label:`${exam} study guide`, icon:'📖' },
+                      { label:`${exam} explained for beginners`, icon:'🎓' },
+                      { label:`${exam} practice questions`, icon:'✏️' },
+                      { label:`${exam} cheat sheet review`, icon:'📋' },
+                    ].map(({ label, icon }) => (
+                      <button key={label} onClick={() => setActiveApp({
+                        id: 'youtube', name: 'YouTube', emoji: 'Y', color: '#FF0000',
+                        bgColor: 'rgba(255,0,0,0.1)', borderColor: 'rgba(255,0,0,0.3)',
+                        url: `https://www.youtube.com/results?search_query=${encodeURIComponent(label)}`,
+                        canEmbed: false,
+                      })} style={{
+                        display:'flex', alignItems:'center', gap:12, padding:'10px 12px',
+                        borderRadius:12, border:`1px solid ${color}25`, background:`${color}10`,
+                        cursor:'pointer', textAlign:'left', width:'100%',
+                      }}>
+                        <span style={{ fontSize:'1.2rem' }}>{icon}</span>
+                        <div>
+                          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'var(--w-text-main)', margin:'0 0 2px', fontFamily:'monospace' }}>{label}</p>
+                          <p style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', margin:0 }}>Opens in YouTube →</p>
+                        </div>
+                      </button>
+                    ))}
+                    <button onClick={() => setActiveApp({
+                      id:'youtube', name:'YouTube', emoji:'Y', color:'#FF0000',
+                      bgColor:'rgba(255,0,0,0.1)', borderColor:'rgba(255,0,0,0.3)',
+                      url:`https://www.youtube.com/results?search_query=${encodeURIComponent(exam + ' study song vocabulary')}`,
+                      canEmbed:false,
+                    })} style={{
+                      display:'flex', alignItems:'center', gap:12, padding:'10px 12px',
+                      borderRadius:12, border:`1px solid ${color}40`, background:`${color}20`,
+                      cursor:'pointer', textAlign:'left', width:'100%',
+                    }}>
+                      <span style={{ fontSize:'1.2rem' }}>🎵</span>
+                      <div>
+                        <p style={{ fontSize:'0.62rem', fontWeight:700, color, margin:'0 0 2px', fontFamily:'monospace' }}>{exam} study song &amp; vocabulary</p>
+                        <p style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', margin:0 }}>Opens in YouTube →</p>
+                      </div>
+                    </button>
                   </div>
                 ) : (
-                  <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', color:'rgba(226,232,240,0.25)', fontSize:'0.75rem' }}>
+                  <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', color:'var(--w-text-faint)', fontSize:'0.75rem' }}>
                     Search for an exam above to load videos
                   </div>
                 )}

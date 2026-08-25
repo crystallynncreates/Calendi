@@ -339,7 +339,7 @@ export default function Dashboard() {
   return (
     <div
       className="h-screen flex flex-col overflow-hidden"
-      data-theme={isLight && !isLandscape ? 'light' : undefined}
+      data-theme={isLight ? 'light' : undefined}
       style={{ background: isLandscape ? 'transparent' : (isLight ? '#F7F7FC' : '#06060F'), '--skin-color': color, '--skin-glow': glow, '--skin-dim': dim } as CSSProperties}
     >
       {/* Landscape background scene */}

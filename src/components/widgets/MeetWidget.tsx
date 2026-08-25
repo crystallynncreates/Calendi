@@ -24,6 +24,8 @@ export default function MeetWidget() {
 
   return (
     <div className="widget-card h-full flex flex-col p-3">
+      {/* Description */}
+      <p style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', margin:'0 0 6px', fontFamily:'monospace', letterSpacing:0.3 }}>📹 meet — launch Google Meet or Zoom, join instantly by meeting ID</p>
       {/* Tab switcher */}
       <div className="flex gap-1 mb-3 p-0.5 rounded-xl shrink-0" style={{ background:'rgba(255,255,255,0.03)' }}>
         {(['meet','zoom'] as const).map(t => (

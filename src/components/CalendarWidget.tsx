@@ -232,6 +232,7 @@ export default function CalendarWidget({ compact }: Props) {
       <div className="flex items-center justify-between px-4 pt-3 pb-1 shrink-0">
         <div>
           <div className="text-xs font-mono uppercase tracking-widest" style={{ color, opacity: 0.65, fontSize: '0.6rem' }}>calendar</div>
+          <p style={{ fontSize:'0.45rem', color:'var(--w-text-faint)', margin:'1px 0 0', fontFamily:'monospace', letterSpacing:0.3 }}>your schedule, events &amp; reminders in one glance</p>
           <h2 className="text-sm font-bold" style={{ color: '#E2E8F0' }}>{format(viewDate, 'MMMM yyyy')}</h2>
         </div>
         <div className="flex gap-1 items-center">

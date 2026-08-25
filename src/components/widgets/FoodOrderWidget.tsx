@@ -135,6 +135,7 @@ export default function FoodOrderWidget() {
 
   return (
     <div className="widget-card h-full flex flex-col" style={{ borderColor:`${color}25` }}>
+      <p style={{ fontSize:'0.48rem', color:'var(--w-text-faint)', margin:'6px 10px 0', fontFamily:'monospace', letterSpacing:0.3, flexShrink:0 }}>🍔 food — order from Starbucks, Dunkin, Uber Eats &amp; ShopRite, one tap away</p>
       {/* Tab bar */}
       <div style={{ display:'flex', gap:2, margin:'10px 10px 0', padding:3, borderRadius:12, background:'rgba(255,255,255,0.03)', flexShrink:0 }}>
         {TABS.map(t => (

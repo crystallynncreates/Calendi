@@ -162,10 +162,11 @@ export default function CalculatorWidget() {
 
   return (
     <div style={{
-      width: '100%', height: '100%', display: 'flex',
-      alignItems: 'center', justifyContent: 'center',
+      width: '100%', height: '100%', display: 'flex', flexDirection:'column',
       background: 'linear-gradient(160deg,#1e3a8a 0%,#111f54 100%)',
     }}>
+      <p style={{ fontSize:'0.45rem', color:'rgba(255,255,255,0.3)', margin:'5px 8px 0', fontFamily:'monospace', letterSpacing:0.3 }}>🧮 calculator — TI-84 style, crunch numbers without leaving the page</p>
+      <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center' }}>
       <div style={{
         background: 'linear-gradient(170deg,#2040a0 0%,#172d72 55%,#111f54 100%)',
         borderRadius: 12, padding: '8px 7px 10px',
@@ -236,6 +237,7 @@ export default function CalculatorWidget() {
             })}
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

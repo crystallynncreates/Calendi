@@ -3,8 +3,9 @@ import { useStore, getSkinColors } from '../../store';
 import type { AppEntry } from '../../types';
 
 type Tab = 'stream' | 'social' | 'work' | 'games' | 'food';
+type GameEntry = AppEntry & { tag: string };
 
-/* ── Brand SVG logos (inline) ──────────────────────────────────────────── */
+/* ── Brand SVG logos ── */
 function NetflixLogo() {
   return (
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
@@ -113,7 +114,7 @@ function ShopRiteLogo() {
   );
 }
 
-/* ── App entries ────────────────────────────────────────────────────────── */
+/* ── App entries ── */
 const STREAM_APPS: AppEntry[] = [
   { id:'netflix',  name:'Netflix',   url:'https://netflix.com',       emoji:'N', color:'#E50914', bgColor:'rgba(229,9,20,0.1)',   borderColor:'rgba(229,9,20,0.3)',   canEmbed:false },
   { id:'disney',   name:'Disney+',   url:'https://disneyplus.com',    emoji:'D', color:'#113CCF', bgColor:'rgba(17,60,207,0.12)', borderColor:'rgba(17,60,207,0.3)',  canEmbed:false },
@@ -142,13 +143,19 @@ const WORK_APPS: AppEntry[] = [
   { id:'hsw',      name:'HowStuffWorks',url:'https://www.howstuffworks.com',emoji:'🔬',color:'#e25c04',bgColor:'rgba(226,92,4,0.1)',borderColor:'rgba(226,92,4,0.3)',canEmbed:true },
 ];
 
-const GAME_APPS: AppEntry[] = [
-  { id:'playhop',  name:'Playhop',   url:'https://playhop.com',       emoji:'🎮', color:'#FF5C5C', bgColor:'rgba(255,92,92,0.12)',  borderColor:'rgba(255,92,92,0.3)',   canEmbed:true  },
-  { id:'chess',    name:'Chess',     url:'https://lichess.org',        emoji:'♟️', color:'#A0A0A0', bgColor:'rgba(160,160,160,0.1)', borderColor:'rgba(160,160,160,0.3)', canEmbed:true  },
-  { id:'poki',     name:'Poki',      url:'https://poki.com',           emoji:'🕹️', color:'#FF9800', bgColor:'rgba(255,152,0,0.1)',   borderColor:'rgba(255,152,0,0.3)',   canEmbed:true  },
-  { id:'solitaire',name:'Solitaire', url:'https://solitaired.com',     emoji:'🃏', color:'#E91E63', bgColor:'rgba(233,30,99,0.1)',   borderColor:'rgba(233,30,99,0.3)',   canEmbed:true  },
-  { id:'sudoku',   name:'Sudoku',    url:'https://sudoku.com',         emoji:'🔢', color:'#7B68EE', bgColor:'rgba(123,104,238,0.1)', borderColor:'rgba(123,104,238,0.3)', canEmbed:false },
-  { id:'wordle',   name:'Wordle',    url:'https://www.nytimes.com/games/wordle',emoji:'🟩',color:'#6AAA64',bgColor:'rgba(106,170,100,0.1)',borderColor:'rgba(106,170,100,0.3)',canEmbed:false },
+const GAME_ENTRIES: GameEntry[] = [
+  { id:'playhop',   name:'Playhop',      tag:'Featured', url:'https://playhop.com',                              emoji:'🎮', color:'#FF5C5C', bgColor:'rgba(255,92,92,0.12)',  borderColor:'rgba(255,92,92,0.3)',   canEmbed:true  },
+  { id:'krunker',   name:'Krunker.io',   tag:'Action',   url:'https://krunker.io',                               emoji:'🎯', color:'#F59E0B', bgColor:'rgba(245,158,11,0.1)', borderColor:'rgba(245,158,11,0.3)', canEmbed:true  },
+  { id:'poki',      name:'Poki',         tag:'Action',   url:'https://poki.com',                                 emoji:'🕹️', color:'#FF9800', bgColor:'rgba(255,152,0,0.1)',   borderColor:'rgba(255,152,0,0.3)',   canEmbed:true  },
+  { id:'chess',     name:'Chess',        tag:'Strategy', url:'https://lichess.org',                              emoji:'♟️', color:'#A0A0A0', bgColor:'rgba(160,160,160,0.1)', borderColor:'rgba(160,160,160,0.3)', canEmbed:true  },
+  { id:'backgammon',name:'Backgammon',   tag:'Strategy', url:'https://backgammongalaxy.com',                     emoji:'🎲', color:'#8B5CF6', bgColor:'rgba(139,92,246,0.1)', borderColor:'rgba(139,92,246,0.3)', canEmbed:true  },
+  { id:'2048',      name:'2048',         tag:'Puzzle',   url:'https://play2048.co',                              emoji:'🧮', color:'#FF7043', bgColor:'rgba(255,112,67,0.1)', borderColor:'rgba(255,112,67,0.3)', canEmbed:true  },
+  { id:'jigsaw',    name:'Jigsaw',       tag:'Puzzle',   url:'https://www.jigsawplanet.com',                     emoji:'🧩', color:'#7C3AED', bgColor:'rgba(124,58,237,0.1)', borderColor:'rgba(124,58,237,0.3)', canEmbed:true  },
+  { id:'wordle',    name:'Wordle',       tag:'Word',     url:'https://www.nytimes.com/games/wordle',             emoji:'🟩', color:'#6AAA64', bgColor:'rgba(106,170,100,0.1)', borderColor:'rgba(106,170,100,0.3)', canEmbed:false },
+  { id:'spellbee',  name:'Spelling Bee', tag:'Word',     url:'https://www.nytimes.com/puzzles/spelling-bee',     emoji:'🐝', color:'#F5C518', bgColor:'rgba(245,197,24,0.1)', borderColor:'rgba(245,197,24,0.3)', canEmbed:false },
+  { id:'solitaire', name:'Solitaire',    tag:'Classic',  url:'https://solitaired.com',                           emoji:'🃏', color:'#E91E63', bgColor:'rgba(233,30,99,0.1)',   borderColor:'rgba(233,30,99,0.3)',   canEmbed:true  },
+  { id:'sudoku',    name:'Sudoku',       tag:'Classic',  url:'https://sudoku.com',                               emoji:'🔢', color:'#7B68EE', bgColor:'rgba(123,104,238,0.1)', borderColor:'rgba(123,104,238,0.3)', canEmbed:false },
+  { id:'jstris',    name:'Jstris',       tag:'Classic',  url:'https://jstris.jezevec10.com',                     emoji:'🟦', color:'#00BCD4', bgColor:'rgba(0,188,212,0.1)',  borderColor:'rgba(0,188,212,0.3)',  canEmbed:true  },
 ];
 
 const FOOD_APPS: AppEntry[] = [
@@ -182,17 +189,21 @@ const LOGOS: Record<string, ReactNode> = {
   shoprite:  <ShopRiteLogo />,
 };
 
+const GAME_CATEGORIES = ['Action', 'Strategy', 'Puzzle', 'Word', 'Classic'] as const;
+
 export default function StreamWidget() {
   const skin = useStore(s => s.skin);
   const setActiveApp = useStore(s => s.setActiveApp);
   const { color, glow } = getSkinColors(skin);
   const [tab, setTab] = useState<Tab>('stream');
 
-  const apps =
+  const apps: AppEntry[] =
     tab === 'stream' ? STREAM_APPS :
     tab === 'social' ? SOCIAL_APPS :
     tab === 'work'   ? WORK_APPS :
-    tab === 'food'   ? FOOD_APPS : GAME_APPS;
+    tab === 'food'   ? FOOD_APPS : [];
+
+  const playhopEntry = GAME_ENTRIES.find(g => g.id === 'playhop')!;
 
   return (
     <div className="widget-card h-full flex flex-col p-2.5">
@@ -214,37 +225,114 @@ export default function StreamWidget() {
         ))}
       </div>
 
-      {/* App grid */}
-      <div style={{
-        flex:1, display:'grid',
-        gridTemplateColumns: apps.length <= 4 ? 'repeat(2,1fr)' : 'repeat(3,1fr)',
-        gap:5, overflowY:'auto',
-      }}>
-        {apps.map(app => (
-          <button key={app.id} onClick={() => setActiveApp(app)}
+      {/* Games tab — featured banner + categories */}
+      {tab === 'games' ? (
+        <div style={{ flex:1, overflowY:'auto', display:'flex', flexDirection:'column', gap:10 }}>
+          {/* Playhop featured banner */}
+          <button
+            onClick={() => setActiveApp(playhopEntry)}
             style={{
-              display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
-              gap:4, padding:'8px 3px', borderRadius:12, border:`1px solid ${app.borderColor}`,
-              background:app.bgColor, cursor:'pointer',
+              display:'flex', alignItems:'center', gap:12, padding:'12px 14px',
+              borderRadius:14, border:'1px solid rgba(255,92,92,0.35)',
+              background:'linear-gradient(135deg,rgba(255,92,92,0.18) 0%,rgba(255,92,92,0.06) 100%)',
+              cursor:'pointer', width:'100%', textAlign:'left',
+              boxShadow:'0 2px 16px rgba(255,92,92,0.15)',
               transition:'transform 0.15s, box-shadow 0.15s',
+              flexShrink:0,
             }}
             onMouseEnter={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform='scale(1.06)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow=`0 4px 16px ${app.color}30`;
+              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.02)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 24px rgba(255,92,92,0.3)';
             }}
             onMouseLeave={e => {
-              (e.currentTarget as HTMLButtonElement).style.transform='scale(1)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow='none';
-            }}>
-            <div style={{ width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-              {LOGOS[app.id] ?? <span style={{ fontSize:'1.5rem', lineHeight:1 }}>{app.emoji}</span>}
+              (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 16px rgba(255,92,92,0.15)';
+            }}
+          >
+            <div style={{ width:40, height:40, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <PlayhopLogo />
             </div>
-            <span style={{ fontSize:'0.52rem', fontWeight:700, color:'rgba(226,232,240,0.65)', fontFamily:'monospace', letterSpacing:0.3, textAlign:'center', lineHeight:1.2 }}>
-              {app.name}
-            </span>
+            <div style={{ flex:1 }}>
+              <p style={{ fontSize:'0.78rem', fontWeight:800, color:'#FF5C5C', fontFamily:'monospace', margin:'0 0 3px' }}>🎮 Playhop</p>
+              <p style={{ fontSize:'0.58rem', color:'rgba(226,232,240,0.45)', margin:0 }}>Hundreds of free browser games</p>
+            </div>
+            <span style={{ fontSize:'0.58rem', color:'#FF5C5C', fontFamily:'monospace', fontWeight:800, flexShrink:0 }}>PLAY →</span>
           </button>
-        ))}
-      </div>
+
+          {/* Category rows */}
+          {GAME_CATEGORIES.map(cat => {
+            const catGames = GAME_ENTRIES.filter(g => g.tag === cat);
+            if (!catGames.length) return null;
+            return (
+              <div key={cat}>
+                <p style={{ fontSize:'0.5rem', fontFamily:'monospace', color:'rgba(226,232,240,0.22)', textTransform:'uppercase', letterSpacing:2, margin:'0 0 5px 2px' }}>
+                  {cat}
+                </p>
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:5 }}>
+                  {catGames.map(app => (
+                    <button key={app.id} onClick={() => setActiveApp(app)}
+                      style={{
+                        display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+                        gap:4, padding:'8px 3px', borderRadius:12, border:`1px solid ${app.borderColor}`,
+                        background:app.bgColor, cursor:'pointer',
+                        transition:'transform 0.15s, box-shadow 0.15s',
+                      }}
+                      onMouseEnter={e => {
+                        (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.06)';
+                        (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 4px 16px ${app.color}30`;
+                      }}
+                      onMouseLeave={e => {
+                        (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+                        (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none';
+                      }}
+                    >
+                      <div style={{ width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                        {LOGOS[app.id] ?? <span style={{ fontSize:'1.3rem', lineHeight:1 }}>{app.emoji}</span>}
+                      </div>
+                      <span style={{ fontSize:'0.5rem', fontWeight:700, color:'rgba(226,232,240,0.65)', fontFamily:'monospace', letterSpacing:0.3, textAlign:'center', lineHeight:1.2 }}>
+                        {app.name}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        /* Generic app grid for all other tabs */
+        <div style={{
+          flex:1, display:'grid',
+          gridTemplateColumns: apps.length <= 4 ? 'repeat(2,1fr)' : 'repeat(3,1fr)',
+          gap:5, overflowY:'auto',
+        }}>
+          {apps.map(app => (
+            <button key={app.id} onClick={() => setActiveApp(app)}
+              style={{
+                display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+                gap:4, padding:'8px 3px', borderRadius:12, border:`1px solid ${app.borderColor}`,
+                background:app.bgColor, cursor:'pointer',
+                transition:'transform 0.15s, box-shadow 0.15s',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.06)';
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 4px 16px ${app.color}30`;
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none';
+              }}
+            >
+              <div style={{ width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                {LOGOS[app.id] ?? <span style={{ fontSize:'1.5rem', lineHeight:1 }}>{app.emoji}</span>}
+              </div>
+              <span style={{ fontSize:'0.52rem', fontWeight:700, color:'rgba(226,232,240,0.65)', fontFamily:'monospace', letterSpacing:0.3, textAlign:'center', lineHeight:1.2 }}>
+                {app.name}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

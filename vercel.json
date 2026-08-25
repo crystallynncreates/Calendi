@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pwa-assets-generator --config pwa-assets.config.ts || true && tsc && vite build",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [

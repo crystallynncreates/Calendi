@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "pwa-assets-generator --config pwa-assets.config.ts && tsc && vite build",
+    "build": "pwa-assets-generator --config pwa-assets.config.ts || true && tsc && vite build",
     "preview": "vite preview",
     "generate-icons": "pwa-assets-generator --config pwa-assets.config.ts"
   },

@@ -2,7 +2,7 @@ export type WidgetType =
   | 'clock' | 'calculator' | 'timer' | 'photo-frame'
   | 'streaming' | 'youtube' | 'meet' | 'browser' | 'notes'
   | 'netflix' | 'disney' | 'prime' | 'messaging' | 'phone' | 'zoom'
-  | 'canvas-lms' | 'study-game';
+  | 'canvas-lms' | 'study-game' | 'food-order';
 
 export type LayoutId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 

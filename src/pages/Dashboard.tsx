@@ -22,6 +22,8 @@ const YouTubeWidget    = lazy(() => import('../components/widgets/YouTubeWidget'
 const MeetWidget       = lazy(() => import('../components/widgets/MeetWidget'));
 const BrowserWidget    = lazy(() => import('../components/widgets/BrowserWidget'));
 const NotesWidget      = lazy(() => import('../components/widgets/NotesWidget'));
+const StudyGameWidget  = lazy(() => import('../components/widgets/StudyGameWidget'));
+const FoodOrderWidget  = lazy(() => import('../components/widgets/FoodOrderWidget'));
 
 interface WidgetMeta { id: WidgetType; label: string; icon: ReactNode; desc: string }
 
@@ -33,10 +35,11 @@ const WIDGET_LIST: WidgetMeta[] = [
   { id: 'youtube',     label: 'youtube',    icon: <Youtube size={18} />,         desc: 'watch videos in-widget' },
   { id: 'streaming',   label: 'apps',       icon: <Tv size={18} />,              desc: 'netflix, disney+, prime, socials' },
   { id: 'canvas-lms',  label: 'canvas lms', icon: <GraduationCap size={18} />,  desc: 'canvas courses & assignments' },
-  { id: 'study-game',  label: 'study game', icon: <Brain size={18} />,          desc: 'quizlet flashcards & study' },
+  { id: 'study-game',  label: 'study game', icon: <Brain size={18} />,          desc: 'flash cards, song & study video' },
+  { id: 'food-order',  label: 'food order', icon: <Sparkles size={18} />,       desc: 'starbucks, dunkin, uber eats, shoprite' },
   { id: 'meet',        label: 'meet/zoom',  icon: <Video size={18} />,           desc: 'google meet + zoom' },
   { id: 'browser',     label: 'browser',    icon: <Globe size={18} />,           desc: 'built-in web browser' },
-  { id: 'notes',       label: 'notes',      icon: <FileText size={18} />,        desc: 'quick notes, auto-saves' },
+  { id: 'notes',       label: 'notes',      icon: <FileText size={18} />,        desc: 'rich text notes — like OneNote' },
 ];
 
 function WidgetRenderer({ type }: { type: WidgetType }) {
@@ -54,8 +57,9 @@ function WidgetRenderer({ type }: { type: WidgetType }) {
     case 'phone':       return <StreamWidget />;
     case 'meet':
     case 'zoom':        return <MeetWidget />;
-    case 'canvas-lms':  return <BrowserWidget initialUrl="https://cloud.canvaslms.com/login/canvas" />;
-    case 'study-game':  return <BrowserWidget initialUrl="https://quizlet.com" />;
+    case 'canvas-lms':  return <BrowserWidget initialUrl="https://canvas.instructure.com/login/canvas" />;
+    case 'study-game':  return <StudyGameWidget />;
+    case 'food-order':  return <FoodOrderWidget />;
     case 'browser':     return <BrowserWidget />;
     case 'notes':       return <NotesWidget />;
     default:            return null;

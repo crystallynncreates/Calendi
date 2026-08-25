@@ -11,12 +11,15 @@ type QuickLink = {
 };
 
 const QUICK_LINKS: QuickLink[] = [
-  { label: 'Google',    url: 'https://www.google.com/webhp?igu=1', Logo: GoogleLogo },
-  { label: 'Wikipedia', url: 'https://en.m.wikipedia.org',         emoji: '📖' },
-  { label: 'YouTube',   url: 'https://www.youtube.com',            Logo: YouTubeLogo },
-  { label: 'Maps',      url: 'https://maps.google.com',            Logo: GoogleMapsLogo },
-  { label: 'Translate', url: 'https://translate.google.com',       emoji: '🌐' },
-  { label: 'Weather',   url: 'https://wttr.in/?theme=dark',        emoji: '🌤️' },
+  { label: 'Google',        url: 'https://www.google.com',                         Logo: GoogleLogo },
+  { label: 'YouTube',       url: 'https://www.youtube.com',                        Logo: YouTubeLogo },
+  { label: 'Maps',          url: 'https://maps.google.com/maps?q=&output=embed',   Logo: GoogleMapsLogo },
+  { label: 'Translate',     url: 'https://translate.google.com',                   emoji: '🌐' },
+  { label: 'Wikipedia',     url: 'https://en.m.wikipedia.org',                     emoji: '📖' },
+  { label: 'Weather',       url: 'https://wttr.in/?theme=dark',                    emoji: '🌤️' },
+  { label: 'HowStuffWorks', url: 'https://www.howstuffworks.com',                  emoji: '🔬' },
+  { label: 'Khan Academy',  url: 'https://www.khanacademy.org',                    emoji: '📐' },
+  { label: 'Wolfram Alpha', url: 'https://www.wolframalpha.com',                   emoji: '🧮' },
 ];
 
 interface BrowserProps { initialUrl?: string }
@@ -97,7 +100,7 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
       ) : (
         <div className="flex-1 p-3 overflow-y-auto">
           <p className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: 'rgba(226,232,240,0.25)' }}>quick links</p>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-1.5">
             {QUICK_LINKS.map(q => (
               <button
                 key={q.label}

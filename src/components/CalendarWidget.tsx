@@ -92,6 +92,12 @@ function downloadICS(dayEvents: CalEvent[], label: string) {
   URL.revokeObjectURL(url);
 }
 
+const BILLS_PAID_KEY = 'calendi-bills-paid';
+function loadPaid(): Set<string> {
+  try { return new Set(JSON.parse(localStorage.getItem(BILLS_PAID_KEY) || '[]')); } catch { return new Set(); }
+}
+function savePaid(s: Set<string>) { localStorage.setItem(BILLS_PAID_KEY, JSON.stringify([...s])); }
+
 interface Props { compact?: boolean }
 
 export default function CalendarWidget({ compact }: Props) {
@@ -105,6 +111,9 @@ export default function CalendarWidget({ compact }: Props) {
   const [form, setForm] = useState<FormState>(BLANK);
   const [moreFields, setMoreFields] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [panelTab, setPanelTab] = useState<'day' | 'todos' | 'bills'>('day');
+  const [paidBills, setPaidBills] = useState<Set<string>>(loadPaid);
+  const [quickTodo, setQuickTodo] = useState('');
 
   const today = new Date();
   const panelDate = selected ?? today;
@@ -131,6 +140,18 @@ export default function CalendarWidget({ compact }: Props) {
 
   const panelHolidays = getHolidaysForDate(panelDate);
   const panelEvents = eventsByDay.get(panelKey) || [];
+
+  const allTodos = useMemo(() =>
+    events.filter(e => ['todo','chores','shopping-list','shopping'].includes(e.type))
+          .sort((a,b) => a.date.localeCompare(b.date)), [events]);
+
+  const allBills = useMemo(() =>
+    events.filter(e => e.type === 'bill')
+          .sort((a,b) => a.date.localeCompare(b.date)), [events]);
+
+  const unpaidTotal = useMemo(() =>
+    allBills.filter(b => !paidBills.has(b.id)).reduce((s,b) => s + (b.amount||0), 0),
+    [allBills, paidBills]);
 
   function pickChip(type: EventType) {
     const meta = TYPE_META[type];
@@ -178,6 +199,25 @@ export default function CalendarWidget({ compact }: Props) {
     setForm(BLANK);
     setAdding(false);
     setMoreFields(false);
+  }
+
+  function toggleBillPaid(id: string) {
+    const next = new Set(paidBills);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    setPaidBills(next);
+    savePaid(next);
+  }
+
+  function addQuickTodo() {
+    const title = quickTodo.trim();
+    if (!title) return;
+    const e: CalEvent = {
+      id: Date.now().toString(), title,
+      date: format(today, 'yyyy-MM-dd'),
+      color: 'cyan', type: 'todo', recur: 'none', allDay: true, checklist: [],
+    };
+    addEvent(e);
+    setQuickTodo('');
   }
 
   async function requestNotifications() {
@@ -276,103 +316,243 @@ export default function CalendarWidget({ compact }: Props) {
           })}
         </div>
 
-        {/* Panel header */}
-        <div className="flex items-center justify-between px-3 pb-1.5 shrink-0">
-          <span className="font-mono" style={{ color: 'rgba(226,232,240,0.35)', fontSize: '0.65rem' }}>{panelLabel}</span>
-          <div className="flex gap-1">
-            {panelEvents.length > 0 && (
+        {/* Panel tabs + header */}
+        <div style={{ display:'flex', alignItems:'center', gap:4, padding:'0 12px 8px', flexShrink:0 }}>
+          {(['day','todos','bills'] as const).map(t => {
+            const LABELS = { day:`📅 ${format(panelDate,'MMM d')}`, todos:'✅ To-Do', bills:'🧾 Bills' };
+            return (
+              <button key={t} onClick={() => setPanelTab(t)} style={{
+                flex:1, padding:'4px 2px', borderRadius:8, border:'none', cursor:'pointer',
+                background: panelTab===t ? color : 'rgba(255,255,255,0.04)',
+                color: panelTab===t ? '#fff' : 'rgba(226,232,240,0.38)',
+                fontSize:'0.58rem', fontWeight:700, fontFamily:'monospace',
+                boxShadow: panelTab===t ? `0 2px 8px ${glow}` : 'none',
+                transition:'all 0.15s',
+              }}>{LABELS[t]}</button>
+            );
+          })}
+          <div className="flex gap-1 ml-1">
+            {panelTab === 'day' && panelEvents.length > 0 && (
               <button title="Export .ics" onClick={() => downloadICS(panelEvents, panelKey)} className="btn-ghost btn-pill !px-1.5 !py-1">
                 <Download size={10} style={{ color }} />
               </button>
             )}
-            <button title="Share / Download" onClick={() => setShowShare(true)} className="btn-ghost btn-pill !px-1.5 !py-1">
+            <button title="Share" onClick={() => setShowShare(true)} className="btn-ghost btn-pill !px-1.5 !py-1">
               <Share2 size={10} style={{ color }} />
             </button>
-            <button className="btn-ghost btn-pill !px-2 !py-1 gap-1"
-              style={{ color: deleting ? '#EF4444' : 'rgba(226,232,240,0.45)', borderColor: deleting ? 'rgba(239,68,68,0.4)' : 'rgba(226,232,240,0.12)', fontSize: '0.62rem' }}
-              onClick={() => { setDeleting(!deleting); setAdding(false); }}
-              title="delete events">
-              <Trash2 size={10} /> delete
-            </button>
-            <button className="btn-ghost btn-pill !px-2 !py-1 gap-1"
-              style={{ color, borderColor: `${color}40`, fontSize: '0.62rem' }}
-              onClick={() => { setAdding(!adding); setDeleting(false); if (!adding) setMoreFields(false); }}>
-              <Plus size={10} /> add
-            </button>
+            {panelTab === 'day' && (
+              <>
+                <button className="btn-ghost btn-pill !px-1.5 !py-1 gap-1"
+                  style={{ color: deleting ? '#EF4444' : 'rgba(226,232,240,0.45)', borderColor: deleting ? 'rgba(239,68,68,0.4)' : 'rgba(226,232,240,0.12)', fontSize: '0.6rem' }}
+                  onClick={() => { setDeleting(!deleting); setAdding(false); }} title="delete">
+                  <Trash2 size={10} />
+                </button>
+                <button className="btn-ghost btn-pill !px-2 !py-1 gap-1"
+                  style={{ color, borderColor:`${color}40`, fontSize:'0.62rem' }}
+                  onClick={() => { setAdding(!adding); setDeleting(false); if (!adding) setMoreFields(false); }}>
+                  <Plus size={10} /> add
+                </button>
+              </>
+            )}
           </div>
         </div>
 
         {/* Scrollable events + form */}
         <div className="flex-1 min-h-0 overflow-y-auto px-3 pb-3">
-          {panelHolidays.map((h, i) => (
-            <div key={i} className="flex items-center gap-2 mb-1.5 px-2 py-1.5 rounded-xl"
-              style={{ background: 'rgba(245,158,11,0.07)', border: '1px solid rgba(245,158,11,0.16)' }}>
-              <span style={{ fontSize: '0.7rem' }}>🎉</span>
-              <span style={{ fontSize: '0.7rem', color: 'rgba(226,232,240,0.65)' }}>{h.name}</span>
-            </div>
-          ))}
 
-          {panelEvents.map(e => {
-            const meta = TYPE_META[e.type] ?? TYPE_META.event;
-            const c = contacts.find(x => x.id === e.contactId);
-            return (
-              <div key={e.id} className="mb-1.5 px-2 py-2 rounded-xl"
-                style={{ background: `${COLOR_HEX[e.color]}0D`, border: `1px solid ${COLOR_HEX[e.color]}22` }}>
-                <div className="flex items-start gap-1.5">
-                  <span style={{ fontSize: '0.75rem', marginTop: 1 }}>{meta.emoji}</span>
-                  <div className="flex-1 min-w-0">
-                    <p style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(226,232,240,0.88)', margin: 0 }} className="truncate">{e.title}</p>
-                    {e.time && <p style={{ fontSize: '0.6rem', color: 'rgba(226,232,240,0.35)', margin: '2px 0 0' }}>{e.time}</p>}
-                    {e.amount != null && <p style={{ fontSize: '0.6rem', color: COLOR_HEX[e.color], margin: '2px 0 0' }}>${e.amount.toFixed(2)}</p>}
-                    {c && (
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <User size={9} style={{ color: 'rgba(226,232,240,0.28)' }} />
-                        {c.phone
-                          ? <a href={`tel:${c.phone}`} style={{ fontSize: '0.6rem', color }}>{c.name}</a>
-                          : <span style={{ fontSize: '0.6rem', color: 'rgba(226,232,240,0.35)' }}>{c.name}</span>}
+          {/* ── Day tab ── */}
+          {panelTab === 'day' && (
+            <>
+              {panelHolidays.map((h, i) => (
+                <div key={i} className="flex items-center gap-2 mb-1.5 px-2 py-1.5 rounded-xl"
+                  style={{ background: 'rgba(245,158,11,0.07)', border: '1px solid rgba(245,158,11,0.16)' }}>
+                  <span style={{ fontSize: '0.7rem' }}>🎉</span>
+                  <span style={{ fontSize: '0.7rem', color: 'rgba(226,232,240,0.65)' }}>{h.name}</span>
+                </div>
+              ))}
+
+              {panelEvents.map(e => {
+                const meta = TYPE_META[e.type] ?? TYPE_META.event;
+                const c = contacts.find(x => x.id === e.contactId);
+                return (
+                  <div key={e.id} className="mb-1.5 px-2 py-2 rounded-xl"
+                    style={{ background: `${COLOR_HEX[e.color]}0D`, border: `1px solid ${COLOR_HEX[e.color]}22` }}>
+                    <div className="flex items-start gap-1.5">
+                      <span style={{ fontSize: '0.75rem', marginTop: 1 }}>{meta.emoji}</span>
+                      <div className="flex-1 min-w-0">
+                        <p style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(226,232,240,0.88)', margin: 0 }} className="truncate">{e.title}</p>
+                        {e.time && <p style={{ fontSize: '0.6rem', color: 'rgba(226,232,240,0.35)', margin: '2px 0 0' }}>{e.time}</p>}
+                        {e.amount != null && <p style={{ fontSize: '0.6rem', color: COLOR_HEX[e.color], margin: '2px 0 0' }}>${e.amount.toFixed(2)}</p>}
+                        {c && (
+                          <div className="flex items-center gap-1 mt-0.5">
+                            <User size={9} style={{ color: 'rgba(226,232,240,0.28)' }} />
+                            {c.phone
+                              ? <a href={`tel:${c.phone}`} style={{ fontSize: '0.6rem', color }}>{c.name}</a>
+                              : <span style={{ fontSize: '0.6rem', color: 'rgba(226,232,240,0.35)' }}>{c.name}</span>}
+                          </div>
+                        )}
+                        {e.address && <p className="truncate" style={{ fontSize: '0.58rem', color: 'rgba(226,232,240,0.28)', margin: '2px 0 0' }}>📍 {e.address}</p>}
+                        {e.notes && <p style={{ fontSize: '0.6rem', color: 'rgba(226,232,240,0.38)', margin: '2px 0 0' }}>{e.notes}</p>}
+                        {e.checklist && e.checklist.length > 0 && (
+                          <div className="mt-1.5 flex flex-col gap-1">
+                            {e.checklist.map(item => (
+                              <button key={item.id} onClick={() => toggleEventCheckItem(e.id, item.id)}
+                                className="flex items-center gap-2 text-left"
+                                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                                <div style={{ width: 14, height: 14, borderRadius: 4, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1.5px solid ${item.done ? COLOR_HEX[e.color] : COLOR_HEX[e.color]+'55'}`, background: item.done ? COLOR_HEX[e.color] : 'transparent', transition: 'all 0.15s' }}>
+                                  {item.done && <Check size={8} style={{ color: '#fff' }} />}
+                                </div>
+                                <span style={{ fontSize: '0.65rem', color: item.done ? 'rgba(226,232,240,0.3)' : 'rgba(226,232,240,0.7)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    )}
-                    {e.address && <p className="truncate" style={{ fontSize: '0.58rem', color: 'rgba(226,232,240,0.28)', margin: '2px 0 0' }}>📍 {e.address}</p>}
-                    {e.notes && <p style={{ fontSize: '0.6rem', color: 'rgba(226,232,240,0.38)', margin: '2px 0 0' }}>{e.notes}</p>}
+                      <div className="flex flex-col gap-1 items-end shrink-0">
+                        {deleting ? (
+                          <button onClick={() => { removeEvent(e.id); setDeleting(false); }}
+                            style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.35)', borderRadius: 8, cursor: 'pointer', color: '#EF4444', padding: '4px 6px', display: 'flex', alignItems: 'center', gap: 3, fontSize: '0.6rem', fontWeight: 600 }}>
+                            <Trash2 size={10} /> remove
+                          </button>
+                        ) : (
+                          <button onClick={() => removeEvent(e.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.4)', padding: 2 }}
+                            onMouseEnter={el => (el.currentTarget as HTMLButtonElement).style.color = '#EF4444'}
+                            onMouseLeave={el => (el.currentTarget as HTMLButtonElement).style.color = 'rgba(226,232,240,0.4)'}>
+                            <X size={10} />
+                          </button>
+                        )}
+                        <a href={googleCalLink(e)} target="_blank" rel="noopener noreferrer" title="Add to Google Calendar">
+                          <ExternalLink size={9} style={{ color: 'rgba(226,232,240,0.18)' }} />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {panelEvents.length === 0 && panelHolidays.length === 0 && !adding && (
+                <p className="text-center py-3" style={{ color: 'rgba(226,232,240,0.18)', fontSize: '0.7rem' }}>
+                  tap a chip above to add something here
+                </p>
+              )}
+            </>
+          )}
+
+          {/* ── To-Do tab ── */}
+          {panelTab === 'todos' && (
+            <>
+              {/* Quick add */}
+              <form onSubmit={e => { e.preventDefault(); addQuickTodo(); }} style={{ display:'flex', gap:6, marginBottom:10 }}>
+                <input
+                  className="input-dark flex-1 !py-1.5 text-xs"
+                  placeholder="✅ Add to-do for today…"
+                  value={quickTodo}
+                  onChange={e => setQuickTodo(e.target.value)}
+                />
+                <button type="submit" style={{ background:color, border:'none', borderRadius:8, padding:'0 10px', cursor:'pointer', color:'#fff', flexShrink:0 }}>
+                  <Plus size={13}/>
+                </button>
+              </form>
+
+              {allTodos.length === 0 ? (
+                <p className="text-center py-4" style={{ color:'rgba(226,232,240,0.2)', fontSize:'0.7rem' }}>
+                  No to-dos yet — add one above
+                </p>
+              ) : allTodos.map(e => {
+                const isToday2 = e.date === format(today, 'yyyy-MM-dd');
+                const allDone = (e.checklist?.length ?? 0) > 0 && e.checklist!.every(c => c.done);
+                return (
+                  <div key={e.id} className="mb-2 px-2 py-2 rounded-xl"
+                    style={{ background:`${COLOR_HEX[e.color]}0D`, border:`1px solid ${COLOR_HEX[e.color]}22`, opacity: allDone ? 0.5 : 1 }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: e.checklist?.length ? 6 : 0 }}>
+                      <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                        <span style={{ fontSize:'0.7rem' }}>{TYPE_META[e.type]?.emoji ?? '✅'}</span>
+                        <div>
+                          <p style={{ fontSize:'0.72rem', fontWeight:600, color:'rgba(226,232,240,0.88)', margin:0 }}>{e.title}</p>
+                          <p style={{ fontSize:'0.58rem', color:'rgba(226,232,240,0.3)', margin:0 }}>
+                            {isToday2 ? 'Today' : format(new Date(e.date + 'T12:00:00'), 'MMM d')}
+                            {e.recur !== 'none' ? ` · ${e.recur}` : ''}
+                          </p>
+                        </div>
+                      </div>
+                      <button onClick={() => removeEvent(e.id)} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(226,232,240,0.25)', padding:2 }}><X size={10}/></button>
+                    </div>
                     {e.checklist && e.checklist.length > 0 && (
-                      <div className="mt-1 flex flex-col gap-0.5">
+                      <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
                         {e.checklist.map(item => (
-                          <button key={item.id} onClick={() => toggleEventCheckItem(e.id, item.id)} className="flex items-center gap-1.5 text-left" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                            <div style={{ width: 10, height: 10, borderRadius: 3, border: `1px solid ${COLOR_HEX[e.color]}55`, background: item.done ? COLOR_HEX[e.color] : 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              {item.done && <Check size={6} style={{ color: '#fff' }} />}
+                          <button key={item.id} onClick={() => toggleEventCheckItem(e.id, item.id)}
+                            style={{ display:'flex', alignItems:'center', gap:8, background:'none', border:'none', cursor:'pointer', padding:0, width:'100%', textAlign:'left' }}>
+                            <div style={{ width:18, height:18, borderRadius:5, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', border:`2px solid ${item.done ? COLOR_HEX[e.color] : COLOR_HEX[e.color]+'60'}`, background: item.done ? COLOR_HEX[e.color] : 'transparent', transition:'all 0.15s' }}>
+                              {item.done && <Check size={10} style={{ color:'#fff' }}/>}
                             </div>
-                            <span style={{ fontSize: '0.58rem', color: item.done ? 'rgba(226,232,240,0.22)' : 'rgba(226,232,240,0.58)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
+                            <span style={{ fontSize:'0.68rem', color: item.done ? 'rgba(226,232,240,0.3)' : 'rgba(226,232,240,0.78)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
                           </button>
                         ))}
                       </div>
                     )}
-                  </div>
-                  <div className="flex flex-col gap-1 items-end shrink-0">
-                    {deleting ? (
-                      <button onClick={() => { removeEvent(e.id); setDeleting(false); }}
-                        style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.35)', borderRadius: 8, cursor: 'pointer', color: '#EF4444', padding: '4px 6px', display: 'flex', alignItems: 'center', gap: 3, fontSize: '0.6rem', fontWeight: 600 }}>
-                        <Trash2 size={10} /> remove
-                      </button>
-                    ) : (
-                      <button onClick={() => removeEvent(e.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.4)', padding: 2 }}
-                        onMouseEnter={el => (el.currentTarget as HTMLButtonElement).style.color = '#EF4444'}
-                        onMouseLeave={el => (el.currentTarget as HTMLButtonElement).style.color = 'rgba(226,232,240,0.4)'}>
-                        <X size={10} />
+                    {(!e.checklist || e.checklist.length === 0) && (
+                      <button onClick={() => removeEvent(e.id)}
+                        style={{ display:'flex', alignItems:'center', gap:8, background:'none', border:'none', cursor:'pointer', padding:'4px 0', width:'100%', textAlign:'left' }}>
+                        <div style={{ width:18, height:18, borderRadius:5, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', border:`2px solid ${COLOR_HEX[e.color]+'60'}`, background:'transparent', transition:'all 0.15s' }} />
+                        <span style={{ fontSize:'0.65rem', color:'rgba(226,232,240,0.35)' }}>tap checkbox to mark done</span>
                       </button>
                     )}
-                    <a href={googleCalLink(e)} target="_blank" rel="noopener noreferrer" title="Add to Google Calendar">
-                      <ExternalLink size={9} style={{ color: 'rgba(226,232,240,0.18)' }} />
-                    </a>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })}
+            </>
+          )}
 
-          {panelEvents.length === 0 && panelHolidays.length === 0 && !adding && (
-            <p className="text-center py-3" style={{ color: 'rgba(226,232,240,0.18)', fontSize: '0.7rem' }}>
-              tap a chip above to add something here
-            </p>
+          {/* ── Bills tab ── */}
+          {panelTab === 'bills' && (
+            <>
+              {/* Summary banner */}
+              <div style={{ background:'rgba(245,158,11,0.08)', border:'1px solid rgba(245,158,11,0.2)', borderRadius:12, padding:'8px 12px', marginBottom:10, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                <span style={{ fontSize:'0.6rem', color:'rgba(245,158,11,0.7)', fontFamily:'monospace', textTransform:'uppercase', letterSpacing:1 }}>unpaid total</span>
+                <span style={{ fontSize:'1rem', fontWeight:700, color:'#F59E0B' }}>
+                  ${unpaidTotal.toFixed(2)}
+                </span>
+              </div>
+
+              {/* Bill list */}
+              {allBills.length === 0 ? (
+                <div style={{ textAlign:'center', padding:'16px 0', color:'rgba(226,232,240,0.2)', fontSize:'0.7rem' }}>
+                  No bills yet — tap "🧾 Bill" chip above to add one
+                </div>
+              ) : allBills.map(e => {
+                const isPaid = paidBills.has(e.id);
+                return (
+                  <div key={e.id} className="mb-2 px-3 py-2.5 rounded-xl"
+                    style={{ background: isPaid ? 'rgba(16,185,129,0.06)' : 'rgba(245,158,11,0.06)', border: `1px solid ${isPaid ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)'}`, opacity: isPaid ? 0.6 : 1, transition:'all 0.2s' }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                      {/* Paid checkbox */}
+                      <button onClick={() => toggleBillPaid(e.id)}
+                        style={{ width:22, height:22, borderRadius:6, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', border:`2px solid ${isPaid ? '#10B981' : 'rgba(245,158,11,0.5)'}`, background: isPaid ? '#10B981' : 'transparent', cursor:'pointer', transition:'all 0.15s' }}>
+                        {isPaid && <Check size={12} style={{ color:'#fff' }}/>}
+                      </button>
+                      <div style={{ flex:1, minWidth:0 }}>
+                        <p style={{ fontSize:'0.72rem', fontWeight:600, color:'rgba(226,232,240,0.88)', margin:0, textDecoration: isPaid ? 'line-through' : 'none' }} className="truncate">{e.title}</p>
+                        <p style={{ fontSize:'0.6rem', color:'rgba(226,232,240,0.35)', margin:0 }}>
+                          Due: {format(new Date(e.date + 'T12:00:00'), 'MMM d, yyyy')}
+                          {e.recur !== 'none' ? ` · ${e.recur}` : ''}
+                        </p>
+                      </div>
+                      <div style={{ display:'flex', flexDirection:'column', alignItems:'flex-end', gap:2 }}>
+                        {e.amount != null && (
+                          <span style={{ fontSize:'0.85rem', fontWeight:700, color: isPaid ? '#10B981' : '#F59E0B' }}>
+                            ${e.amount.toFixed(2)}
+                          </span>
+                        )}
+                        <span style={{ fontSize:'0.58rem', fontFamily:'monospace', color: isPaid ? '#10B981' : 'rgba(245,158,11,0.6)', letterSpacing:0.5 }}>
+                          {isPaid ? 'PAID ✓' : 'UNPAID'}
+                        </span>
+                      </div>
+                    </div>
+                    {e.notes && <p style={{ fontSize:'0.6rem', color:'rgba(226,232,240,0.3)', margin:'4px 0 0 30px' }}>{e.notes}</p>}
+                  </div>
+                );
+              })}
+            </>
           )}
 
           {adding && (

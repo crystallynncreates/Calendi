@@ -115,7 +115,7 @@ export default function CalendarShareModal({ onClose }: Props) {
     {
       icon: <Share2 size={22} />,
       label: 'Share via phone',
-      sub: navigator.share ? 'Native share sheet' : 'Copies event list',
+      sub: typeof navigator.share === 'function' ? 'Native share sheet' : 'Copies event list',
       onClick: handleShare,
       col: '#34D399',
     },

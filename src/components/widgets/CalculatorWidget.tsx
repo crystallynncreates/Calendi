@@ -26,8 +26,10 @@ export default function CalculatorWidget() {
     if (btn === '=') {
       try {
         const raw = expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');
-        const result = Function('"use strict"; return (' + raw + ')')();
-        const str = Number.isFinite(result) ? String(parseFloat(result.toFixed(10))) : 'Error';
+        const fn = Function('"use strict"; return (' + raw + ')') as () => unknown;
+        const result = fn();
+        const num = typeof result === 'number' ? result : NaN;
+        const str = Number.isFinite(num) ? String(parseFloat(num.toFixed(10))) : 'Error';
         setDisplay(str); setExpr(str); setFresh(true);
       } catch { setDisplay('Error'); setFresh(true); }
       return;

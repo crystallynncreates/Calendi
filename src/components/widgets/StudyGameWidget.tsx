@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, ChevronLeft, ChevronRight, RotateCcw, Music, Video, BookOpen, Volume2, HelpCircle } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 
@@ -933,6 +933,180 @@ const VOCAB_BANKS: Record<string, FlashCard[]> = {
     { term:'Board/Elder Relations', def:"Pastor works with governing board on vision, budget, and accountability; shared authority and trust essential", category:'Administration' },
     { term:'Bivocational Ministry', def:"Pastor who also works a secular job; common in smaller churches; requires strong time management and boundaries", category:'Contexts' },
   ],
+  'isc2-cc': [
+    { term:'CIA Triad',         def:"Confidentiality (limit access), Integrity (prevent unauthorized changes), Availability (ensure reliable access) — foundation of security", category:'Core Concepts' },
+    { term:'Authentication',    def:"Verifying WHO you are (username/password, biometrics, MFA); authorization is what you can do after authentication", category:'Access Control' },
+    { term:'Least Privilege',   def:"Grant users only the minimum permissions needed to perform their job function; reduces attack surface", category:'Principles' },
+    { term:'Defense in Depth',  def:"Layered security approach; multiple controls so if one fails others compensate (firewall + IDS + endpoint + training)", category:'Principles' },
+    { term:'Incident Response Phases', def:"Preparation, Identification, Containment, Eradication, Recovery, Lessons Learned (PICERL); structured breach response", category:'IR' },
+    { term:'DAC / MAC / RBAC',  def:"Discretionary (owner controls), Mandatory (labels/clearances), Role-Based (job role grants access) — access control models", category:'Access Control' },
+    { term:'Social Engineering', def:"Manipulating people into revealing information or taking action; phishing, pretexting, baiting, tailgating", category:'Threats' },
+    { term:'Malware Types',     def:"Virus (attaches to files), Worm (self-replicating), Trojan (disguised), Ransomware (encrypts for ransom), Spyware (monitors)", category:'Threats' },
+    { term:'Symmetric Encryption', def:"Same key encrypts and decrypts (AES, 3DES); fast but key distribution is a challenge", category:'Cryptography' },
+    { term:'Asymmetric Encryption', def:"Public key encrypts, private key decrypts (RSA, ECC); solves key distribution; used in HTTPS, email signing", category:'Cryptography' },
+    { term:'Risk = Threat x Vulnerability x Impact', def:"Risk is the likelihood and impact of a threat exploiting a vulnerability; accept, mitigate, transfer, or avoid", category:'Risk Management' },
+    { term:'Physical Security',  def:"Locks, guards, cameras, fences, badges, and mantraps protect physical assets from unauthorized access", category:'Controls' },
+    { term:'Business Continuity', def:"Plans to maintain operations during a disruption; BCP covers all functions; DR plan focuses on IT recovery", category:'Resilience' },
+  ],
+  'greek-mythology': [
+    { term:'Zeus',              def:"King of the Olympian gods; ruler of sky, thunder, and lightning; lived on Mount Olympus; married Hera", category:'Olympians' },
+    { term:'Hera',              def:"Queen of the gods; goddess of marriage, women, and family; wife of Zeus; known for jealousy of Zeus affairs", category:'Olympians' },
+    { term:'Athena',            def:"Goddess of wisdom, strategy, and crafts; born fully armored from Zeus head; patron deity of Athens", category:'Olympians' },
+    { term:'Apollo',            def:"God of the sun, music, poetry, and prophecy; twin of Artemis; associated with the Oracle at Delphi", category:'Olympians' },
+    { term:'Artemis',           def:"Goddess of the hunt, moon, and wilderness; twin of Apollo; protector of young women and childbirth", category:'Olympians' },
+    { term:'Poseidon',          def:"God of the sea, earthquakes, and horses; brother of Zeus and Hades; wielded a golden trident", category:'Olympians' },
+    { term:'Hades',             def:"God of the underworld; brother of Zeus; ruled the realm of the dead; married Persephone; wore a helm of invisibility", category:'Major Gods' },
+    { term:'Aphrodite',         def:"Goddess of love and beauty; born from sea foam; married Hephaestus; mother of Eros (Cupid)", category:'Olympians' },
+    { term:'Hermes',            def:"Messenger of the gods; god of commerce, travelers, and thieves; wore winged sandals and carried the caduceus", category:'Olympians' },
+    { term:'Ares',              def:"God of war and violence; son of Zeus and Hera; lover of Aphrodite; represents chaotic, brutal aspect of war", category:'Olympians' },
+    { term:'The Odyssey',       def:"Homer epic poem about Odysseus ten-year journey home after the Trojan War; encounters Cyclops, Sirens, Circe, Scylla", category:'Epic Poems' },
+    { term:'Trojan War',        def:"Ten-year Greek siege of Troy; sparked by Paris abducting Helen; ended with the Trojan Horse; Iliad by Homer", category:'Myths' },
+    { term:'Prometheus',        def:"Titan who stole fire from the gods and gave it to humanity; punished by Zeus with eternal torment (eagle ate his liver)", category:'Titans' },
+    { term:'Hercules (Heracles)', def:"Greatest Greek hero; son of Zeus and mortal woman; performed the 12 Labors as penance; became a god after death", category:'Heroes' },
+    { term:'Persephone',        def:"Daughter of Demeter; abducted by Hades; queen of the underworld; her return each spring symbolizes seasons", category:'Myths' },
+  ],
+  'egyptology': [
+    { term:'Pharaoh',           def:"King of Egypt, considered a living god; both political and religious ruler; wore double crown of Upper and Lower Egypt", category:'Government' },
+    { term:'Hieroglyphics',     def:"Egyptian writing system using pictorial symbols; over 700 characters; written on papyrus, walls, and monuments", category:'Writing' },
+    { term:'Rosetta Stone',     def:"Discovered 1799; trilingual decree (hieroglyphics, Demotic, Greek); enabled decipherment of hieroglyphics by Champollion", category:'Discovery' },
+    { term:'Great Pyramid of Giza', def:"Built for Pharaoh Khufu c. 2560 BCE; 481 feet tall; one of the Seven Wonders of the Ancient World; built by workers not slaves", category:'Monuments' },
+    { term:'Ra (Amun-Ra)',      def:"Sun god; chief creator deity; merged with Amun as Amun-Ra; symbolized by solar disk; traveled the sky in a solar barque", category:'Deities' },
+    { term:'Osiris',            def:"God of afterlife, death, and resurrection; killed and dismembered by Set; resurrected by Isis; husband of Isis; father of Horus", category:'Deities' },
+    { term:'Isis',              def:"Goddess of magic, healing, and motherhood; wife of Osiris; mother of Horus; one of the most widely worshipped Egyptian deities", category:'Deities' },
+    { term:'Anubis',            def:"Jackal-headed god of embalming and the dead; guided souls to the afterlife; presided over mummification rituals", category:'Deities' },
+    { term:'Mummification',     def:"Preservation of bodies for the afterlife; removed organs into canopic jars, dried with natron salt, wrapped in linen over 70 days", category:'Practices' },
+    { term:'Tutankhamun',       def:"Boy pharaoh who died around age 18-19; tomb discovered intact in 1922 by Howard Carter; revealed treasures of Egyptian royalty", category:'Pharaohs' },
+    { term:'Old / Middle / New Kingdoms', def:"Three major eras of Egyptian civilization; pyramid building age, reunification, and imperial expansion; separated by intermediate periods", category:'History' },
+    { term:'Book of the Dead',  def:"Collection of magic spells to help the deceased navigate the afterlife; heart weighed against feather of Ma at on a scale", category:'Religion' },
+    { term:'Ma at',             def:"Concept of cosmic order, truth, and justice; feather of Ma at weighed against soul; pharaoh responsible for maintaining Ma at", category:'Philosophy' },
+    { term:'Cleopatra VII',     def:"Last active pharaoh of Egypt; spoke 9 languages; allied with Julius Caesar and Mark Antony; Egypt fell to Rome after her death", category:'Pharaohs' },
+  ],
+  'pan-african-studies': [
+    { term:'Pan-Africanism',    def:"Political and cultural movement advocating unity of all African peoples worldwide; originated in late 19th century Diaspora", category:'Overview' },
+    { term:'Marcus Garvey',     def:"Jamaican political leader; founded UNIA (Universal Negro Improvement Association); Back to Africa movement; Black self-determination", category:'Leaders' },
+    { term:'W.E.B. Du Bois',    def:"First Black Harvard PhD; co-founded NAACP; organized five Pan-African Congresses (1919-1927); wrote The Souls of Black Folk", category:'Leaders' },
+    { term:'Kwame Nkrumah',     def:"First leader of independent Ghana (1957); champion of Pan-Africanism; advocated African socialism and continental unity", category:'Leaders' },
+    { term:'African Union (AU)', def:"Continental union of 55 African nations established 2002; successor to OAU; promotes unity, peace, and development across Africa", category:'Organizations' },
+    { term:'Decolonization',    def:"Post-WWII process of African nations gaining independence from European colonial powers; most achieved independence by 1975", category:'History' },
+    { term:'African Diaspora',  def:"People of African descent living outside Africa, particularly in the Americas as a result of the transatlantic slave trade", category:'Concepts' },
+    { term:'Great Zimbabwe',    def:"Pre-colonial African kingdom (11th-15th century CE); sophisticated stone-walled city; evidence of advanced African civilization", category:'History' },
+    { term:'Cheikh Anta Diop',  def:"Senegalese scholar who argued ancient Egypt was a Black African civilization; challenged Eurocentric views of African history", category:'Scholars' },
+    { term:'Afrocentrism',      def:"Intellectual and cultural movement placing African history and values at the center of analysis; response to Eurocentrism", category:'Concepts' },
+    { term:'Négritude Movement', def:"Literary and intellectual movement founded by Senghor, Césaire, and Damas in 1930s; affirmed African cultural identity and dignity", category:'Movements' },
+    { term:'Ubuntu Philosophy', def:"Southern African concept meaning I am because we are; emphasizes communal interdependence, compassion, and shared humanity", category:'Philosophy' },
+  ],
+  'african-american-studies': [
+    { term:'Transatlantic Slave Trade', def:"Forced migration of 12+ million Africans to the Americas (1500s-1800s); Middle Passage crossing had 10-20% mortality rate", category:'History' },
+    { term:'Reconstruction (1865-1877)', def:"Post-Civil War period; 13th (abolished slavery), 14th (citizenship), 15th (voting rights) Amendments; Freedmen Bureau established", category:'History' },
+    { term:'Jim Crow Laws',     def:"State and local laws enforcing racial segregation in the American South from 1877-1965; separate but equal doctrine", category:'History' },
+    { term:'Harlem Renaissance', def:"1920s cultural explosion in New York; Langston Hughes, Zora Neale Hurston, Louis Armstrong, Duke Ellington; Black arts flourished", category:'Culture' },
+    { term:'Civil Rights Movement', def:"1950s-60s mass movement ending legal segregation; Rosa Parks, MLK, March on Washington (1963), Civil Rights Act (1964)", category:'History' },
+    { term:'NAACP',             def:"National Association for the Advancement of Colored People; co-founded by Du Bois in 1909; oldest US civil rights organization", category:'Organizations' },
+    { term:'Black Power Movement', def:"1960s-70s political and cultural self-determination movement; Stokely Carmichael coined the phrase; Black Panther Party formed 1966", category:'History' },
+    { term:'Intersectionality', def:"Framework coined by Kimberlé Crenshaw; analyzes overlapping systems of oppression based on race, gender, class, and other identities", category:'Theory' },
+    { term:'HBCUs',             def:"Historically Black Colleges and Universities; founded to serve Black students; Howard, Morehouse, Spelman, Hampton among the most notable", category:'Education' },
+    { term:'Great Migration',   def:"Two waves (1910-1940, 1940-1970); over 6 million Black Americans moved from the South to Northern and Western cities", category:'History' },
+    { term:'Redlining',         def:"Discriminatory practice of denying mortgages and services to Black neighborhoods; created lasting wealth gaps and segregated cities", category:'Economics' },
+    { term:'Black Lives Matter', def:"Movement founded 2013 after Trayvon Martin killing; addresses systemic racism, police brutality, and racial inequality in the US", category:'Contemporary' },
+  ],
+  'ot-survey': [
+    { term:'Pentateuch (Torah)', def:"Genesis, Exodus, Leviticus, Numbers, Deuteronomy; Law of Moses; covers creation, fall, flood, covenant with Abraham, the Exodus", category:'Law' },
+    { term:'Historical Books',  def:"Joshua through Esther; conquest of Canaan, period of Judges, united and divided kingdoms, Babylonian exile and Persian return", category:'History' },
+    { term:'Wisdom Literature', def:"Job (suffering), Psalms (worship), Proverbs (practical wisdom), Ecclesiastes (meaning), Song of Songs (love)", category:'Poetry' },
+    { term:'Major Prophets',    def:"Isaiah, Jeremiah, Lamentations, Ezekiel, Daniel; lengthy prophetic books addressing Israel, Judah, and surrounding nations", category:'Prophecy' },
+    { term:'Minor Prophets (Book of the Twelve)', def:"Hosea through Malachi; 12 shorter prophetic books covering justice, judgment, restoration, and the Day of the Lord", category:'Prophecy' },
+    { term:'The Covenant Structure', def:"God enters binding agreements: Adamic, Noahic, Abrahamic, Mosaic, Davidic — each progressive, culminating in New Covenant", category:'Theology' },
+    { term:'Babylonian Exile',  def:"Judah conquered by Babylon (605-586 BCE); Jerusalem and temple destroyed; Jews exiled; Daniel and Ezekiel minister during this period", category:'History' },
+    { term:'The Exodus',        def:"God delivers Israel from Egyptian slavery through Moses; crossing of the Red Sea; 40 years in wilderness; receiving the Law at Sinai", category:'History' },
+    { term:'Messianic Prophecies', def:"Isaiah 53 (suffering servant), Micah 5:2 (Bethlehem), Psalm 22 (crucifixion details), Zechariah 9:9 (triumphal entry)", category:'Prophecy' },
+    { term:'The Psalter',       def:"150 psalms organized in 5 books; genres include lament, praise, royal, wisdom, and imprecatory psalms; largely attributed to David", category:'Poetry' },
+    { term:'Creation and Fall', def:"Genesis 1-3: God creates world very good; Adam and Eve sin; curse, exile from Eden; beginning of redemptive narrative", category:'Genesis' },
+    { term:'Types and Shadows', def:"OT persons, events, institutions that foreshadow NT fulfillment: Passover-Crucifixion, Temple-Jesus body, Manna-Eucharist", category:'Theology' },
+  ],
+  'nt-survey': [
+    { term:'Synoptic Gospels',  def:"Matthew, Mark, Luke; share common material and structure; Mark likely earliest (50s CE); Q source theory explains shared content", category:'Gospels' },
+    { term:'Gospel of John',    def:"Unique theological Gospel; 7 I AM statements; Logos theology (John 1:1); signs point to Jesus divinity; written 85-95 CE", category:'Gospels' },
+    { term:'Acts of the Apostles', def:"Luke sequel; Pentecost and early church; Peter and Paul ministries; spread of gospel from Jerusalem to Rome; ends with Paul in Rome", category:'History' },
+    { term:'Pauline Epistles',  def:"Romans, 1-2 Corinthians, Galatians, Ephesians, Philippians, Colossians, 1-2 Thessalonians, Philemon; written 49-62 CE", category:'Epistles' },
+    { term:'Pastoral Epistles', def:"1-2 Timothy and Titus; instructions for church leadership, guarding sound doctrine, and organizing local congregations", category:'Epistles' },
+    { term:'General Epistles',  def:"Hebrews, James, 1-2 Peter, 1-3 John, Jude; addressed to broad audiences; diverse theology, Jewish and Gentile contexts", category:'Epistles' },
+    { term:'Revelation',        def:"Apocalyptic letter to seven churches; John vision on Patmos; judgment, cosmic warfare, new heaven and earth; written c. 95 CE", category:'Apocalyptic' },
+    { term:'Justification by Faith', def:"Pauline teaching: sinners declared righteous before God through faith in Christ alone, not law-keeping (Romans 3-5; Galatians 2-3)", category:'Theology' },
+    { term:'Kingdom of God',    def:"Central theme in Synoptics; Jesus announces God reign is breaking into history; parables describe it; inaugurated but not yet complete", category:'Theology' },
+    { term:'Canon Formation',   def:"NT books circulated, collected, debated; Athanasius listed 27 NT books in 367 CE; councils confirmed what churches already accepted", category:'Canon' },
+    { term:'Christology',       def:"NT presents Jesus as fully God and fully human; Council of Nicaea (325) affirmed divinity; Chalcedon (451) affirmed two natures", category:'Theology' },
+    { term:'Resurrection',      def:"Bodily resurrection of Jesus is the cornerstone of NT faith (1 Cor 15); witnessed by 500+; proved by empty tomb; gave birth to church", category:'Core Doctrine' },
+  ],
+  'hermeneutics': [
+    { term:'Grammatical-Historical Method', def:"Interpret text according to original grammar (word meanings, syntax) and historical context of the author and audience", category:'Methods' },
+    { term:'Authorial Intent',  def:"Primary meaning of a text is what the human author intended for the original audience; guards against reading foreign meanings in", category:'Principles' },
+    { term:'Literary Genre',    def:"Genre shapes interpretation; poetry, law, prophecy, epistle, and apocalyptic each follow different rules and should be read differently", category:'Principles' },
+    { term:'Context Principle', def:"Interpret verses in context of paragraph, chapter, book, testament, and whole Bible; never pull verses out of their context", category:'Principles' },
+    { term:'Intertextuality',   def:"OT quotes and allusions in NT; later biblical authors interpret earlier texts; Scripture interpreting Scripture is reliable", category:'Principles' },
+    { term:'Typology',          def:"OT persons, events, and institutions foreshadow NT fulfillment; Christ is the antitype who fulfills OT types and shadows", category:'Methods' },
+    { term:'Allegory vs. Literal', def:"Some passages are clearly figurative (Ps 18:2 rock); others literal; literary genre, context, and author intent guide which to choose", category:'Principles' },
+    { term:'Horizon Fusion',    def:"Gadamer concept: bridging the gap between the ancient text world and the modern reader world to make application meaningful", category:'Philosophy' },
+    { term:'Sensus Plenior',    def:"Fuller sense: God may have intended a deeper meaning in a text beyond what the human author fully understood at the time", category:'Concepts' },
+    { term:'Preunderstanding',  def:"The assumptions and prior knowledge a reader brings that inevitably shapes interpretation; must be identified and evaluated critically", category:'Concepts' },
+    { term:'Exegesis vs. Eisegesis', def:"Exegesis = drawing meaning OUT of the text; Eisegesis = reading personal ideas INTO the text; exegesis is the proper method", category:'Methods' },
+    { term:'Application',       def:"Bridging from ancient meaning to modern life; what does this text demand of me today given my context?", category:'Practice' },
+  ],
+  'biblical-languages': [
+    { term:'Hebrew Alphabet',   def:"22 consonants; written right to left; no original vowels; Masoretes added vowel points (niqqud) in 7th-10th century CE", category:'Hebrew' },
+    { term:'Biblical Hebrew Verbs', def:"Verbs express ASPECT not tense: perfect (complete action), imperfect (ongoing/future); qal, niphal, hiphil, piel stems", category:'Hebrew' },
+    { term:'Koine Greek',       def:"Common Greek dialect of the NT era (300 BCE-300 CE); simpler than classical; lingua franca of the Mediterranean world", category:'Greek' },
+    { term:'Greek Alphabet',    def:"24 letters; alpha to omega; key: alpha (a), beta (b), delta (d), theta (th), lambda (l), sigma (s), omega (long o)", category:'Greek' },
+    { term:'Greek Noun Cases',  def:"Nominative (subject), Genitive (possession), Dative (indirect object), Accusative (direct object); no capitalization needed", category:'Greek' },
+    { term:'Greek Verb Parsing', def:"Identify: tense (present/aorist/perfect), voice (active/middle/passive), mood (indicative/subjunctive), person, number", category:'Greek' },
+    { term:'Aramaic',           def:"Semitic language related to Hebrew; sections of Daniel and Ezra; Jesus likely spoke Aramaic as his primary everyday language", category:'Other Languages' },
+    { term:'Septuagint (LXX)', def:"Greek translation of OT (3rd-1st century BCE); widely used in early church; NT writers often quote from it rather than Hebrew", category:'Texts' },
+    { term:'Textual Criticism', def:"Comparing manuscripts to identify the most accurate reading of the original text; 5800+ Greek NT manuscripts exist", category:'Methods' },
+    { term:'Lexicon',           def:"Dictionary of biblical Greek or Hebrew with definitions, morphology, and usage data (e.g. BDAG for Greek, BDB for Hebrew)", category:'Tools' },
+    { term:'Interlinear Bible', def:"Shows original language word-by-word with English translation beneath each word; accessible to students without fluency", category:'Tools' },
+    { term:'Concordance',       def:"Index of every word in the Bible with its references; Strongs Concordance assigns numbers to every Hebrew and Greek word", category:'Tools' },
+  ],
+  'systematic-theology': [
+    { term:'Theology Proper',   def:"Study of the nature and attributes of God; communicable (love, wisdom) vs incommunicable (omnipotence, omniscience, eternality)", category:'God' },
+    { term:'Trinitarian Theology', def:"One God in three co-equal, co-eternal persons: Father, Son, Holy Spirit; not three gods (tritheism) nor one mode (modalism)", category:'God' },
+    { term:'Christology',       def:"Study of Jesus Christ; hypostatic union: fully God and fully human in one person; two natures, one person affirmed at Chalcedon 451", category:'Christ' },
+    { term:'Pneumatology',      def:"Study of the Holy Spirit; convicts of sin, regenerates, indwells, seals, gifts, and sanctifies believers; third person of the Trinity", category:'Holy Spirit' },
+    { term:'Anthropology',      def:"Study of human nature; created in imago Dei; fallen through Adam sin; mortal body; soul and spirit; in need of redemption", category:'Humanity' },
+    { term:'Hamartiology',      def:"Study of sin; original sin (inherited guilt), total depravity (corruption in all areas), personal sin; sin separates from God", category:'Sin' },
+    { term:'Soteriology',       def:"Study of salvation; golden chain: election, calling, regeneration, faith, justification, adoption, sanctification, glorification", category:'Salvation' },
+    { term:'Ecclesiology',      def:"Study of the church; universal (all believers) and local expressions; ordinances (baptism, Lord supper); church government models", category:'Church' },
+    { term:'Eschatology',       def:"Study of last things; second coming of Christ, bodily resurrection, final judgment, heaven (new creation), and hell (eternal separation)", category:'End Times' },
+    { term:'Bibliology',        def:"Study of Scripture; verbal plenary inspiration, inerrancy in original manuscripts, sufficiency, clarity, canonicity, and authority", category:'Scripture' },
+    { term:'Election and Predestination', def:"God foreknows and chooses those who will be saved; Calvinist (unconditional) vs Arminian (foreknown faith) perspectives", category:'Salvation' },
+    { term:'Atonement Theories', def:"Penal Substitution (Christ bore our punishment), Moral Influence, Christus Victor, Ransom, Governmental — explain how cross saves", category:'Salvation' },
+  ],
+  'apologetics': [
+    { term:'Apologetics',       def:"Rational defense of the Christian faith; from Greek apologia (to give a defense); 1 Peter 3:15 commands readiness to answer", category:'Overview' },
+    { term:'Classical Apologetics', def:"Argues for theism first (cosmological, ontological), then for Christian theism (resurrection evidence); two-step method", category:'Approaches' },
+    { term:'Evidential Apologetics', def:"Presents direct historical evidence for Christianity; reliability of Scripture; resurrection facts; fulfilled prophecy (Habermas)", category:'Approaches' },
+    { term:'Presuppositional Apologetics', def:"All reasoning presupposes God; argues from Scripture as foundation; exposes inconsistency of non-Christian worldviews (Van Til)", category:'Approaches' },
+    { term:'Cosmological Argument', def:"Everything that exists has a cause; the universe began to exist; therefore an uncaused First Cause (God) must exist (Kalam)", category:'Arguments' },
+    { term:'Teleological Argument', def:"Universe shows fine-tuned complexity; design implies a designer; probability of life-permitting constants by chance is essentially zero", category:'Arguments' },
+    { term:'Moral Argument',    def:"Objective morality exists; objective morality requires a transcendent moral lawgiver; therefore God exists (Lewis, Craig)", category:'Arguments' },
+    { term:'Resurrection Evidence', def:"Empty tomb, post-resurrection appearances to 500+, disciples died for this belief, Paul conversion, James conversion — minimal facts", category:'Historical' },
+    { term:'Reliability of NT', def:"5800+ Greek manuscripts, 25000+ total; written within decades of events; archaeologically confirmed; earlier than critics claim", category:'Historical' },
+    { term:'Problem of Evil Response', def:"Free will theodicy, soul-making (Hick), greater good argument, eschatological resolution — God permits evil for greater purposes", category:'Objections' },
+    { term:'Cumulative Case',   def:"Combined weight of philosophical, historical, scientific, and experiential evidence all pointing toward Christianity being true", category:'Methods' },
+    { term:'Presuppositions',   def:"Every worldview begins with unprovable starting assumptions; Christianity presupposes God and Scripture as more coherent than alternatives", category:'Methods' },
+  ],
+  'church-history': [
+    { term:'Apostolic Age (30-100 CE)', def:"First generation Christians; spread from Jerusalem; Paul missionary journeys; all NT books written; persecution under Nero and Domitian", category:'Early Church' },
+    { term:'Early Heresies',    def:"Gnosticism (secret knowledge), Marcionism (rejected OT), Arianism (Christ not fully God); each prompted councils to define orthodoxy", category:'Early Church' },
+    { term:'Council of Nicaea (325 CE)', def:"Affirmed full divinity of Christ against Arianism; produced Nicene Creed; called by Emperor Constantine; bishops from across empire", category:'Councils' },
+    { term:'Edict of Milan (313 CE)', def:"Constantine legalized Christianity in Roman Empire; Christianity moved from persecuted minority to imperial favor within a generation", category:'Roman Period' },
+    { term:'Augustine of Hippo (354-430)', def:"Defining theologian of Western Christianity; wrote Confessions and City of God; theology of grace, original sin, and just war", category:'Early Fathers' },
+    { term:'The Great Schism (1054)', def:"Split between Eastern Orthodox and Roman Catholic churches; filioque controversy (Spirit proceeds from Father and Son) and papal authority", category:'Medieval' },
+    { term:'Medieval Church',   def:"Pope at height of political power; Crusades (1095-1291); scholasticism (Aquinas); universities founded; cathedral building era", category:'Medieval' },
+    { term:'Martin Luther (1517)', def:"Posted 95 Theses against indulgences; sparked Protestant Reformation; sola scriptura, sola fide, sola gratia; translated Bible into German", category:'Reformation' },
+    { term:'Protestant Reformation', def:"Luther, Calvin (Geneva), Zwingli (Zurich); rejection of papal authority; Bible in vernacular languages; priesthood of all believers", category:'Reformation' },
+    { term:'John Calvin',       def:"French reformer; systematic theology in Institutes of the Christian Religion; doctrine of election; Geneva as model reformed city", category:'Reformation' },
+    { term:'Wesley and Methodism', def:"John Wesley and Charles Wesley; 18th century revival movement; field preaching, class meetings, social reform; founded Methodism", category:'Modern' },
+    { term:'Global Christianity', def:"20th-21st century: center of Christianity shifted to Global South (Africa, Asia, Latin America); charismatic and Pentecostal growth", category:'Contemporary' },
+  ],
 };
 
 const CHIPS = [
@@ -946,6 +1120,9 @@ const CHIPS = [
   'Bible Intro','World Religions','Philosophy','Public Speaking','Writing & Research',
   'Christian Ethics','Philosophy of Religion','Moral Theology',
   'Ministry & Chaplaincy','Missions','Counseling & Crisis','Homiletics & Worship','Pastoral Ministry',
+  'ISC2 CC','Greek Mythology','Egyptology','Pan-African Studies','African American Studies',
+  'OT Survey','NT Survey','Hermeneutics','Biblical Languages',
+  'Systematic Theology','Apologetics','Church History',
 ];
 
 function matchExam(query: string): FlashCard[] {
@@ -1019,7 +1196,19 @@ function matchExam(query: string): FlashCard[] {
   if (/lsat|law school/.test(q)) return VOCAB_BANKS['lsat'];
   if (/aws|amazon web|ec2|s3\b/.test(q)) return VOCAB_BANKS['aws'];
   if (/azure|microsoft cloud|az-/.test(q)) return VOCAB_BANKS['azure'];
-  if (/cissp|isc2|certified info sys/.test(q)) return VOCAB_BANKS['cissp'];
+  if (/cissp|certified info sys security prof/.test(q)) return VOCAB_BANKS['cissp'];
+  if (/isc2.cc|cc.cert|certified in cyber|isc2 cc/.test(q)) return VOCAB_BANKS['isc2-cc'];
+  if (/greek.myth|olympian|zeus|athena|hercules|odyssey|troy|titan/.test(q)) return VOCAB_BANKS['greek-mythology'];
+  if (/egypt(ology)?|pharaoh|hieroglyph|mummif|pyramid|sphinx|rosetta/.test(q)) return VOCAB_BANKS['egyptology'];
+  if (/pan.african|garvey|nkrumah|ubuntu|negritude|afrocentric|decoloniz/.test(q)) return VOCAB_BANKS['pan-african-studies'];
+  if (/african.american|black.hist|harlem.renais|jim.crow|naacp|civil.right|great.migrat|redlin|hbcu/.test(q)) return VOCAB_BANKS['african-american-studies'];
+  if (/ot.survey|old.test(ament)?|pentateuch|torah|deuteronomy|leviticus|psalms|prophets/.test(q)) return VOCAB_BANKS['ot-survey'];
+  if (/nt.survey|new.test(ament)?|gospel|acts.of|pauline|epistle|revelation.*john|synoptic/.test(q)) return VOCAB_BANKS['nt-survey'];
+  if (/hermeneut|biblical.interp|exegesis|eisegesis|authorial.intent|intertextuality/.test(q)) return VOCAB_BANKS['hermeneutics'];
+  if (/biblical.lang|hebrew.alphabet|koine.greek|greek.verb|lexicon|concordance|septuagint/.test(q)) return VOCAB_BANKS['biblical-languages'];
+  if (/systematic.theol|theology.proper|christology|pneumatology|soteriology|ecclesiology|eschatology|hamartiology/.test(q)) return VOCAB_BANKS['systematic-theology'];
+  if (/apologetic|cosmological.arg|teleological|moral.arg|resurrection.evid|presupposit|classical.apol|evidential/.test(q)) return VOCAB_BANKS['apologetics'];
+  if (/church.hist|early.church|reformation.hist|nicaea|constantine|augustine|great.schism|luther.reform|calvin|methodism/.test(q)) return VOCAB_BANKS['church-history'];
   if (/pmp|project manag|pmbok/.test(q)) return VOCAB_BANKS['pmp'];
   if (/nurs|patient|rn\b|hospital/.test(q)) return VOCAB_BANKS['nclex'];
   if (/cybe|secu|hack|pen test/.test(q)) return VOCAB_BANKS['security+'];
@@ -1100,22 +1289,40 @@ export default function StudyGameWidget() {
   const [flipped, setFlipped] = useState(false);
   const [tab, setTab] = useState<Tab>('cards');
   const [speaking, setSpeaking] = useState(false);
-  const [videoSearch, setVideoSearch] = useState('');
+
   const [quiz, setQuiz] = useState<QuizQ[]>([]);
   const [quizIdx, setQuizIdx] = useState(0);
   const [quizSelected, setQuizSelected] = useState<number | null>(null);
   const [quizScore, setQuizScore] = useState(0);
   const [quizStreak, setQuizStreak] = useState(0);
+  const [videoState, setVideoState] = useState<'idle'|'playing'|'paused'>('idle');
+  const [videoSlide, setVideoSlide] = useState(0);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const videoRef = useRef<{ interval: ReturnType<typeof setInterval>|null; elapsed: number; total: number; lastSlide: number }>({ interval:null, elapsed:0, total:0, lastSlide:-1 });
+  const [lyricLine, setLyricLine] = useState(0);
+  const lyricRef = useRef<ReturnType<typeof setInterval>|null>(null);
+
+  function stopVideo() {
+    if (videoRef.current.interval) { clearInterval(videoRef.current.interval); videoRef.current.interval = null; }
+    window.speechSynthesis?.cancel();
+    setVideoState('idle');
+    setVideoSlide(0);
+    setVideoProgress(0);
+  }
 
   function loadExam(q: string) {
+    stopVideo();
+    if (lyricRef.current) { clearInterval(lyricRef.current); lyricRef.current = null; }
     const matched = matchExam(q);
     setExam(q);
     setCards(matched);
     setLyrics(generateLyrics(q, matched));
-    setVideoSearch(q + ' study guide exam prep');
+
     setCardIdx(0);
     setFlipped(false);
     setTab('cards');
+    setSpeaking(false);
+    setLyricLine(0);
   }
 
   function start() {
@@ -1128,14 +1335,22 @@ export default function StudyGameWidget() {
   function prevCard() { setCardIdx(i => (i - 1 + cards.length) % cards.length); setFlipped(false); }
 
   function speakLyrics() {
+    window.speechSynthesis?.cancel();
+    if (lyricRef.current) { clearInterval(lyricRef.current); lyricRef.current = null; }
+    if (speaking) { setSpeaking(false); setLyricLine(0); return; }
     if (!lyrics || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    if (speaking) { setSpeaking(false); return; }
+    const lines = lyrics.split('\n');
+    setLyricLine(0);
     const utt = new SpeechSynthesisUtterance(lyrics.replace(/🎵|🎓|🎶/g, ''));
-    utt.rate = 1.1; utt.pitch = 1.1;
-    utt.onend = () => setSpeaking(false);
+    utt.rate = 1.1; utt.pitch = 1.05;
+    utt.onend = () => { setSpeaking(false); setLyricLine(0); if (lyricRef.current) { clearInterval(lyricRef.current); lyricRef.current = null; } };
     window.speechSynthesis.speak(utt);
     setSpeaking(true);
+    let idx = 0;
+    lyricRef.current = setInterval(() => {
+      idx = (idx + 1) % lines.length;
+      setLyricLine(idx);
+    }, 850);
   }
 
   function answerQuiz(optIdx: number) {
@@ -1159,6 +1374,76 @@ export default function StudyGameWidget() {
     setQuizStreak(0);
   }
 
+  function speakVideoSlide(text: string) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.rate = 0.92; utt.pitch = 1.0;
+    window.speechSynthesis.speak(utt);
+  }
+
+  function runVideoInterval(n: number, cardDur: number) {
+    const r = videoRef.current;
+    const iv = setInterval(() => {
+      r.elapsed += 0.1;
+      const pct = Math.min(1, r.elapsed / r.total);
+      setVideoProgress(pct);
+      const introTime = 5;
+      const outroStart = introTime + n * cardDur;
+      if (r.elapsed < introTime) {
+        if (r.lastSlide !== 0) { r.lastSlide = 0; setVideoSlide(0); }
+      } else if (r.elapsed >= outroStart) {
+        if (r.lastSlide !== n + 1) {
+          r.lastSlide = n + 1;
+          setVideoSlide(n + 1);
+          speakVideoSlide("Study complete! You covered " + n + " terms for " + exam + ". Keep reviewing and you will ace it!");
+        }
+      } else {
+        const afterIntro = r.elapsed - introTime;
+        const slideIdx = Math.min(n - 1, Math.floor(afterIntro / cardDur));
+        if (slideIdx + 1 !== r.lastSlide) {
+          r.lastSlide = slideIdx + 1;
+          setVideoSlide(slideIdx + 1);
+          const c = cards[slideIdx];
+          speakVideoSlide(c.term + ". " + c.def.replace(/;/g, '.'));
+        }
+      }
+      if (r.elapsed >= r.total) {
+        clearInterval(iv);
+        r.interval = null;
+        setVideoState('idle');
+      }
+    }, 100);
+    r.interval = iv;
+  }
+
+  function startVideo() {
+    if (!cards.length) return;
+    const n = cards.length;
+    const cardDur = Math.max(7, Math.min(15, 170 / n));
+    const total = 5 + n * cardDur + 5;
+    videoRef.current = { interval: null, elapsed: 0, total, lastSlide: -1 };
+    setVideoState('playing');
+    setVideoSlide(0);
+    setVideoProgress(0);
+    speakVideoSlide("Welcome to your " + exam + " study overview. We will cover " + n + " key concepts.");
+    runVideoInterval(n, cardDur);
+  }
+
+  function toggleVideoPause() {
+    if (videoState === 'playing') {
+      if (videoRef.current.interval) { clearInterval(videoRef.current.interval); videoRef.current.interval = null; }
+      window.speechSynthesis?.pause();
+      setVideoState('paused');
+    } else if (videoState === 'paused') {
+      window.speechSynthesis?.resume();
+      const n = cards.length;
+      const cardDur = Math.max(7, Math.min(15, 170 / n));
+      runVideoInterval(n, cardDur);
+      setVideoState('playing');
+    }
+  }
+
   useEffect(() => {
     if (cards.length > 0) {
       setQuiz(buildQuiz(cards));
@@ -1169,7 +1454,11 @@ export default function StudyGameWidget() {
     }
   }, [cards]);
 
-  useEffect(() => () => { window.speechSynthesis?.cancel(); }, []);
+  useEffect(() => () => {
+    window.speechSynthesis?.cancel();
+    if (videoRef.current.interval) clearInterval(videoRef.current.interval);
+    if (lyricRef.current) clearInterval(lyricRef.current);
+  }, []);
 
   const card = cards[cardIdx];
   const quizDone = quiz.length > 0 && quizIdx >= quiz.length;
@@ -1379,72 +1668,154 @@ export default function StudyGameWidget() {
               </div>
             )}
 
-            {/* ── SONG ── */}
+            {/* ── SONG (animated music video) ── */}
             {tab === 'song' && (
-              <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:8 }}>
-                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'var(--w-text-faint)', textTransform:'uppercase', letterSpacing:1 }}>🎵 study anthem</span>
-                  <button onClick={speakLyrics}
-                    style={{ background: speaking ? `${color}25` : 'rgba(255,255,255,0.04)', border:`1px solid ${speaking ? color+'40' : 'rgba(255,255,255,0.08)'}`, borderRadius:8, padding:'4px 10px', cursor:'pointer', color: speaking ? color : 'var(--w-text-dim)', display:'flex', alignItems:'center', gap:4, fontSize:'0.6rem', fontFamily:'monospace' }}>
-                    <Volume2 size={10} /> {speaking ? 'stop' : 'play TTS'}
+              <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:0, position:'relative', overflow:'hidden' }}>
+                {/* Animated background glow */}
+                <div style={{
+                  position:'absolute', inset:0, borderRadius:10, zIndex:0, pointerEvents:'none',
+                  background: speaking ? `radial-gradient(ellipse at 50% 70%, ${color}28 0%, transparent 75%)` : 'transparent',
+                  animation: speaking ? 'song-pulse 2.2s ease-in-out infinite' : 'none',
+                  transition:'background 0.5s',
+                }} />
+                {/* Header */}
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0, zIndex:1, paddingBottom:8 }}>
+                  <span style={{ fontSize:'0.58rem', fontFamily:'monospace', letterSpacing:1, textTransform:'uppercase', color: speaking ? color : 'var(--w-text-faint)' }}>
+                    {speaking ? '🎵 now playing' : '🎵 study anthem'}
+                  </span>
+                  <button onClick={speakLyrics} style={{
+                    background: speaking ? `${color}25` : 'rgba(255,255,255,0.04)',
+                    border:`1px solid ${speaking ? color+'50' : 'rgba(255,255,255,0.08)'}`,
+                    borderRadius:8, padding:'4px 10px', cursor:'pointer',
+                    color: speaking ? color : 'var(--w-text-dim)',
+                    display:'flex', alignItems:'center', gap:4,
+                    fontSize:'0.6rem', fontFamily:'monospace', fontWeight:700,
+                  }}>
+                    <Volume2 size={10} /> {speaking ? '■ Stop' : '▶ Play'}
                   </button>
                 </div>
-                <div style={{ flex:1, overflowY:'auto', background:'rgba(255,255,255,0.02)', borderRadius:10, padding:12 }}>
-                  <pre style={{ fontSize:'0.65rem', color:'var(--w-text-dim)', lineHeight:1.7, whiteSpace:'pre-wrap', fontFamily:'monospace', margin:0 }}>{lyrics}</pre>
+                {/* Lyric scroll */}
+                <div style={{ flex:1, overflowY:'auto', zIndex:1, padding:'2px 0' }}>
+                  {lyrics.split('\n').map((line, i) => {
+                    const isActive = speaking && lyricLine === i;
+                    const isHeader = line.startsWith('[') || line.startsWith('🎵');
+                    return (
+                      <p key={i} style={{
+                        margin:'1px 0', padding:'2px 6px', borderRadius:5,
+                        fontSize: isActive ? '0.74rem' : '0.62rem',
+                        fontWeight: isActive ? 800 : isHeader ? 600 : 400,
+                        color: isActive ? 'var(--w-text-main)' : isHeader ? color : 'var(--w-text-dim)',
+                        background: isActive ? `${color}22` : 'transparent',
+                        fontFamily:'monospace', lineHeight:1.65,
+                        transition:'font-size 0.2s, background 0.2s, color 0.2s',
+                        textAlign: isHeader ? 'center' : 'left',
+                        textShadow: isActive ? `0 0 12px ${glow}` : 'none',
+                      }}>{line || ' '}</p>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
-            {/* ── VIDEO ── */}
+            {/* ── VIDEO (AI animated study presentation) ── */}
             {tab === 'video' && (
-              <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:10 }}>
-                <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'var(--w-text-faint)', textTransform:'uppercase', letterSpacing:1 }}>📹 study video</span>
-                {videoSearch ? (
-                  <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
-                    {[
-                      { label:`${exam} study guide`, icon:'📖' },
-                      { label:`${exam} explained for beginners`, icon:'🎓' },
-                      { label:`${exam} practice questions`, icon:'✏️' },
-                      { label:`${exam} cheat sheet review`, icon:'📋' },
-                    ].map(({ label, icon }) => (
-                      <button key={label} onClick={() => setActiveApp({
-                        id: 'youtube', name: 'YouTube', emoji: 'Y', color: '#FF0000',
-                        bgColor: 'rgba(255,0,0,0.1)', borderColor: 'rgba(255,0,0,0.3)',
-                        url: `https://www.youtube.com/results?search_query=${encodeURIComponent(label)}`,
-                        canEmbed: false,
-                      })} style={{
-                        display:'flex', alignItems:'center', gap:12, padding:'10px 12px',
-                        borderRadius:12, border:`1px solid ${color}25`, background:`${color}10`,
-                        cursor:'pointer', textAlign:'left', width:'100%',
-                      }}>
-                        <span style={{ fontSize:'1.2rem' }}>{icon}</span>
-                        <div>
-                          <p style={{ fontSize:'0.62rem', fontWeight:700, color:'var(--w-text-main)', margin:'0 0 2px', fontFamily:'monospace' }}>{label}</p>
-                          <p style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', margin:0 }}>Opens in YouTube →</p>
-                        </div>
-                      </button>
-                    ))}
-                    <button onClick={() => setActiveApp({
-                      id:'youtube', name:'YouTube', emoji:'Y', color:'#FF0000',
-                      bgColor:'rgba(255,0,0,0.1)', borderColor:'rgba(255,0,0,0.3)',
-                      url:`https://www.youtube.com/results?search_query=${encodeURIComponent(exam + ' study song vocabulary')}`,
-                      canEmbed:false,
-                    })} style={{
-                      display:'flex', alignItems:'center', gap:12, padding:'10px 12px',
-                      borderRadius:12, border:`1px solid ${color}40`, background:`${color}20`,
-                      cursor:'pointer', textAlign:'left', width:'100%',
+              <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:8 }}>
+                {videoState === 'idle' && videoSlide === 0 ? (
+                  /* Start screen */
+                  <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:16 }}>
+                    <span style={{ fontSize:'2.5rem' }}>🎬</span>
+                    <div style={{ textAlign:'center' }}>
+                      <p style={{ fontSize:'0.85rem', fontWeight:800, color:'var(--w-text-main)', margin:'0 0 4px', fontFamily:'monospace' }}>{exam.toUpperCase()}</p>
+                      <p style={{ fontSize:'0.6rem', color:'var(--w-text-dim)', margin:0 }}>AI-narrated study overview · {cards.length} key concepts</p>
+                    </div>
+                    <button onClick={startVideo} style={{
+                      background:color, color:'#fff', border:'none', borderRadius:12,
+                      padding:'10px 28px', cursor:'pointer', fontSize:'0.72rem',
+                      fontWeight:800, fontFamily:'monospace', letterSpacing:1,
+                      boxShadow:`0 4px 18px ${glow}`,
+                      display:'flex', alignItems:'center', gap:8,
                     }}>
-                      <span style={{ fontSize:'1.2rem' }}>🎵</span>
-                      <div>
-                        <p style={{ fontSize:'0.62rem', fontWeight:700, color, margin:'0 0 2px', fontFamily:'monospace' }}>{exam} study song &amp; vocabulary</p>
-                        <p style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', margin:0 }}>Opens in YouTube →</p>
-                      </div>
+                      <Video size={14} /> Start Presentation
                     </button>
                   </div>
                 ) : (
-                  <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', color:'var(--w-text-faint)', fontSize:'0.75rem' }}>
-                    Search for an exam above to load videos
-                  </div>
+                  <>
+                    {/* Progress bar */}
+                    <div style={{ height:3, background:'rgba(255,255,255,0.08)', borderRadius:2, flexShrink:0 }}>
+                      <div style={{ width:`${videoProgress*100}%`, height:'100%', background:color, borderRadius:2, transition:'width 0.1s linear' }} />
+                    </div>
+                    {/* Slide area */}
+                    <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:0, overflow:'hidden' }}>
+                      {(() => {
+                        const n = cards.length;
+                        if (videoSlide === 0) {
+                          return (
+                            <div key="intro" className="anim-fade-slide-in" style={{ textAlign:'center', padding:'0 12px' }}>
+                              <span style={{ fontSize:'2rem' }}>📚</span>
+                              <p style={{ fontSize:'1rem', fontWeight:800, color:'var(--w-text-main)', fontFamily:'monospace', margin:'10px 0 4px' }}>{exam.toUpperCase()}</p>
+                              <p style={{ fontSize:'0.62rem', color:'var(--w-text-dim)', margin:'0 0 12px' }}>Comprehensive Study Overview</p>
+                              <div style={{ padding:'5px 14px', background:`${color}18`, border:`1px solid ${color}35`, borderRadius:20, display:'inline-block' }}>
+                                <span style={{ fontSize:'0.58rem', color, fontFamily:'monospace' }}>▶ Narrated · {n} key concepts</span>
+                              </div>
+                            </div>
+                          );
+                        } else if (videoSlide > n) {
+                          return (
+                            <div key="outro" className="anim-fade-slide-in" style={{ textAlign:'center', padding:'0 12px' }}>
+                              <span style={{ fontSize:'2.5rem' }}>🎓</span>
+                              <p style={{ fontSize:'1rem', fontWeight:800, color, fontFamily:'monospace', margin:'10px 0 4px' }}>Study Complete!</p>
+                              <p style={{ fontSize:'0.65rem', color:'var(--w-text-dim)', margin:'0 0 12px' }}>You covered {n} key terms for {exam}</p>
+                              <p style={{ fontSize:'0.58rem', color:'var(--w-text-faint)', margin:0 }}>Switch to Cards or Quiz to reinforce your knowledge.</p>
+                              <button onClick={() => { setVideoSlide(0); setVideoProgress(0); }} style={{
+                                marginTop:14, background:`${color}18`, border:`1px solid ${color}35`, borderRadius:10,
+                                padding:'6px 18px', cursor:'pointer', color, fontSize:'0.6rem', fontFamily:'monospace', fontWeight:700,
+                              }}>Watch Again</button>
+                            </div>
+                          );
+                        } else {
+                          const slideCard = cards[videoSlide - 1];
+                          return (
+                            <div key={videoSlide} className="anim-fade-slide-in" style={{ width:'100%', padding:'0 6px', display:'flex', flexDirection:'column', gap:10, alignItems:'center' }}>
+                              <span style={{
+                                fontSize:'0.5rem', fontFamily:'monospace', letterSpacing:2, textTransform:'uppercase',
+                                padding:'3px 12px', background:`${color}18`, border:`1px solid ${color}35`, borderRadius:20, color,
+                              }}>{slideCard.category}</span>
+                              <p style={{ fontSize:'0.95rem', fontWeight:800, color:'var(--w-text-main)', fontFamily:'monospace', textAlign:'center', lineHeight:1.3, margin:0 }}>{slideCard.term}</p>
+                              <p style={{ fontSize:'0.65rem', color:'var(--w-text-dim)', textAlign:'center', lineHeight:1.65, margin:0 }}>{slideCard.def}</p>
+                              <span style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', fontFamily:'monospace', marginTop:4 }}>{videoSlide} / {n}</span>
+                            </div>
+                          );
+                        }
+                      })()}
+                    </div>
+                    {/* Dot navigation */}
+                    <div style={{ display:'flex', gap:4, justifyContent:'center', flexWrap:'wrap', flexShrink:0 }}>
+                      {Array.from({ length: Math.min(cards.length + 2, 14) }, (_, i) => (
+                        <div key={i} style={{
+                          width:5, height:5, borderRadius:'50%',
+                          background: videoSlide === i ? color : 'rgba(255,255,255,0.15)',
+                          transition:'background 0.25s',
+                        }} />
+                      ))}
+                    </div>
+                    {/* Playback controls */}
+                    {videoState !== 'idle' && (
+                      <div style={{ display:'flex', gap:8, justifyContent:'center', flexShrink:0 }}>
+                        <button onClick={toggleVideoPause} style={{
+                          background:`${color}20`, border:`1px solid ${color}45`, borderRadius:10,
+                          padding:'6px 20px', cursor:'pointer', color, fontSize:'0.62rem', fontFamily:'monospace', fontWeight:800,
+                        }}>
+                          {videoState === 'playing' ? '⏸ Pause' : '▶ Resume'}
+                        </button>
+                        <button onClick={stopVideo} style={{
+                          background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:10,
+                          padding:'6px 14px', cursor:'pointer', color:'var(--w-text-dim)', fontSize:'0.62rem', fontFamily:'monospace',
+                        }}>
+                          ■ Stop
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             )}

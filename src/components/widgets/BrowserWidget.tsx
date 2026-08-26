@@ -1,5 +1,5 @@
 import { useState, useRef, type FC } from 'react';
-import { ArrowLeft, ArrowRight, RefreshCw, Globe, X } from 'lucide-react';
+import { RefreshCw, Globe, X, ExternalLink } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 import { GoogleLogo, YouTubeLogo, GoogleMapsLogo } from '../BrandLogos';
 
@@ -11,13 +11,13 @@ type QuickLink = {
 };
 
 const QUICK_LINKS: QuickLink[] = [
-  { label: 'Google',        url: 'https://lite.duckduckgo.com/lite/',              Logo: GoogleLogo },
-  { label: 'YouTube',       url: 'https://piped.video',                            Logo: YouTubeLogo },
-  { label: 'Maps',          url: 'https://maps.google.com/maps?q=&output=embed',   Logo: GoogleMapsLogo },
-  { label: 'Translate',     url: 'https://lingva.ml',                              emoji: '🌐' },
-  { label: 'Wikipedia',     url: 'https://en.m.wikipedia.org',                     emoji: '📖' },
-  { label: 'Weather',       url: 'https://wttr.in/?format=v2',                     emoji: '🌤️' },
-  { label: 'HowStuffWorks', url: 'https://www.howstuffworks.com',                  emoji: '🔬' },
+  { label: 'Search',      url: 'https://search.brave.com',                      Logo: GoogleLogo },
+  { label: 'YouTube',     url: 'https://piped.video',                           Logo: YouTubeLogo },
+  { label: 'Maps',        url: 'https://maps.google.com/maps?q=&output=embed',  Logo: GoogleMapsLogo },
+  { label: 'Translate',   url: 'https://lingva.ml',                             emoji: '🌐' },
+  { label: 'Wikipedia',   url: 'https://en.m.wikipedia.org',                    emoji: '📖' },
+  { label: 'Weather',     url: 'https://wttr.in/?format=v2',                    emoji: '🌤️' },
+  { label: 'SimpleWiki',  url: 'https://simple.wikipedia.org/wiki/Main_Page',   emoji: '🔬' },
 ];
 
 interface BrowserProps { initialUrl?: string }
@@ -34,7 +34,7 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
     let full = target.trim();
     if (!full) return;
     if (!full.startsWith('http://') && !full.startsWith('https://')) {
-      full = full.includes('.') ? `https://${full}` : `https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(full)}`;
+      full = full.includes('.') ? `https://${full}` : `https://search.brave.com/search?q=${encodeURIComponent(full)}`;
     }
     setActiveUrl(full);
     setUrl(full);
@@ -47,12 +47,17 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
     setTimeout(() => setActiveUrl(activeUrl), 50);
   }
 
+  function openExternal() {
+    window.open(activeUrl, '_blank', 'noopener');
+  }
+
   return (
     <div className="widget-card h-full flex flex-col" style={{ borderColor: `${color}25` }}>
       {/* Header tagline */}
       <div style={{ padding:'6px 10px 2px', flexShrink:0 }}>
         <p style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', margin:0, fontFamily:'monospace', letterSpacing:0.3 }}>🌐 browser — search the web, open any site, explore quick links</p>
       </div>
+
       {/* Address bar */}
       <div className="flex items-center gap-1.5 px-2 py-2 shrink-0" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <Globe size={12} style={{ color: 'var(--w-text-faint)', flexShrink: 0 }} />
@@ -73,10 +78,13 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
         </form>
         {activeUrl && (
           <>
-            <button onClick={refresh} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2 }}>
+            <button onClick={refresh} title="Refresh" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2 }}>
               <RefreshCw size={11} />
             </button>
-            <button onClick={() => { setActiveUrl(''); setUrl(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2 }}>
+            <button onClick={openExternal} title="Open in new tab" style={{ background: 'none', border: 'none', cursor: 'pointer', color, padding: 2 }}>
+              <ExternalLink size={11} />
+            </button>
+            <button onClick={() => { setActiveUrl(''); setUrl(''); }} title="Close" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2 }}>
               <X size={11} />
             </button>
           </>
@@ -91,11 +99,12 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
           )}
           <iframe
             ref={iframeRef}
+            key={activeUrl}
             src={activeUrl}
             title="browser"
             onLoad={() => setLoading(false)}
             onError={() => setLoading(false)}
-            style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+            style={{ width: '100%', height: '100%', border: 'none', display: 'block', background: '#fff' }}
             sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-storage-access-by-user-activation"
             allow="accelerometer; camera; clipboard-write; encrypted-media; fullscreen; geolocation; gyroscope; microphone; payment; autoplay"
           />
@@ -120,7 +129,7 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
             ))}
           </div>
           <p className="text-xs mt-4 text-center leading-relaxed" style={{ color: 'var(--w-text-faint)' }}>
-            type a URL or search term above<br />some sites block embedding by design
+            type any URL or search above — tap the <ExternalLink size={9} style={{ display:'inline', verticalAlign:'middle' }} /> icon to open blocked sites in a full tab
           </p>
         </div>
       )}

@@ -5,7 +5,7 @@ import {
   NetflixLogo, DisneyPlusLogo, PrimeLogo, HuluLogo, YouTubeLogo, PeacockLogo,
   InstagramLogo, FacebookLogo, TikTokLogo, XLogo, WhatsAppLogo, MessagesLogo,
   GmailLogo, OutlookLogo, TeamsLogo, GoogleMeetLogo, ZoomLogo, CanvasLMSLogo,
-  HowStuffWorksLogo, StarbucksLogo, DunkinLogo, UberEatsLogo, ShopRiteLogo,
+  StarbucksLogo, DunkinLogo, UberEatsLogo, ShopRiteLogo,
   PlayhopLogo, KrunkerLogo, PokiLogo, ChessLogo, BackgammonLogo, Game2048Logo, JigsawLogo,
   WordleLogo, SpellingBeeLogo, SolitaireLogo, SudokuLogo, JstrisLogo,
 } from '../BrandLogos';
@@ -40,7 +40,7 @@ const WORK_APPS: AppEntry[] = [
   { id:'meet',     name:'Meet',      url:'https://meet.google.com',    emoji:'M', color:'#00897B', bgColor:'rgba(0,137,123,0.1)', borderColor:'rgba(0,137,123,0.3)',  canEmbed:true },
   { id:'zoom',     name:'Zoom',      url:'https://zoom.us',            emoji:'Z', color:'#2D8CFF', bgColor:'rgba(45,140,255,0.1)', borderColor:'rgba(45,140,255,0.3)', canEmbed:true },
   { id:'canvas',   name:'Canvas',    url:'https://canvas.instructure.com/login/canvas',emoji:'🎓',color:'#E66000',bgColor:'rgba(230,96,0,0.1)',borderColor:'rgba(230,96,0,0.3)',canEmbed:true },
-  { id:'hsw',      name:'HowStuffWorks',url:'https://www.howstuffworks.com',emoji:'🔬',color:'#e25c04',bgColor:'rgba(226,92,4,0.1)',borderColor:'rgba(226,92,4,0.3)',canEmbed:true },
+  { id:'wiki',     name:'Wikipedia',    url:'https://en.m.wikipedia.org',   emoji:'📖',color:'#6B7280',bgColor:'rgba(107,114,128,0.1)',borderColor:'rgba(107,114,128,0.3)',canEmbed:true },
 ];
 
 const GAME_ENTRIES: GameEntry[] = [
@@ -92,7 +92,6 @@ const LOGO_MAP: Record<string, JSX.Element> = {
   meet:       <GoogleMeetLogo size={28} />,
   zoom:       <ZoomLogo size={28} />,
   canvas:     <CanvasLMSLogo size={28} />,
-  hsw:        <HowStuffWorksLogo size={28} />,
   starbucks:  <StarbucksLogo size={28} />,
   dunkin:     <DunkinLogo size={28} />,
   ubereats:   <UberEatsLogo size={28} />,

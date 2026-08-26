@@ -18,8 +18,6 @@ const QUICK_LINKS: QuickLink[] = [
   { label: 'Wikipedia',     url: 'https://en.m.wikipedia.org',                     emoji: '📖' },
   { label: 'Weather',       url: 'https://wttr.in/?theme=dark',                    emoji: '🌤️' },
   { label: 'HowStuffWorks', url: 'https://www.howstuffworks.com',                  emoji: '🔬' },
-  { label: 'Khan Academy',  url: 'https://www.khanacademy.org',                    emoji: '📐' },
-  { label: 'Wolfram Alpha', url: 'https://www.wolframalpha.com',                   emoji: '🧮' },
 ];
 
 interface BrowserProps { initialUrl?: string }

@@ -301,3 +301,24 @@ export function JstrisLogo({ size = 28 }: P) {
     </svg>
   );
 }
+
+export function HowStuffWorksLogo({ size = 28 }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <rect width="24" height="24" rx="6" fill="#e25c04"/>
+      <text x="12" y="15" textAnchor="middle" fontFamily="Arial Black,sans-serif" fontWeight="900" fontSize="9" fill="white">HSW</text>
+    </svg>
+  );
+}
+
+export function PokiLogo({ size = 28 }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <rect width="24" height="24" rx="6" fill="#FF9800"/>
+      <circle cx="12" cy="12" r="6" stroke="white" strokeWidth="2" fill="none"/>
+      <circle cx="12" cy="12" r="2.5" fill="white"/>
+      <line x1="6" y1="12" x2="9" y2="12" stroke="white" strokeWidth="2"/>
+      <line x1="15" y1="12" x2="18" y2="12" stroke="white" strokeWidth="2"/>
+    </svg>
+  );
+}

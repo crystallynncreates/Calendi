@@ -5,8 +5,8 @@ import {
   NetflixLogo, DisneyPlusLogo, PrimeLogo, HuluLogo, YouTubeLogo, PeacockLogo,
   InstagramLogo, FacebookLogo, TikTokLogo, XLogo, WhatsAppLogo, MessagesLogo,
   GmailLogo, OutlookLogo, TeamsLogo, GoogleMeetLogo, ZoomLogo, CanvasLMSLogo,
-  StarbucksLogo, DunkinLogo, UberEatsLogo, ShopRiteLogo,
-  PlayhopLogo, KrunkerLogo, ChessLogo, BackgammonLogo, Game2048Logo, JigsawLogo,
+  HowStuffWorksLogo, StarbucksLogo, DunkinLogo, UberEatsLogo, ShopRiteLogo,
+  PlayhopLogo, KrunkerLogo, PokiLogo, ChessLogo, BackgammonLogo, Game2048Logo, JigsawLogo,
   WordleLogo, SpellingBeeLogo, SolitaireLogo, SudokuLogo, JstrisLogo,
 } from '../BrandLogos';
 
@@ -16,53 +16,53 @@ type GameEntry = AppEntry & { tag: string };
 
 /* ── App entries ── */
 const STREAM_APPS: AppEntry[] = [
-  { id:'netflix',  name:'Netflix',   url:'https://netflix.com',        emoji:'N', color:'#E50914', bgColor:'rgba(229,9,20,0.1)',   borderColor:'rgba(229,9,20,0.3)',   canEmbed:false },
-  { id:'disney',   name:'Disney+',   url:'https://disneyplus.com',     emoji:'D', color:'#113CCF', bgColor:'rgba(17,60,207,0.12)', borderColor:'rgba(17,60,207,0.3)',  canEmbed:false },
-  { id:'prime',    name:'Prime',     url:'https://primevideo.com',     emoji:'P', color:'#00A8E0', bgColor:'rgba(0,168,224,0.1)',  borderColor:'rgba(0,168,224,0.3)',  canEmbed:false },
-  { id:'hulu',     name:'Hulu',      url:'https://hulu.com',           emoji:'H', color:'#1CE783', bgColor:'rgba(28,231,131,0.1)', borderColor:'rgba(28,231,131,0.3)', canEmbed:false },
-  { id:'youtube',  name:'YouTube',   url:'https://youtube.com',        emoji:'Y', color:'#FF0000', bgColor:'rgba(255,0,0,0.1)',   borderColor:'rgba(255,0,0,0.3)',    canEmbed:false },
-  { id:'peacock',  name:'Peacock',   url:'https://peacocktv.com',      emoji:'🦚',color:'#F5A623', bgColor:'rgba(245,166,35,0.1)', borderColor:'rgba(245,166,35,0.3)', canEmbed:false },
+  { id:'netflix',  name:'Netflix',   url:'https://netflix.com',        emoji:'N', color:'#E50914', bgColor:'rgba(229,9,20,0.1)',   borderColor:'rgba(229,9,20,0.3)',   canEmbed:true },
+  { id:'disney',   name:'Disney+',   url:'https://disneyplus.com',     emoji:'D', color:'#113CCF', bgColor:'rgba(17,60,207,0.12)', borderColor:'rgba(17,60,207,0.3)',  canEmbed:true },
+  { id:'prime',    name:'Prime',     url:'https://primevideo.com',     emoji:'P', color:'#00A8E0', bgColor:'rgba(0,168,224,0.1)',  borderColor:'rgba(0,168,224,0.3)',  canEmbed:true },
+  { id:'hulu',     name:'Hulu',      url:'https://hulu.com',           emoji:'H', color:'#1CE783', bgColor:'rgba(28,231,131,0.1)', borderColor:'rgba(28,231,131,0.3)', canEmbed:true },
+  { id:'youtube',  name:'YouTube',   url:'https://youtube.com',        emoji:'Y', color:'#FF0000', bgColor:'rgba(255,0,0,0.1)',   borderColor:'rgba(255,0,0,0.3)',    canEmbed:true },
+  { id:'peacock',  name:'Peacock',   url:'https://peacocktv.com',      emoji:'🦚',color:'#F5A623', bgColor:'rgba(245,166,35,0.1)', borderColor:'rgba(245,166,35,0.3)', canEmbed:true },
 ];
 
 const SOCIAL_APPS: AppEntry[] = [
-  { id:'instagram',name:'Instagram', url:'https://instagram.com',      emoji:'I', color:'#E1306C', bgColor:'rgba(225,48,108,0.1)', borderColor:'rgba(225,48,108,0.3)', canEmbed:false },
-  { id:'facebook', name:'Facebook',  url:'https://facebook.com',       emoji:'F', color:'#1877F2', bgColor:'rgba(24,119,242,0.1)', borderColor:'rgba(24,119,242,0.3)', canEmbed:false },
-  { id:'tiktok',   name:'TikTok',    url:'https://tiktok.com',         emoji:'T', color:'#69C9D0', bgColor:'rgba(0,0,0,0.15)',    borderColor:'rgba(105,201,208,0.3)',canEmbed:false },
-  { id:'x',        name:'X',         url:'https://x.com',              emoji:'X', color:'#e2e8f0', bgColor:'rgba(0,0,0,0.15)',    borderColor:'rgba(255,255,255,0.15)',canEmbed:false },
-  { id:'whatsapp', name:'WhatsApp',  url:'https://web.whatsapp.com',   emoji:'W', color:'#25D366', bgColor:'rgba(37,211,102,0.1)', borderColor:'rgba(37,211,102,0.3)', canEmbed:false },
-  { id:'messages', name:'Messages',  url:'https://messages.google.com',emoji:'💬',color:'#4CAF50', bgColor:'rgba(76,175,80,0.1)', borderColor:'rgba(76,175,80,0.3)',  canEmbed:false },
+  { id:'instagram',name:'Instagram', url:'https://instagram.com',      emoji:'I', color:'#E1306C', bgColor:'rgba(225,48,108,0.1)', borderColor:'rgba(225,48,108,0.3)', canEmbed:true },
+  { id:'facebook', name:'Facebook',  url:'https://www.facebook.com',   emoji:'F', color:'#1877F2', bgColor:'rgba(24,119,242,0.1)', borderColor:'rgba(24,119,242,0.3)', canEmbed:true },
+  { id:'tiktok',   name:'TikTok',    url:'https://www.tiktok.com',     emoji:'T', color:'#69C9D0', bgColor:'rgba(0,0,0,0.15)',    borderColor:'rgba(105,201,208,0.3)',canEmbed:true },
+  { id:'x',        name:'X',         url:'https://x.com',              emoji:'X', color:'#e2e8f0', bgColor:'rgba(0,0,0,0.15)',    borderColor:'rgba(255,255,255,0.15)',canEmbed:true },
+  { id:'whatsapp', name:'WhatsApp',  url:'https://web.whatsapp.com',   emoji:'W', color:'#25D366', bgColor:'rgba(37,211,102,0.1)', borderColor:'rgba(37,211,102,0.3)', canEmbed:true },
+  { id:'messages', name:'Messages',  url:'sms:',                       emoji:'💬',color:'#4CAF50', bgColor:'rgba(76,175,80,0.1)', borderColor:'rgba(76,175,80,0.3)',  canEmbed:false },
 ];
 
 const WORK_APPS: AppEntry[] = [
-  { id:'gmail',    name:'Gmail',     url:'https://mail.google.com',    emoji:'G', color:'#EA4335', bgColor:'rgba(234,67,53,0.1)', borderColor:'rgba(234,67,53,0.3)',  canEmbed:false },
-  { id:'outlook',  name:'Outlook',   url:'https://outlook.live.com',   emoji:'O', color:'#0078D4', bgColor:'rgba(0,120,212,0.12)',borderColor:'rgba(0,120,212,0.3)',  canEmbed:false },
-  { id:'teams',    name:'Teams',     url:'https://teams.microsoft.com',emoji:'T', color:'#6264A7', bgColor:'rgba(98,100,167,0.12)',borderColor:'rgba(98,100,167,0.3)',canEmbed:false },
-  { id:'meet',     name:'Meet',      url:'https://meet.google.com',    emoji:'M', color:'#00897B', bgColor:'rgba(0,137,123,0.1)', borderColor:'rgba(0,137,123,0.3)',  canEmbed:false },
-  { id:'zoom',     name:'Zoom',      url:'https://zoom.us',            emoji:'Z', color:'#2D8CFF', bgColor:'rgba(45,140,255,0.1)', borderColor:'rgba(45,140,255,0.3)', canEmbed:false },
+  { id:'gmail',    name:'Gmail',     url:'https://mail.google.com',    emoji:'G', color:'#EA4335', bgColor:'rgba(234,67,53,0.1)', borderColor:'rgba(234,67,53,0.3)',  canEmbed:true },
+  { id:'outlook',  name:'Outlook',   url:'https://outlook.live.com',   emoji:'O', color:'#0078D4', bgColor:'rgba(0,120,212,0.12)',borderColor:'rgba(0,120,212,0.3)',  canEmbed:true },
+  { id:'teams',    name:'Teams',     url:'https://teams.microsoft.com',emoji:'T', color:'#6264A7', bgColor:'rgba(98,100,167,0.12)',borderColor:'rgba(98,100,167,0.3)',canEmbed:true },
+  { id:'meet',     name:'Meet',      url:'https://meet.google.com',    emoji:'M', color:'#00897B', bgColor:'rgba(0,137,123,0.1)', borderColor:'rgba(0,137,123,0.3)',  canEmbed:true },
+  { id:'zoom',     name:'Zoom',      url:'https://zoom.us',            emoji:'Z', color:'#2D8CFF', bgColor:'rgba(45,140,255,0.1)', borderColor:'rgba(45,140,255,0.3)', canEmbed:true },
   { id:'canvas',   name:'Canvas',    url:'https://canvas.instructure.com/login/canvas',emoji:'🎓',color:'#E66000',bgColor:'rgba(230,96,0,0.1)',borderColor:'rgba(230,96,0,0.3)',canEmbed:true },
   { id:'hsw',      name:'HowStuffWorks',url:'https://www.howstuffworks.com',emoji:'🔬',color:'#e25c04',bgColor:'rgba(226,92,4,0.1)',borderColor:'rgba(226,92,4,0.3)',canEmbed:true },
 ];
 
 const GAME_ENTRIES: GameEntry[] = [
-  { id:'playhop',   name:'Playhop',      tag:'Featured', url:'https://playhop.com',                          emoji:'🎮', color:'#FF5C5C', bgColor:'rgba(255,92,92,0.12)',  borderColor:'rgba(255,92,92,0.3)',   canEmbed:false },
-  { id:'krunker',   name:'Krunker.io',   tag:'Action',   url:'https://krunker.io',                           emoji:'🎯', color:'#F59E0B', bgColor:'rgba(245,158,11,0.1)', borderColor:'rgba(245,158,11,0.3)', canEmbed:true  },
-  { id:'poki',      name:'Poki',         tag:'Action',   url:'https://poki.com',                             emoji:'🕹️', color:'#FF9800', bgColor:'rgba(255,152,0,0.1)',   borderColor:'rgba(255,152,0,0.3)',   canEmbed:true  },
-  { id:'chess',     name:'Chess',        tag:'Strategy', url:'https://lichess.org',                          emoji:'♟️', color:'#A0A0A0', bgColor:'rgba(160,160,160,0.1)', borderColor:'rgba(160,160,160,0.3)', canEmbed:true  },
-  { id:'backgammon',name:'Backgammon',   tag:'Strategy', url:'https://backgammongalaxy.com',                 emoji:'🎲', color:'#8B5CF6', bgColor:'rgba(139,92,246,0.1)', borderColor:'rgba(139,92,246,0.3)', canEmbed:true  },
-  { id:'2048',      name:'2048',         tag:'Puzzle',   url:'https://play2048.co',                          emoji:'🧮', color:'#FF7043', bgColor:'rgba(255,112,67,0.1)', borderColor:'rgba(255,112,67,0.3)', canEmbed:true  },
-  { id:'jigsaw',    name:'Jigsaw',       tag:'Puzzle',   url:'https://www.jigsawplanet.com',                 emoji:'🧩', color:'#7C3AED', bgColor:'rgba(124,58,237,0.1)', borderColor:'rgba(124,58,237,0.3)', canEmbed:true  },
-  { id:'wordle',    name:'Wordle',       tag:'Word',     url:'https://www.nytimes.com/games/wordle',         emoji:'🟩', color:'#6AAA64', bgColor:'rgba(106,170,100,0.1)', borderColor:'rgba(106,170,100,0.3)', canEmbed:false },
-  { id:'spellbee',  name:'Spelling Bee', tag:'Word',     url:'https://www.nytimes.com/puzzles/spelling-bee', emoji:'🐝', color:'#F5C518', bgColor:'rgba(245,197,24,0.1)', borderColor:'rgba(245,197,24,0.3)', canEmbed:false },
-  { id:'solitaire', name:'Solitaire',    tag:'Classic',  url:'https://solitaired.com',                       emoji:'🃏', color:'#E91E63', bgColor:'rgba(233,30,99,0.1)',   borderColor:'rgba(233,30,99,0.3)',   canEmbed:true  },
-  { id:'sudoku',    name:'Sudoku',       tag:'Classic',  url:'https://sudoku.com',                           emoji:'🔢', color:'#7B68EE', bgColor:'rgba(123,104,238,0.1)', borderColor:'rgba(123,104,238,0.3)', canEmbed:false },
-  { id:'jstris',    name:'Jstris',       tag:'Classic',  url:'https://jstris.jezevec10.com',                 emoji:'🟦', color:'#00BCD4', bgColor:'rgba(0,188,212,0.1)',  borderColor:'rgba(0,188,212,0.3)',  canEmbed:true  },
+  { id:'playhop',   name:'Playhop',      tag:'Featured', url:'https://playhop.com',                          emoji:'🎮', color:'#FF5C5C', bgColor:'rgba(255,92,92,0.12)',  borderColor:'rgba(255,92,92,0.3)',   canEmbed:true },
+  { id:'krunker',   name:'Krunker.io',   tag:'Action',   url:'https://krunker.io',                           emoji:'🎯', color:'#F59E0B', bgColor:'rgba(245,158,11,0.1)', borderColor:'rgba(245,158,11,0.3)', canEmbed:true },
+  { id:'poki',      name:'Poki',         tag:'Action',   url:'https://poki.com',                             emoji:'🕹️', color:'#FF9800', bgColor:'rgba(255,152,0,0.1)',   borderColor:'rgba(255,152,0,0.3)',   canEmbed:true },
+  { id:'chess',     name:'Chess',        tag:'Strategy', url:'https://lichess.org',                          emoji:'♟️', color:'#A0A0A0', bgColor:'rgba(160,160,160,0.1)', borderColor:'rgba(160,160,160,0.3)', canEmbed:true },
+  { id:'backgammon',name:'Backgammon',   tag:'Strategy', url:'https://backgammongalaxy.com',                 emoji:'🎲', color:'#8B5CF6', bgColor:'rgba(139,92,246,0.1)', borderColor:'rgba(139,92,246,0.3)', canEmbed:true },
+  { id:'2048',      name:'2048',         tag:'Puzzle',   url:'https://play2048.co',                          emoji:'🧮', color:'#FF7043', bgColor:'rgba(255,112,67,0.1)', borderColor:'rgba(255,112,67,0.3)', canEmbed:true },
+  { id:'jigsaw',    name:'Jigsaw',       tag:'Puzzle',   url:'https://www.jigsawplanet.com',                 emoji:'🧩', color:'#7C3AED', bgColor:'rgba(124,58,237,0.1)', borderColor:'rgba(124,58,237,0.3)', canEmbed:true },
+  { id:'wordle',    name:'Wordle',       tag:'Word',     url:'https://wordlegame.org',                       emoji:'🟩', color:'#6AAA64', bgColor:'rgba(106,170,100,0.1)', borderColor:'rgba(106,170,100,0.3)', canEmbed:true },
+  { id:'spellbee',  name:'Spelling Bee', tag:'Word',     url:'https://www.nytgames.com/spelling-bee/',       emoji:'🐝', color:'#F5C518', bgColor:'rgba(245,197,24,0.1)', borderColor:'rgba(245,197,24,0.3)', canEmbed:true },
+  { id:'solitaire', name:'Solitaire',    tag:'Classic',  url:'https://solitaired.com',                       emoji:'🃏', color:'#E91E63', bgColor:'rgba(233,30,99,0.1)',   borderColor:'rgba(233,30,99,0.3)',   canEmbed:true },
+  { id:'sudoku',    name:'Sudoku',       tag:'Classic',  url:'https://sudoku.game',                          emoji:'🔢', color:'#7B68EE', bgColor:'rgba(123,104,238,0.1)', borderColor:'rgba(123,104,238,0.3)', canEmbed:true },
+  { id:'jstris',    name:'Jstris',       tag:'Classic',  url:'https://jstris.jezevec10.com',                 emoji:'🟦', color:'#00BCD4', bgColor:'rgba(0,188,212,0.1)',  borderColor:'rgba(0,188,212,0.3)',  canEmbed:true },
 ];
 
 const FOOD_APPS: AppEntry[] = [
-  { id:'starbucks',name:'Starbucks', url:'https://www.starbucks.com/menu',          emoji:'☕', color:'#00704A', bgColor:'rgba(0,112,74,0.1)',   borderColor:'rgba(0,112,74,0.3)',   canEmbed:false },
-  { id:'dunkin',   name:"Dunkin'",   url:'https://www.dunkindonuts.com/en/menu',    emoji:'🍩', color:'#FF671F', bgColor:'rgba(255,103,31,0.1)', borderColor:'rgba(255,103,31,0.3)', canEmbed:false },
-  { id:'ubereats', name:'Uber Eats', url:'https://www.ubereats.com',               emoji:'🛵', color:'#06C167', bgColor:'rgba(6,193,103,0.1)', borderColor:'rgba(6,193,103,0.3)',  canEmbed:false },
-  { id:'shoprite', name:'ShopRite',  url:'https://www.shoprite.com',               emoji:'🛒', color:'#CC0000', bgColor:'rgba(204,0,0,0.1)',   borderColor:'rgba(204,0,0,0.3)',    canEmbed:false },
+  { id:'starbucks',name:'Starbucks', url:'https://www.starbucks.com/menu',          emoji:'☕', color:'#00704A', bgColor:'rgba(0,112,74,0.1)',   borderColor:'rgba(0,112,74,0.3)',   canEmbed:true },
+  { id:'dunkin',   name:"Dunkin'",   url:'https://www.dunkindonuts.com/en/menu',    emoji:'🍩', color:'#FF671F', bgColor:'rgba(255,103,31,0.1)', borderColor:'rgba(255,103,31,0.3)', canEmbed:true },
+  { id:'ubereats', name:'Uber Eats', url:'https://www.ubereats.com',               emoji:'🛵', color:'#06C167', bgColor:'rgba(6,193,103,0.1)', borderColor:'rgba(6,193,103,0.3)',  canEmbed:true },
+  { id:'shoprite', name:'ShopRite',  url:'https://www.shoprite.com',               emoji:'🛒', color:'#CC0000', bgColor:'rgba(204,0,0,0.1)',   borderColor:'rgba(204,0,0,0.3)',    canEmbed:true },
 ];
 
 const TABS: { id: Tab; label: string; emoji: string }[] = [
@@ -92,12 +92,14 @@ const LOGO_MAP: Record<string, JSX.Element> = {
   meet:       <GoogleMeetLogo size={28} />,
   zoom:       <ZoomLogo size={28} />,
   canvas:     <CanvasLMSLogo size={28} />,
+  hsw:        <HowStuffWorksLogo size={28} />,
   starbucks:  <StarbucksLogo size={28} />,
   dunkin:     <DunkinLogo size={28} />,
   ubereats:   <UberEatsLogo size={28} />,
   shoprite:   <ShopRiteLogo size={28} />,
   playhop:    <PlayhopLogo size={28} />,
   krunker:    <KrunkerLogo size={28} />,
+  poki:       <PokiLogo size={28} />,
   chess:      <ChessLogo size={28} />,
   backgammon: <BackgammonLogo size={28} />,
   '2048':     <Game2048Logo size={28} />,

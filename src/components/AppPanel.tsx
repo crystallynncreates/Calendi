@@ -1,21 +1,58 @@
-import { useState } from 'react';
-import { X, ExternalLink, AlertCircle, Maximize2 } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { X, ExternalLink, Maximize2 } from 'lucide-react';
 import type { AppEntry } from '../types';
 
 interface Props { app: AppEntry; onClose: () => void }
 
-/* Services that always block iframe embedding */
-const NO_EMBED = new Set([
-  'netflix', 'disney', 'prime', 'facebook', 'instagram',
-  'whatsapp', 'gmail', 'phone', 'messages',
-]);
-
 export default function AppPanel({ app, onClose }: Props) {
-  const [iframeError, setIframeError] = useState(false);
-  const blocked = NO_EMBED.has(app.id) || !app.canEmbed;
+  const [showFallback, setShowFallback] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const isProtocol = !app.url.startsWith('http://') && !app.url.startsWith('https://');
+
+  useEffect(() => {
+    if (isProtocol) {
+      window.open(app.url, '_self');
+    }
+  }, [app.url, isProtocol]);
+
+  useEffect(() => {
+    if (isProtocol) return;
+    timerRef.current = setTimeout(() => setShowFallback(true), 5000);
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, [app.url, isProtocol]);
 
   function openExternal() {
     window.open(app.url, '_blank', 'noopener');
+  }
+
+  if (isProtocol) {
+    return (
+      <div className="panel-slide-in" style={{
+        position: 'fixed', inset: 0, zIndex: 200,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        background: '#06060F',
+      }}>
+        <div style={{
+          width: 96, height: 96, borderRadius: 28,
+          background: app.bgColor, border: `2px solid ${app.borderColor}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '3rem', marginBottom: 24,
+          boxShadow: `0 0 60px ${app.color}40`,
+        }}>
+          {app.emoji}
+        </div>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#E2E8F0', marginBottom: 10 }}>Opening {app.name}…</h2>
+        <p style={{ fontSize: '0.82rem', color: 'rgba(226,232,240,0.45)', marginBottom: 28 }}>Your device is handling this link.</p>
+        <button onClick={onClose} style={{
+          background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.14)',
+          borderRadius: 50, padding: '10px 28px', cursor: 'pointer', color: '#E2E8F0',
+          fontSize: '0.82rem', fontWeight: 600,
+        }}>
+          <X size={13} style={{ display: 'inline', marginRight: 6 }} /> Back to Calendi
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -52,55 +89,42 @@ export default function AppPanel({ app, onClose }: Props) {
         </button>
       </div>
 
-      {/* Content */}
+      {/* iframe content — always try, circumventing X-Frame-Options where possible */}
       <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-        {!blocked && !iframeError ? (
-          <iframe
-            src={app.url}
-            title={app.name}
-            style={{ width: '100%', height: '100%', border: 'none' }}
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
-            onError={() => setIframeError(true)}
-          />
-        ) : (
-          /* Branded launch screen for services that block iframe */
+        <iframe
+          key={app.url}
+          src={app.url}
+          title={app.name}
+          style={{ width: '100%', height: '100%', border: 'none', background: '#fff' }}
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-storage-access-by-user-activation"
+          allow="accelerometer; camera; clipboard-write; encrypted-media; fullscreen; geolocation; gyroscope; microphone; payment; autoplay"
+          onLoad={() => { if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; } setShowFallback(false); }}
+        />
+
+        {/* Soft fallback banner — shows if site didn't respond in 5s */}
+        {showFallback && (
           <div style={{
-            width: '100%', height: '100%',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            background: `radial-gradient(ellipse at center, ${app.bgColor} 0%, #06060F 65%)`,
-            gap: 28, padding: 32, textAlign: 'center',
+            position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)',
+            background: 'rgba(6,6,15,0.92)', border: `1px solid ${app.borderColor}`,
+            borderRadius: 14, padding: '10px 18px',
+            display: 'flex', alignItems: 'center', gap: 10,
+            backdropFilter: 'blur(12px)', boxShadow: `0 4px 24px ${app.color}30`,
+            whiteSpace: 'nowrap',
           }}>
-            <div style={{
-              width: 100, height: 100, borderRadius: 28,
-              background: app.bgColor, border: `2px solid ${app.borderColor}`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '3.5rem',
-              boxShadow: `0 0 60px ${app.color}40`,
-            }}>
-              {app.emoji}
-            </div>
-            <div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#E2E8F0', marginBottom: 10 }}>{app.name}</h2>
-              <p style={{ fontSize: '0.88rem', color: 'rgba(226,232,240,0.45)', maxWidth: 340, lineHeight: 1.6 }}>
-                {app.name} keeps its content secure and can't be shown inside another app.
-                Tap below to open it — your browser keeps it separate from Calendi.
-              </p>
-            </div>
+            <span style={{ fontSize: '0.72rem', color: 'rgba(226,232,240,0.7)' }}>Site not loading inside the frame?</span>
             <button onClick={openExternal} style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              padding: '15px 36px', borderRadius: 50, border: 'none', cursor: 'pointer',
-              background: `linear-gradient(135deg, ${app.color}, ${app.color}BB)`,
-              color: '#fff', fontSize: '1rem', fontWeight: 800,
-              boxShadow: `0 8px 32px ${app.color}50`,
+              background: app.color, border: 'none', borderRadius: 8, padding: '5px 14px',
+              cursor: 'pointer', color: '#fff', fontSize: '0.7rem', fontWeight: 700,
+              display: 'flex', alignItems: 'center', gap: 5,
             }}>
-              <ExternalLink size={17} /> Open {app.name}
+              <ExternalLink size={11} /> Open in browser
             </button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: 0.3 }}>
-              <AlertCircle size={11} style={{ color: '#E2E8F0' }} />
-              <span style={{ fontSize: '0.65rem', fontFamily: 'monospace', color: '#E2E8F0' }}>
-                security policy set by {app.name}
-              </span>
-            </div>
+            <button onClick={() => setShowFallback(false)} style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: 'rgba(226,232,240,0.4)', fontSize: '0.7rem', padding: '4px',
+            }}>
+              <X size={11} />
+            </button>
           </div>
         )}
       </div>

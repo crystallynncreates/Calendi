@@ -136,8 +136,8 @@ export default function CalendarShareModal({ onClose }: Props) {
         style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)', borderBottom: 'none' }}>
         <div className="flex items-center justify-between px-5 pt-5 pb-4">
           <div>
-            <h2 className="font-bold text-lg" style={{ color: '#E2E8F0' }}>share & download</h2>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(226,232,240,0.3)' }}>{events.length} event{events.length !== 1 ? 's' : ''} · {monthLabel}</p>
+            <h2 className="font-bold text-lg" style={{ color: 'var(--w-text-main)' }}>share & download</h2>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--w-text-faint)' }}>{events.length} event{events.length !== 1 ? 's' : ''} · {monthLabel}</p>
           </div>
           <button className="btn-ghost btn-pill !px-2 !py-1.5" onClick={onClose}><X size={16} /></button>
         </div>
@@ -157,8 +157,8 @@ export default function CalendarShareModal({ onClose }: Props) {
                 {a.icon}
               </div>
               <div>
-                <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#E2E8F0', marginBottom: 2 }}>{a.label}</p>
-                <p style={{ fontSize: '0.65rem', color: 'rgba(226,232,240,0.35)' }}>{a.sub}</p>
+                <p style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--w-text-main)', marginBottom: 2 }}>{a.label}</p>
+                <p style={{ fontSize: '0.65rem', color: 'var(--w-text-dim)' }}>{a.sub}</p>
               </div>
             </button>
           ))}

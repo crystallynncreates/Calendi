@@ -43,8 +43,8 @@ export default function ContactsModal({ onClose }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-5 pb-3 shrink-0">
           <div>
-            <h2 className="font-bold text-lg" style={{ color: '#E2E8F0' }}>contacts</h2>
-            <p className="text-xs font-mono" style={{ color: 'rgba(226,232,240,0.3)' }}>{contacts.length} saved · tap name to call</p>
+            <h2 className="font-bold text-lg" style={{ color: 'var(--w-text-main)' }}>contacts</h2>
+            <p className="text-xs font-mono" style={{ color: 'var(--w-text-faint)' }}>{contacts.length} saved · tap name to call</p>
           </div>
           <div className="flex gap-2">
             <button className="btn-ghost btn-pill !px-2 !py-1.5 gap-1 text-xs" style={{ color, borderColor: `${color}40` }} onClick={startAdd}>
@@ -79,7 +79,7 @@ export default function ContactsModal({ onClose }: Props) {
               <div style={{ width: 48, height: 48, borderRadius: 16, background: `${color}15`, border: `1px solid ${color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <User size={22} style={{ color }} />
               </div>
-              <p className="text-sm" style={{ color: 'rgba(226,232,240,0.3)' }}>no contacts yet</p>
+              <p className="text-sm" style={{ color: 'var(--w-text-faint)' }}>no contacts yet</p>
               <button className="btn-pill btn-ghost !text-xs !py-1.5 !px-4" style={{ color, borderColor: `${color}40` }} onClick={startAdd}>
                 <Plus size={12} /> add your first contact
               </button>
@@ -90,7 +90,7 @@ export default function ContactsModal({ onClose }: Props) {
                 <div key={c.id} className="p-3 rounded-2xl glass-hover" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm" style={{ color: '#E2E8F0' }}>{c.name}</p>
+                      <p className="font-semibold text-sm" style={{ color: 'var(--w-text-main)' }}>{c.name}</p>
                       {c.phone && (
                         <a href={`tel:${c.phone}`} className="flex items-center gap-1.5 mt-1">
                           <Phone size={11} style={{ color, flexShrink: 0 }} />
@@ -99,21 +99,21 @@ export default function ContactsModal({ onClose }: Props) {
                       )}
                       {c.email && (
                         <a href={`mailto:${c.email}`} className="flex items-center gap-1.5 mt-1">
-                          <Mail size={11} style={{ color: 'rgba(226,232,240,0.4)', flexShrink: 0 }} />
-                          <span className="text-xs truncate" style={{ color: 'rgba(226,232,240,0.4)' }}>{c.email}</span>
+                          <Mail size={11} style={{ color: 'var(--w-text-dim)', flexShrink: 0 }} />
+                          <span className="text-xs truncate" style={{ color: 'var(--w-text-dim)' }}>{c.email}</span>
                         </a>
                       )}
                       {c.address && (
                         <div className="flex items-center gap-1.5 mt-1">
-                          <MapPin size={11} style={{ color: 'rgba(226,232,240,0.3)', flexShrink: 0 }} />
-                          <span className="text-xs truncate" style={{ color: 'rgba(226,232,240,0.3)' }}>{c.address}</span>
+                          <MapPin size={11} style={{ color: 'var(--w-text-faint)', flexShrink: 0 }} />
+                          <span className="text-xs truncate" style={{ color: 'var(--w-text-faint)' }}>{c.address}</span>
                         </div>
                       )}
-                      {c.notes && <p className="text-xs mt-1" style={{ color: 'rgba(226,232,240,0.25)' }}>{c.notes}</p>}
+                      {c.notes && <p className="text-xs mt-1" style={{ color: 'var(--w-text-faint)' }}>{c.notes}</p>}
                     </div>
                     <div className="flex gap-1 shrink-0">
                       <button className="btn-ghost btn-pill !px-2 !py-1" onClick={() => startEdit(c)}>
-                        <Edit2 size={11} style={{ color: 'rgba(226,232,240,0.4)' }} />
+                        <Edit2 size={11} style={{ color: 'var(--w-text-dim)' }} />
                       </button>
                       <button className="btn-ghost btn-pill !px-2 !py-1" onClick={() => removeContact(c.id)}>
                         <Trash2 size={11} style={{ color: 'rgba(239,68,68,0.5)' }} />

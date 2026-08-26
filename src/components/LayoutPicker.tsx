@@ -23,8 +23,8 @@ export default function LayoutPicker({ onClose }: Props) {
       >
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h2 className="font-bold text-lg" style={{ color: '#E2E8F0' }}>pick a layout</h2>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(226,232,240,0.35)' }}>the calendar is always your anchor</p>
+            <h2 className="font-bold text-lg" style={{ color: 'var(--w-text-main)' }}>pick a layout</h2>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--w-text-dim)' }}>the calendar is always your anchor</p>
           </div>
           <button className="btn-ghost btn-pill !px-2 !py-1.5" onClick={onClose}><X size={16} /></button>
         </div>
@@ -45,7 +45,7 @@ export default function LayoutPicker({ onClose }: Props) {
               }}
             >
               <LayoutThumb id={l.id} active={layoutId === l.id} color={color} />
-              <p className="text-xs font-mono text-center mt-2" style={{ color: layoutId === l.id ? color : 'rgba(226,232,240,0.3)', fontSize: '0.65rem' }}>
+              <p className="text-xs font-mono text-center mt-2" style={{ color: layoutId === l.id ? color : 'var(--w-text-faint)', fontSize: '0.65rem' }}>
                 {l.name}
               </p>
             </button>

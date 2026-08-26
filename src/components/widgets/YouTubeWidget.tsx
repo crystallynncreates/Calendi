@@ -53,17 +53,17 @@ export default function YouTubeWidget() {
           {mode === 'player' && (
             <>
               <button onClick={() => { setLoading(true); setEmbedSrc(s => s + (s.includes('?') ? '&_r=1' : '?_r=1')); }}
-                style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(226,232,240,0.35)', padding:2 }}>
+                style={{ background:'none', border:'none', cursor:'pointer', color:'var(--w-text-dim)', padding:2 }}>
                 <RefreshCw size={11} />
               </button>
-              <button onClick={reset} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(226,232,240,0.35)', padding:2 }}>
+              <button onClick={reset} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--w-text-dim)', padding:2 }}>
                 <X size={12} />
               </button>
             </>
           )}
           <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"
             title="Open YouTube.com"
-            style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(226,232,240,0.35)', padding:2, display:'flex' }}>
+            style={{ background:'none', border:'none', cursor:'pointer', color:'var(--w-text-dim)', padding:2, display:'flex' }}>
             <ExternalLink size={11} />
           </a>
         </div>
@@ -108,7 +108,7 @@ export default function YouTubeWidget() {
           <div className="w-full h-full flex flex-col items-center justify-center gap-3"
             style={{ background:'linear-gradient(135deg,#0d0d0d 0%,#1a0a0a 100%)', padding:12 }}>
             <YouTubeLogo size={44} />
-            <p className="text-xs text-center leading-relaxed px-2" style={{ color:'rgba(226,232,240,0.4)' }}>
+            <p className="text-xs text-center leading-relaxed px-2" style={{ color:'var(--w-text-dim)' }}>
               Search for any video above, or paste a YouTube URL.<br />
               Sign in to YouTube using the button below.
             </p>
@@ -123,7 +123,7 @@ export default function YouTubeWidget() {
             <div style={{ display:'flex', flexDirection:'column', gap:4, width:'100%', marginTop:4 }}>
               {['Trending','Music','Gaming','News'].map(cat => (
                 <button key={cat} onClick={() => { setInput(cat); setEmbedSrc(`https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(cat)}`); setMode('player'); setLoading(true); }}
-                  style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, padding:'5px 10px', cursor:'pointer', color:'rgba(226,232,240,0.55)', fontSize:'0.7rem', fontFamily:'monospace', textAlign:'left' }}>
+                  style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, padding:'5px 10px', cursor:'pointer', color:'var(--w-text-dim)', fontSize:'0.7rem', fontFamily:'monospace', textAlign:'left' }}>
                   🔍 {cat} videos
                 </button>
               ))}

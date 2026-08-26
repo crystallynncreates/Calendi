@@ -102,8 +102,8 @@ export default function FoodOrderWidget() {
           {brand.emoji}
         </div>
         <div style={{ textAlign:'center' }}>
-          <p style={{ fontSize:'0.95rem', fontWeight:700, color:'#E2E8F0', marginBottom:4 }}>{brand.label}</p>
-          <p style={{ fontSize:'0.65rem', color:'rgba(226,232,240,0.35)', lineHeight:1.5 }}>
+          <p style={{ fontSize:'0.95rem', fontWeight:700, color:'var(--w-text-main)', marginBottom:4 }}>{brand.label}</p>
+          <p style={{ fontSize:'0.65rem', color:'var(--w-text-dim)', lineHeight:1.5 }}>
             Sign in and order in a new window.<br/>Use your existing account.
           </p>
         </div>
@@ -112,7 +112,7 @@ export default function FoodOrderWidget() {
           {BRAND_FEATURES[tab].map(f => (
             <div key={f} style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 10px', borderRadius:8, background:'rgba(255,255,255,0.03)' }}>
               <Check size={10} style={{ color:brand.color, flexShrink:0 }} />
-              <span style={{ fontSize:'0.65rem', color:'rgba(226,232,240,0.55)' }}>{f}</span>
+              <span style={{ fontSize:'0.65rem', color:'var(--w-text-dim)' }}>{f}</span>
             </div>
           ))}
         </div>
@@ -142,7 +142,7 @@ export default function FoodOrderWidget() {
           <button key={t.id} onClick={() => setTab(t.id)} style={{
             flex:1, padding:'5px 1px', borderRadius:9, border:'none', cursor:'pointer',
             background: tab===t.id ? t.color : 'transparent',
-            color: tab===t.id ? '#fff' : 'rgba(226,232,240,0.4)',
+            color: tab===t.id ? '#fff' : 'var(--w-text-dim)',
             fontSize:'0.5rem', fontWeight:700, fontFamily:'monospace',
             display:'flex', flexDirection:'column', alignItems:'center', gap:1,
             transition:'all 0.15s',
@@ -159,10 +159,10 @@ export default function FoodOrderWidget() {
         /* ── ShopRite: Shopping list + auto-order ── */
         <div style={{ flex:1, display:'flex', flexDirection:'column', minHeight:0, padding:'10px 10px 8px' }}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
-            <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'rgba(226,232,240,0.3)', textTransform:'uppercase', letterSpacing:1, display:'flex', alignItems:'center', gap:4 }}>
+            <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'var(--w-text-faint)', textTransform:'uppercase', letterSpacing:1, display:'flex', alignItems:'center', gap:4 }}>
               <ShoppingCart size={10} /> Shopping List
             </span>
-            <span style={{ fontSize:'0.6rem', color:'rgba(226,232,240,0.3)', fontFamily:'monospace' }}>
+            <span style={{ fontSize:'0.6rem', color:'var(--w-text-faint)', fontFamily:'monospace' }}>
               {done}/{listItems.length} checked
             </span>
           </div>
@@ -183,7 +183,7 @@ export default function FoodOrderWidget() {
           {/* List */}
           <div style={{ flex:1, overflowY:'auto', display:'flex', flexDirection:'column', gap:3, minHeight:0 }}>
             {listItems.length === 0 ? (
-              <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', color:'rgba(226,232,240,0.2)', fontSize:'0.7rem', flexDirection:'column', gap:6 }}>
+              <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', color:'var(--w-text-faint)', fontSize:'0.7rem', flexDirection:'column', gap:6 }}>
                 <ShoppingCart size={24} style={{ opacity:0.3 }} />
                 <span>Add items above</span>
               </div>
@@ -197,11 +197,11 @@ export default function FoodOrderWidget() {
                   style={{ width:16, height:16, borderRadius:4, border:`1.5px solid ${item.done ? brand.color : 'rgba(255,255,255,0.2)'}`, background: item.done ? brand.color : 'transparent', cursor:'pointer', flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center' }}>
                   {item.done && <Check size={9} style={{ color:'#fff' }} />}
                 </button>
-                <span style={{ flex:1, fontSize:'0.7rem', color:'rgba(226,232,240,0.75)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.name}</span>
+                <span style={{ flex:1, fontSize:'0.7rem', color:'var(--w-text-dim)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.name}</span>
                 <div style={{ display:'flex', alignItems:'center', gap:2 }}>
-                  <button onClick={() => setQty(item.id, item.qty-1)} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(226,232,240,0.4)', fontSize:'0.8rem', lineHeight:1, padding:'0 2px' }}>−</button>
-                  <span style={{ fontSize:'0.65rem', color:'rgba(226,232,240,0.5)', fontFamily:'monospace', minWidth:14, textAlign:'center' }}>{item.qty}</span>
-                  <button onClick={() => setQty(item.id, item.qty+1)} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(226,232,240,0.4)', fontSize:'0.8rem', lineHeight:1, padding:'0 2px' }}>+</button>
+                  <button onClick={() => setQty(item.id, item.qty-1)} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--w-text-dim)', fontSize:'0.8rem', lineHeight:1, padding:'0 2px' }}>−</button>
+                  <span style={{ fontSize:'0.65rem', color:'var(--w-text-dim)', fontFamily:'monospace', minWidth:14, textAlign:'center' }}>{item.qty}</span>
+                  <button onClick={() => setQty(item.id, item.qty+1)} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--w-text-dim)', fontSize:'0.8rem', lineHeight:1, padding:'0 2px' }}>+</button>
                 </div>
                 <button onClick={() => removeItem(item.id)} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(239,68,68,0.4)', padding:2 }}>
                   <Trash2 size={10} />
@@ -213,7 +213,7 @@ export default function FoodOrderWidget() {
           {/* Auto-order schedule */}
           <div style={{ marginTop:8, padding:'8px 10px', borderRadius:10, background:'rgba(204,0,0,0.08)', border:'1px solid rgba(204,0,0,0.2)', flexShrink:0 }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
-              <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'rgba(226,232,240,0.5)', textTransform:'uppercase', letterSpacing:1, display:'flex', alignItems:'center', gap:4 }}>
+              <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'var(--w-text-dim)', textTransform:'uppercase', letterSpacing:1, display:'flex', alignItems:'center', gap:4 }}>
                 <Calendar size={9} /> Auto-Order Schedule
               </span>
               {schedSet && <span style={{ fontSize:'0.6rem', color:brand.color, fontFamily:'monospace' }}>saved ✓</span>}
@@ -222,19 +222,19 @@ export default function FoodOrderWidget() {
               <select
                 value={autoOrder?.day ?? 'Saturday'}
                 onChange={e => saveAutoOrder({ day:e.target.value })}
-                style={{ flex:1, minWidth:80, background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', color:'rgba(226,232,240,0.7)', borderRadius:6, fontSize:'0.6rem', padding:'3px 4px', fontFamily:'monospace', cursor:'pointer' }}>
+                style={{ flex:1, minWidth:80, background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', color:'var(--w-text-dim)', borderRadius:6, fontSize:'0.6rem', padding:'3px 4px', fontFamily:'monospace', cursor:'pointer' }}>
                 {DAYS.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
               <input
                 type="time"
                 value={autoOrder?.time ?? '09:00'}
                 onChange={e => saveAutoOrder({ time:e.target.value })}
-                style={{ flex:1, minWidth:70, background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', color:'rgba(226,232,240,0.7)', borderRadius:6, fontSize:'0.6rem', padding:'3px 4px', fontFamily:'monospace', cursor:'pointer' }}
+                style={{ flex:1, minWidth:70, background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', color:'var(--w-text-dim)', borderRadius:6, fontSize:'0.6rem', padding:'3px 4px', fontFamily:'monospace', cursor:'pointer' }}
               />
               <select
                 value={autoOrder?.recur ?? 'Weekly'}
                 onChange={e => saveAutoOrder({ recur:e.target.value })}
-                style={{ flex:1, minWidth:70, background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', color:'rgba(226,232,240,0.7)', borderRadius:6, fontSize:'0.6rem', padding:'3px 4px', fontFamily:'monospace', cursor:'pointer' }}>
+                style={{ flex:1, minWidth:70, background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', color:'var(--w-text-dim)', borderRadius:6, fontSize:'0.6rem', padding:'3px 4px', fontFamily:'monospace', cursor:'pointer' }}>
                 {RECURS.map(r => <option key={r} value={r}>{r}</option>)}
               </select>
             </div>
@@ -244,7 +244,7 @@ export default function FoodOrderWidget() {
                 <ExternalLink size={9} /> Order at ShopRite
               </a>
             </div>
-            <p style={{ fontSize:'0.55rem', color:'rgba(226,232,240,0.2)', marginTop:4, fontFamily:'monospace' }}>
+            <p style={{ fontSize:'0.55rem', color:'var(--w-text-faint)', marginTop:4, fontFamily:'monospace' }}>
               Schedule saves to calendar. Order is placed via ShopRite website.
             </p>
           </div>

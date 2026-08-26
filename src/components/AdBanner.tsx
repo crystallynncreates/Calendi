@@ -43,8 +43,8 @@ export default function AdBanner({ onSubscribe }: Props) {
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>📢</div>
             <div>
-              <p style={{ fontSize: '0.72rem', color: 'rgba(226,232,240,0.5)', margin: 0 }}>Ad placeholder — configure AdSense publisher ID</p>
-              <p style={{ fontSize: '0.62rem', color: 'rgba(226,232,240,0.25)', margin: '2px 0 0' }}>Set VITE_ADSENSE_CLIENT in your environment</p>
+              <p style={{ fontSize: '0.72rem', color: 'var(--w-text-dim)', margin: 0 }}>Ad placeholder — configure AdSense publisher ID</p>
+              <p style={{ fontSize: '0.62rem', color: 'var(--w-text-faint)', margin: '2px 0 0' }}>Set VITE_ADSENSE_CLIENT in your environment</p>
             </div>
           </div>
           <button onClick={onSubscribe} style={{

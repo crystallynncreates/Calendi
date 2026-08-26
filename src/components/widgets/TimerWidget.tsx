@@ -106,7 +106,7 @@ export default function TimerWidget() {
             className="flex-1 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all"
             style={{
               background: tab === t ? color : 'transparent',
-              color: tab === t ? '#fff' : 'rgba(226,232,240,0.4)',
+              color: tab === t ? '#fff' : 'var(--w-text-dim)',
               boxShadow: tab === t ? `0 2px 10px ${glow}` : 'none',
             }}
           >{t}</button>
@@ -129,7 +129,7 @@ export default function TimerWidget() {
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-mono font-bold text-xl" style={{ color: fired ? '#EF4444' : '#E2E8F0' }}>
+              <span className="font-mono font-bold text-xl" style={{ color: fired ? '#EF4444' : 'var(--w-text-main)' }}>
                 {mm}:{ss}
               </span>
             </div>
@@ -183,7 +183,7 @@ export default function TimerWidget() {
 
           <button
             className="btn-pill w-full"
-            style={{ background: alarmOn ? color : 'rgba(255,255,255,0.05)', color: alarmOn ? '#fff' : 'rgba(226,232,240,0.5)', boxShadow: alarmOn ? `0 4px 20px ${glow}` : 'none', border: `1px solid ${alarmOn ? color + '50' : 'rgba(255,255,255,0.1)'}` }}
+            style={{ background: alarmOn ? color : 'rgba(255,255,255,0.05)', color: alarmOn ? '#fff' : 'var(--w-text-dim)', boxShadow: alarmOn ? `0 4px 20px ${glow}` : 'none', border: `1px solid ${alarmOn ? color + '50' : 'rgba(255,255,255,0.1)'}` }}
             onClick={() => { setAlarmOn(!alarmOn); setAlarmFired(false); }}
           >
             {alarmOn ? <Bell size={14} /> : <BellOff size={14} />}

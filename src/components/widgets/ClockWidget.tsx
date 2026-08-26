@@ -149,7 +149,7 @@ export default function ClockWidget() {
             style={{
               flex: 1, padding: '3px 2px', borderRadius: 7, border: 'none', cursor: 'pointer',
               background: mode === m.id ? `${color}22` : 'transparent',
-              color: mode === m.id ? color : 'rgba(226,232,240,0.25)',
+              color: mode === m.id ? color : 'var(--w-text-faint)',
               fontSize: '0.52rem', fontWeight: 700, fontFamily: 'monospace',
               borderBottom: mode === m.id ? `1.5px solid ${color}` : '1.5px solid transparent',
             }}>
@@ -166,7 +166,7 @@ export default function ClockWidget() {
             style={{ fontSize: mode === 'hybrid' ? 'clamp(1.4rem,4vw,2rem)' : 'clamp(2rem,5vw,3.5rem)', color, letterSpacing: '-0.02em', textShadow: `0 0 30px ${color}50` }}
           >
             {hh}<span style={{ opacity: 0.7, animation: 'pulse 1s ease-in-out infinite', display: 'inline-block' }}>:</span>{mm}
-            <span className="ml-1.5" style={{ fontSize: mode === 'hybrid' ? '0.9rem' : '1.1rem', color: 'rgba(226,232,240,0.3)', fontWeight: 500 }}>{ss}</span>
+            <span className="ml-1.5" style={{ fontSize: mode === 'hybrid' ? '0.9rem' : '1.1rem', color: 'var(--w-text-faint)', fontWeight: 500 }}>{ss}</span>
           </div>
         )}
 
@@ -179,7 +179,7 @@ export default function ClockWidget() {
             <div className="font-mono font-black tabular-nums" style={{ fontSize: 'clamp(1.5rem,4vw,2.5rem)', color, letterSpacing: '0.08em', textShadow: `0 0 20px ${color}60` }}>
               {now.getHours().toString().padStart(2, '0')}{mm}{ss}Z
             </div>
-            <div className="mt-1 text-xs font-mono" style={{ color: 'rgba(226,232,240,0.35)', letterSpacing: '0.15em' }}>
+            <div className="mt-1 text-xs font-mono" style={{ color: 'var(--w-text-dim)', letterSpacing: '0.15em' }}>
               ZULU TIME
             </div>
           </div>
@@ -196,19 +196,19 @@ export default function ClockWidget() {
               return (
                 <div key={i} className="flex items-center justify-between px-2 py-1.5 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
                   <select value={tz} onChange={e => setCity(i, e.target.value)}
-                    style={{ background: 'transparent', border: 'none', color: 'rgba(226,232,240,0.5)', fontSize: '0.65rem', fontFamily: 'monospace', cursor: 'pointer', outline: 'none', maxWidth: 110 }}>
+                    style={{ background: 'transparent', border: 'none', color: 'var(--w-text-dim)', fontSize: '0.65rem', fontFamily: 'monospace', cursor: 'pointer', outline: 'none', maxWidth: 110 }}>
                     {CITIES.map(c => <option key={c.tz} value={c.tz} style={{ background: '#0D0D1A' }}>{c.label}</option>)}
                   </select>
                   <div className="flex items-center gap-1.5">
                     <span className="font-mono font-bold tabular-nums" style={{ color, fontSize: '0.95rem' }}>{hh2}:{mm2}</span>
-                    <span style={{ fontSize: '0.55rem', color: 'rgba(226,232,240,0.3)', fontFamily: 'monospace' }}>{ampm}</span>
-                    <button onClick={() => removeCity(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.2)', padding: 1, lineHeight: 1 }}>×</button>
+                    <span style={{ fontSize: '0.55rem', color: 'var(--w-text-faint)', fontFamily: 'monospace' }}>{ampm}</span>
+                    <button onClick={() => removeCity(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 1, lineHeight: 1 }}>×</button>
                   </div>
                 </div>
               );
             })}
             {citySlots.length < 3 && (
-              <button onClick={addCity} style={{ background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.08)', borderRadius: 12, padding: '6px', cursor: 'pointer', color: 'rgba(226,232,240,0.2)', fontSize: '0.62rem', fontFamily: 'monospace' }}>
+              <button onClick={addCity} style={{ background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.08)', borderRadius: 12, padding: '6px', cursor: 'pointer', color: 'var(--w-text-faint)', fontSize: '0.62rem', fontFamily: 'monospace' }}>
                 + add city
               </button>
             )}
@@ -216,7 +216,7 @@ export default function ClockWidget() {
         )}
 
         {mode !== 'world' && (
-          <div className="text-xs" style={{ color: 'rgba(226,232,240,0.3)' }}>{day}</div>
+          <div className="text-xs" style={{ color: 'var(--w-text-faint)' }}>{day}</div>
         )}
       </div>
     </div>

@@ -490,11 +490,463 @@ const VOCAB_BANKS: Record<string, FlashCard[]> = {
     { term:'Externalities',      def:'Costs/benefits not reflected in price; negative (pollution), positive (education); corrected by taxes/subsidies (Pigouvian)', category:'Market Failure' },
     { term:'Business Cycle',     def:'Expansion → Peak → Recession (2+ quarters negative GDP growth) → Trough → Recovery; measured by GDP, employment, output', category:'Macroeconomics' },
   ],
+  'sight-words-4': [
+    { term:'accomplish',     def:"To successfully complete a task or achieve a goal through effort", category:'4th Grade' },
+    { term:'determined',     def:"Having a strong will to achieve something despite obstacles; resolute", category:'4th Grade' },
+    { term:'sufficient',     def:"Enough to meet a need or requirement; adequate for the purpose", category:'4th Grade' },
+    { term:'conclude',       def:"To reach a decision or opinion after reasoning through evidence", category:'4th Grade' },
+    { term:'evidence',       def:"Facts, data, or examples that support a claim or argument", category:'4th Grade' },
+    { term:'summarize',      def:"To state the main points of something in a brief, clear way", category:'4th Grade' },
+    { term:'consequence',    def:"A result or effect that follows from an action or event", category:'4th Grade' },
+    { term:'perspective',    def:"A particular way of thinking about or viewing something", category:'4th Grade' },
+    { term:'significant',    def:"Important, meaningful, or having a major effect on something", category:'4th Grade' },
+    { term:'contribute',     def:"To give or add something to help a group effort or cause", category:'4th Grade' },
+    { term:'establish',      def:"To set up, create, or prove something firmly and permanently", category:'4th Grade' },
+    { term:'illustrate',     def:"To explain or show something using examples, pictures, or diagrams", category:'4th Grade' },
+    { term:'evaluate',       def:"To judge the quality, importance, or value of something carefully", category:'4th Grade' },
+    { term:'infer',          def:"To reach a conclusion based on evidence and reasoning, not stated directly", category:'4th Grade' },
+    { term:'appropriate',    def:"Correct or suitable for a particular situation or purpose", category:'4th Grade' },
+  ],
+  'sight-words-5': [
+    { term:'analyze',        def:"To study something carefully to understand its parts and how they relate", category:'5th Grade' },
+    { term:'narrative',      def:"A story or account of connected events told in sequence", category:'5th Grade' },
+    { term:'hypothesis',     def:"A testable prediction made before conducting an experiment", category:'5th Grade' },
+    { term:'controversy',    def:"A disagreement or debate where people hold strong opposing opinions", category:'5th Grade' },
+    { term:'fundamental',    def:"Forming the base or foundation; absolutely essential to something", category:'5th Grade' },
+    { term:'procedure',      def:"A set of steps followed in a regular, orderly way to accomplish something", category:'5th Grade' },
+    { term:'characteristic', def:"A quality or feature that makes something or someone distinct or recognizable", category:'5th Grade' },
+    { term:'comparison',     def:"Examining two or more things to find similarities and differences", category:'5th Grade' },
+    { term:'democracy',      def:"A system of government where citizens vote to elect leaders and make decisions", category:'5th Grade' },
+    { term:'reliable',       def:"Consistently good in quality or performance; able to be trusted", category:'5th Grade' },
+    { term:'elaborate',      def:"To add more detail or explanation to make something clearer or more complete", category:'5th Grade' },
+    { term:'justification',  def:"Good reasons or evidence that explain why a decision or action is correct", category:'5th Grade' },
+    { term:'synthesis',      def:"Combining parts or ideas from different sources to create something new", category:'5th Grade' },
+    { term:'transition',     def:"A change from one state, place, or situation to another", category:'5th Grade' },
+    { term:'stereotype',     def:"An oversimplified, fixed idea about a group of people that ignores individuality", category:'5th Grade' },
+  ],
+  'sight-words-6': [
+    { term:'abolish',        def:"To formally end or eliminate a law, system, or practice", category:'6th Grade' },
+    { term:'catalyst',       def:"A person or event that causes important change to happen rapidly", category:'6th Grade' },
+    { term:'ambiguous',      def:"Having more than one possible meaning; open to different interpretations", category:'6th Grade' },
+    { term:'circulate',      def:"To move or flow continuously in a closed system; to pass around widely", category:'6th Grade' },
+    { term:'deduction',      def:"Reaching a specific conclusion from a general rule or principle", category:'6th Grade' },
+    { term:'empathy',        def:"The ability to understand and share the feelings of another person", category:'6th Grade' },
+    { term:'generate',       def:"To produce or create something, often energy, ideas, or revenue", category:'6th Grade' },
+    { term:'jurisdiction',   def:"Official authority or legal power to make decisions in a given area", category:'6th Grade' },
+    { term:'meticulous',     def:"Showing great attention to detail; very careful and precise", category:'6th Grade' },
+    { term:'propaganda',     def:"Biased or misleading information used to promote a particular cause", category:'6th Grade' },
+    { term:'resilient',      def:"Able to recover quickly from difficulties or challenges", category:'6th Grade' },
+    { term:'sovereignty',    def:"Supreme power or authority; the right of a state to govern itself", category:'6th Grade' },
+    { term:'sustainable',    def:"Able to be maintained over time without depleting resources", category:'6th Grade' },
+    { term:'variation',      def:"A difference or slight change from the original or standard form", category:'6th Grade' },
+    { term:'credible',       def:"Able to be believed; convincing and trustworthy as a source", category:'6th Grade' },
+  ],
+  'sight-words-7': [
+    { term:'allegory',       def:"A story where characters and events represent hidden moral or political meaning", category:'7th Grade' },
+    { term:'connotation',    def:"An idea or feeling a word suggests beyond its literal dictionary meaning", category:'7th Grade' },
+    { term:'dystopia',       def:"An imagined society where conditions are extremely bad due to oppression or fear", category:'7th Grade' },
+    { term:'exposition',     def:"Background information at the start of a story setting up characters and setting", category:'7th Grade' },
+    { term:'foreshadowing',  def:"A clue or hint early in a story about what will happen later", category:'7th Grade' },
+    { term:'irony',          def:"When the opposite of what is expected happens, or words mean the opposite of what is said", category:'7th Grade' },
+    { term:'metaphor',       def:"A direct comparison between two unlike things without using like or as", category:'7th Grade' },
+    { term:'protagonist',    def:"The main character in a story who drives the plot forward", category:'7th Grade' },
+    { term:'antagonist',     def:"The character or force that opposes the protagonist and creates conflict", category:'7th Grade' },
+    { term:'satire',         def:"Using humor, irony, or exaggeration to criticize or mock society", category:'7th Grade' },
+    { term:'inference',      def:"A conclusion drawn from evidence and reasoning rather than stated directly", category:'7th Grade' },
+    { term:'rhetoric',       def:"The art of persuasion through effective writing or speaking", category:'7th Grade' },
+    { term:'bias',           def:"A tendency to favor one view over another unfairly; prejudice in thinking", category:'7th Grade' },
+    { term:'symbolism',      def:"Using objects, people, or events to represent abstract ideas or concepts", category:'7th Grade' },
+    { term:'theme',          def:"The central message or life lesson the author wants readers to understand", category:'7th Grade' },
+  ],
+  'sight-words-8': [
+    { term:'allusion',       def:"An indirect reference to a well-known person, event, or work of literature", category:'8th Grade' },
+    { term:'diction',        def:"Word choice; a writer picks specific words to create tone and meaning", category:'8th Grade' },
+    { term:'juxtaposition',  def:"Placing two contrasting ideas or things side by side for effect", category:'8th Grade' },
+    { term:'paradox',        def:"A statement that seems contradictory but reveals a deeper truth", category:'8th Grade' },
+    { term:'syntax',         def:"The arrangement of words and phrases to create well-formed sentences", category:'8th Grade' },
+    { term:'verisimilitude', def:"The appearance of being true or real; believability in fiction", category:'8th Grade' },
+    { term:'motif',          def:"A recurring element in a work that has symbolic significance", category:'8th Grade' },
+    { term:'polemic',        def:"A strong verbal or written attack on someone or something", category:'8th Grade' },
+    { term:'subtext',        def:"The underlying meaning or message beneath what is literally said", category:'8th Grade' },
+    { term:'didactic',       def:"Intended to teach a moral lesson; instructional in purpose", category:'8th Grade' },
+    { term:'archetype',      def:"A universal character type or pattern found across many stories and cultures", category:'8th Grade' },
+    { term:'ambivalence',    def:"Having mixed or contradictory feelings about something at the same time", category:'8th Grade' },
+    { term:'fallacy',        def:"An error in reasoning that makes an argument invalid or misleading", category:'8th Grade' },
+    { term:'episodic',       def:"Made up of a series of loosely connected incidents rather than a unified plot", category:'8th Grade' },
+    { term:'catharsis',      def:"Emotional release experienced by an audience through watching tragedy", category:'8th Grade' },
+  ],
+  'addition': [
+    { term:'Addend',         def:"Any number being added in an addition problem; e.g. in 3+5, both 3 and 5 are addends", category:'Vocabulary' },
+    { term:'Sum',            def:"The answer to an addition problem; the total when addends are combined", category:'Vocabulary' },
+    { term:'Commutative Property', def:"a + b = b + a; changing the order of addends does not change the sum", category:'Properties' },
+    { term:'Associative Property', def:"(a + b) + c = a + (b + c); grouping addends differently does not change the sum", category:'Properties' },
+    { term:'Identity Property',    def:"Any number + 0 = that number; zero is the additive identity", category:'Properties' },
+    { term:'Regrouping (Carrying)', def:"When a column sum exceeds 9, carry the tens digit to the next column left", category:'Process' },
+    { term:'Making 10',      def:"Mental math strategy: split an addend to make a group of 10 (8+5 = 8+2+3 = 13)", category:'Strategy' },
+    { term:'Doubles',        def:"Adding a number to itself (6+6=12); memorizing doubles speeds mental math", category:'Strategy' },
+    { term:'Column Addition', def:"Align digits by place value (ones, tens, hundreds); add each column right to left", category:'Process' },
+    { term:'Estimation',     def:"Rounding addends to the nearest 10 or 100 to quickly estimate a sum", category:'Strategy' },
+    { term:'Clue Words',     def:"in all, total, altogether, sum, plus, combined — signal addition in word problems", category:'Word Problems' },
+    { term:'Number Line Addition', def:"Start at one addend on number line, jump forward by the second addend to find sum", category:'Visual' },
+  ],
+  'subtraction': [
+    { term:'Minuend',        def:"The number being subtracted FROM; the starting amount (e.g. in 9-4, 9 is the minuend)", category:'Vocabulary' },
+    { term:'Subtrahend',     def:"The number being subtracted; taken away from the minuend", category:'Vocabulary' },
+    { term:'Difference',     def:"The answer to a subtraction problem; what remains after subtracting", category:'Vocabulary' },
+    { term:'Regrouping (Borrowing)', def:"Taking 1 from the next place value column to subtract when the digit is too small", category:'Process' },
+    { term:'Checking Subtraction', def:"Add the difference + subtrahend; if it equals the minuend, the answer is correct", category:'Strategy' },
+    { term:'Not Commutative', def:"a - b is NOT equal to b - a; order matters in subtraction (10-3 ≠ 3-10)", category:'Properties' },
+    { term:'Zero Property',  def:"Any number minus 0 = that number; any number minus itself = 0", category:'Properties' },
+    { term:'Inverse of Addition', def:"Subtraction undoes addition; if 5+3=8, then 8-3=5 and 8-5=3", category:'Concepts' },
+    { term:'Count Up Method', def:"Start at the subtrahend and count up to the minuend; the jumps = the difference", category:'Strategy' },
+    { term:'Clue Words',     def:"less, fewer, remain, left, take away, difference, change, how many more — signal subtraction", category:'Word Problems' },
+    { term:'Place Value Subtraction', def:"Subtract ones from ones, tens from tens, borrowing when needed across columns", category:'Process' },
+  ],
+  'multiplication': [
+    { term:'Factor',         def:"Numbers being multiplied together; in 4 x 6, both 4 and 6 are factors", category:'Vocabulary' },
+    { term:'Product',        def:"The answer to a multiplication problem; result of multiplying factors", category:'Vocabulary' },
+    { term:'Array',          def:"A grid model of multiplication; rows x columns = product (3 rows of 4 = 12)", category:'Visual' },
+    { term:'Commutative Property', def:"a x b = b x a; order of factors does not change the product (4x5=5x4)", category:'Properties' },
+    { term:'Associative Property', def:"(a x b) x c = a x (b x c); grouping factors differently does not change product", category:'Properties' },
+    { term:'Distributive Property', def:"a(b+c) = ab + ac; multiply a by each addend separately then add (3x12 = 3x10 + 3x2)", category:'Properties' },
+    { term:'Identity Property', def:"Any number x 1 = that number; 1 is the multiplicative identity", category:'Properties' },
+    { term:'Zero Property',  def:"Any number x 0 = 0; multiplying by zero always gives zero", category:'Properties' },
+    { term:'Skip Counting',  def:"Counting by multiples of a number (by 3s: 3,6,9,12,...) to find products", category:'Strategy' },
+    { term:'Repeated Addition', def:"Multiplication as repeated addition: 4x3 = 3+3+3+3 = 12", category:'Concepts' },
+    { term:'Times Tables',   def:"Memorized multiplication facts from 1x1 through 12x12; foundation for all math", category:'Skill' },
+    { term:'Clue Words',     def:"times, of, product, each, per, groups of, total (with equal groups) — signal multiplication", category:'Word Problems' },
+    { term:'Partial Products', def:"Break factors into expanded form; multiply each part; add results (23x4 = 20x4 + 3x4)", category:'Strategy' },
+  ],
+  'long-division': [
+    { term:'Dividend',       def:"The number being divided; the total amount being shared equally", category:'Vocabulary' },
+    { term:'Divisor',        def:"The number you divide by; how many equal groups to make", category:'Vocabulary' },
+    { term:'Quotient',       def:"The answer to a division problem; how many are in each group", category:'Vocabulary' },
+    { term:'Remainder',      def:"What is left over after dividing evenly; must be less than the divisor", category:'Vocabulary' },
+    { term:'DMSB Algorithm', def:"Divide, Multiply, Subtract, Bring down — the 4 repeating steps of long division", category:'Process' },
+    { term:'Step 1: Divide', def:"Estimate how many times the divisor goes into the current partial dividend", category:'Process' },
+    { term:'Step 2: Multiply', def:"Multiply your estimate by the divisor; write the product below", category:'Process' },
+    { term:'Step 3: Subtract', def:"Subtract the product from the partial dividend; write the difference", category:'Process' },
+    { term:'Step 4: Bring Down', def:"Bring the next digit of the dividend down beside the remainder; repeat DMSB", category:'Process' },
+    { term:'Checking Division', def:"Quotient x Divisor + Remainder = Dividend; verifies your answer is correct", category:'Strategy' },
+    { term:'Partial Quotient Method', def:"Estimate chunks of the quotient and subtract repeatedly (flexible algorithm)", category:'Strategy' },
+    { term:'Estimation in Division', def:"Round divisor to nearest 10 to make trial quotient guesses easier", category:'Strategy' },
+  ],
+  'pa-cdl': [
+    { term:'CDL Class A',    def:"Required to drive combination vehicles over 26,001 lbs with towed unit over 10,000 lbs (semi-trucks)", category:'License Classes' },
+    { term:'CDL Class B',    def:"Required for heavy straight vehicles over 26,001 lbs not towing over 10,000 lbs", category:'License Classes' },
+    { term:'CDL Class C',    def:"Vehicles designed to transport 16+ passengers or carry hazardous materials requiring placards", category:'License Classes' },
+    { term:'Pre-trip Inspection', def:"Required safety check before each trip; covers engine, brakes, lights, tires, coupling, cargo", category:'Safety' },
+    { term:'Hours of Service (HOS)', def:"Federal limits: 11-hour driving limit, 14-hour on-duty window, 10-hour off-duty rest, 60/70-hour weekly cap", category:'Regulations' },
+    { term:'GVWR',           def:"Gross Vehicle Weight Rating: maximum weight a vehicle is designed to safely carry including cargo", category:'Concepts' },
+    { term:'Air Brake Endorsement', def:"Required knowledge (brakes, slack adjusters, compressors, drums) if vehicle has air brakes", category:'Endorsements' },
+    { term:'Hazmat Endorsement', def:"Required to haul hazardous materials; needs TSA background check and knowledge test", category:'Endorsements' },
+    { term:'Tanker Endorsement', def:"Required for vehicles carrying liquid loads of 1,000+ gallons in one tank", category:'Endorsements' },
+    { term:'Doubles/Triples Endorsement', def:"T endorsement: required to pull double or triple trailers", category:'Endorsements' },
+    { term:'CDL Disqualification', def:"DUI in any vehicle, railroad crossing violations, excessive speeding, or HOS violations can disqualify", category:'Regulations' },
+    { term:'CDL Medical Card', def:"Drivers must have current DOT physical medical certificate; valid for up to 24 months", category:'Requirements' },
+    { term:'Smith System',   def:"Safe driving method: Aim High, Big Picture, Keep Eyes Moving, Leave Room, Make Sure They See You", category:'Safety' },
+  ],
+  'pa-class-c': [
+    { term:'PA Class C License', def:"Standard vehicle license; for cars, SUVs, pickups under 26,001 lbs GVWR without hazmat or 16+ passengers", category:'License' },
+    { term:'Vision Requirements', def:"20/40 or better in better eye; 20/100 or better in worse eye; PennDOT may add restrictions", category:'Requirements' },
+    { term:'Speed Limits',   def:"Residential: 25 mph; School zone: 15 mph; Urban: 35 mph; Interstate: 65-70 mph unless posted", category:'Rules of Road' },
+    { term:'Right of Way',   def:"Yield to vehicles already in intersection; pedestrians have right of way in crosswalks", category:'Rules of Road' },
+    { term:'DUI in PA',      def:"Illegal at .08% BAC; .04% for CDL drivers; .02% for under 21; tiered penalties up to 18 months in jail", category:'Legal' },
+    { term:'Move Over Law',  def:"Slow down and move to next lane for stopped emergency, roadway maintenance, or recovery vehicles", category:'Legal' },
+    { term:'School Bus Law', def:"Must stop when school bus red lights flash; applies to both directions on undivided roads", category:'Legal' },
+    { term:'Following Distance', def:"3-second rule in good conditions; increase to 4-6 seconds in rain, snow, or heavy traffic", category:'Safety' },
+    { term:'Stopping Distance', def:"At 60 mph on dry road: approx 246 feet total (reaction + braking); wet roads need more", category:'Safety' },
+    { term:'Cell Phone Law', def:"Hands-free only while driving; no interactive wireless device use (texting, calling, apps)", category:'Legal' },
+    { term:'Point System',   def:"Moving violations add points; 6 points = warning letter; 11+ points = 15-day suspension", category:'Legal' },
+    { term:'Headlight Rules', def:"Required sunset to sunrise and when visibility is less than 1,000 feet; use low beams in fog", category:'Rules of Road' },
+    { term:'Roundabout Rules', def:"Yield to vehicles already in circle; enter when safe; proceed counter-clockwise; signal to exit", category:'Rules of Road' },
+  ],
+  'boating-safety': [
+    { term:'Life Jackets (PFDs)', def:"One Coast Guard-approved PFD required per person; children under 12 must wear at all times while underway in PA", category:'Safety Equipment' },
+    { term:'PFD Types',      def:"Type I (offshore); Type II (near shore); Type III (inland/recreational); Type IV (throwable); Type V (special use)", category:'Safety Equipment' },
+    { term:'Red Buoys',      def:"Nun buoys (pointed top) mark right side of channel when returning to port; keep red on right returning", category:'Navigation' },
+    { term:'Green Buoys',    def:"Can buoys (flat top) mark left side of channel when returning to port; keep green on left returning", category:'Navigation' },
+    { term:'Yellow Buoys',   def:"Special purpose markers: caution, restricted area, swim area boundaries, or racing course markers", category:'Navigation' },
+    { term:'Right of Way Rules', def:"Vessel being overtaken has right of way; give-way vessel yields; stand-on vessel maintains course and speed", category:'Rules of Road' },
+    { term:'Crossing Situations', def:"Vessel to your starboard (right) has right of way; give way by slowing or turning starboard", category:'Rules of Road' },
+    { term:'Weather Safety', def:"Check NOAA forecast before departure; seek shelter if lightning; watch for dark clouds and wind shifts", category:'Weather' },
+    { term:'Storm Safety',   def:"Head to shore or marina at first sign of storm; stay low; put on PFDs; never anchor in open water in storms", category:'Weather' },
+    { term:'Fish Size Limits', def:"Minimum legal size protects juvenile fish; measured tip of closed mouth to tip of compressed tail fin", category:'Regulations' },
+    { term:'Clinch Knot',    def:"Thread line through eye; wrap 5x around main line; pass tag end through loop above eye; pull tight", category:'Knots' },
+    { term:'Palomar Knot',   def:"Strongest common fishing knot; double 6 inches of line through eye; tie loose overhand knot; pass hook through loop; wet and pull", category:'Knots' },
+    { term:'Boat Launching', def:"Check trailer lights; back trailer until hull submersed; release bow strap; start motor; pull truck and trailer forward", category:'Trailering' },
+    { term:'Trailer Basics', def:"Check wheel bearings, tire pressure (cold), and safety chains; use tow mirrors; do not exceed trailer tongue weight", category:'Trailering' },
+    { term:'Navigation Lights', def:"Sunset to sunrise: red port (left), green starboard (right), white stern light; powerboats add white masthead light", category:'Navigation' },
+  ],
+  'fishing-license': [
+    { term:'PA Fishing License Required', def:"All residents 16+ and non-residents fishing in PA waters need a license; must be visibly displayed", category:'Requirements' },
+    { term:'Resident Annual License', def:"For PA residents; purchase at county treasurer, license dealers, or PFBC online; valid Jan 1 - Dec 31", category:'License Types' },
+    { term:'Non-Resident License', def:"Required for anyone who is not a PA resident; higher fee than resident license", category:'License Types' },
+    { term:'Tourist (Short-term) License', def:"3-day or 7-day license available for visitors who do not need a full annual license", category:'License Types' },
+    { term:'Senior License',def:"Reduced-fee license for residents 65 and older; Lifetime license also available", category:'License Types' },
+    { term:'Creel Limit',    def:"Maximum number of fish of a given species you may legally keep per day", category:'Regulations' },
+    { term:'Size Limit',     def:"Minimum legal length of a fish to keep; measured tip of mouth to tip of tail (compressed)", category:'Regulations' },
+    { term:'Trout Season',   def:"PA Opening Day typically first Saturday in April for most streams; special regulations vary by water", category:'Seasons' },
+    { term:'Catch and Release', def:"Returning fish to water; use wet hands, barbless hooks, and quick release to maximize survival", category:'Practices' },
+    { term:'Special Regulation Waters', def:"Some streams have unique rules: fly-fishing only, delayed harvest, or catch-and-release only; check PFBC regulations", category:'Regulations' },
+    { term:'Invasive Species Rule', def:"Do not transport water, plants, or baitfish between water bodies; prevents spread of invasive species", category:'Conservation' },
+    { term:'Report Violations', def:"Call 1-888-GAME-COM to report fishing, hunting, or boating law violations anonymously", category:'Enforcement' },
+  ],
+  'uas-law': [
+    { term:'FAA Part 107',   def:"Federal Aviation Administration regulation governing commercial (for-hire) small UAS operations in the US", category:'Regulations' },
+    { term:'Remote Pilot Certificate', def:"Required for commercial UAS operations; pass FAA aeronautical knowledge test at an approved testing center", category:'Certification' },
+    { term:'Recreational Flyer Rules', def:"Hobby flyers must follow community-based safety guidelines, register if drone over 0.55 lbs, and use TRUST", category:'Regulations' },
+    { term:'Maximum Altitude', def:"400 feet AGL (above ground level) by default; may fly higher within 400 feet of a structure with authorization", category:'Operational Limits' },
+    { term:'Visual Line of Sight', def:"Pilot must keep drone in unaided visual sight at all times; no FPV goggles as sole means of observation", category:'Operational Limits' },
+    { term:'Airspace Authorization', def:"Required before flying in controlled airspace (Classes B, C, D, E surface); use LAANC system or DroneZone", category:'Airspace' },
+    { term:'Drone Registration', def:"Required for drones 0.55-55 lbs; register at FAA DroneZone ($5/3 years); mark drone with registration number", category:'Requirements' },
+    { term:'Maximum Speed',  def:"100 mph (87 knots) maximum airspeed for Part 107 operations", category:'Operational Limits' },
+    { term:'Night Operations', def:"Allowed with anti-collision lighting visible 3 statute miles; no waiver needed (updated rule post-2021)", category:'Operational Limits' },
+    { term:'Remote ID',      def:"Required as of Sept 2023 for most drones; broadcasts GPS location and ID like a digital license plate", category:'Regulations' },
+    { term:'No-Fly Zones',   def:"National parks, military bases, Washington DC airspace, and airport areas without LAANC authorization", category:'Airspace' },
+    { term:'Operations Over People', def:"Categories A (under 0.55 lbs), B, C (with parachute), D (with ATC broadcast) govern flying over people", category:'Operational Limits' },
+    { term:'Waivers',        def:"FAA may waive certain Part 107 rules if pilot demonstrates safety; apply at FAA DroneZone website", category:'Regulations' },
+  ],
+  'advanced-math': [
+    { term:'Derivative',     def:"Rate of change of a function; slope of tangent line; d/dx[x^n] = nx^(n-1) (Power Rule)", category:'Calculus' },
+    { term:'Integral',       def:"Accumulation of quantities; area under a curve; antiderivative of f(x); Fundamental Theorem links to derivative", category:'Calculus' },
+    { term:'Limit',          def:"Value a function approaches as x approaches a given point; foundation of calculus; lim(x→a) f(x)", category:'Calculus' },
+    { term:'Chain Rule',     def:"d/dx[f(g(x))] = f'(g(x)) * g'(x); used to differentiate composite functions", category:'Calculus' },
+    { term:"L'Hopital's Rule", def:"Evaluate indeterminate forms (0/0, inf/inf) by taking derivatives of numerator and denominator separately", category:'Calculus' },
+    { term:'Matrix Multiplication', def:"(AB)ij = sum of products of row i of A and column j of B; dimensions must be m×n times n×p", category:'Linear Algebra' },
+    { term:'Eigenvalue',     def:"Scalar λ where Av = λv for non-zero vector v; reveals stretching factors of linear transformation", category:'Linear Algebra' },
+    { term:'Taylor Series',  def:"Approximates any function near point a as infinite sum: Σ[f^(n)(a)/n!](x-a)^n", category:'Series' },
+    { term:'Differential Equation', def:"Equation relating a function and its derivatives; models rates of change (dy/dx = ky → y = Ce^(kt))", category:'Diff EQ' },
+    { term:'Fourier Transform', def:"Decomposes a function into its frequency components; used in signal processing, physics, and engineering", category:'Analysis' },
+    { term:'Stokes Theorem', def:"Surface integral of curl F = line integral of F around boundary; generalizes Fundamental Theorem to 3D", category:'Vector Calc' },
+    { term:'Bayes Theorem',  def:"P(A|B) = P(B|A)*P(A)/P(B); updates probability based on new evidence; fundamental to statistics and AI", category:'Statistics' },
+  ],
+  'ancient-math': [
+    { term:'Babylonian Math', def:"Base-60 (sexagesimal) number system c. 2000 BCE; used positional notation; gave us 60-minute hours", category:'Ancient Systems' },
+    { term:'Egyptian Fractions', def:"Only unit fractions (1/n) used; Rhind Papyrus (1650 BCE) contains 84 math problems and fraction tables", category:'Ancient Systems' },
+    { term:"Euclid's Elements", def:"Foundational geometry text c. 300 BCE; 13 books; proved from 5 postulates including the parallel postulate", category:'Greek Math' },
+    { term:'Pythagorean Theorem', def:"a² + b² = c²; known by Babylonians 1000 years before Pythagoras; cornerstone of geometry", category:'Greek Math' },
+    { term:'Archimedes',     def:"Estimated pi between 3.1408 and 3.1429; developed method of exhaustion, precursor to integration", category:'Greek Math' },
+    { term:'Fibonacci Sequence', def:"0,1,1,2,3,5,8,13,21,...; introduced Hindu-Arabic numerals to Europe; appears throughout nature", category:'Medieval Math' },
+    { term:'Zero as a Number', def:"Concept developed in India by Brahmagupta (628 CE); transformed mathematics from placeholder to number", category:'Hindu Math' },
+    { term:'Golden Ratio',   def:"φ ≈ 1.618; ratio where (a+b)/a = a/b; appears in Greek art, architecture, Fibonacci, and nature", category:'Greek Math' },
+    { term:'Mayan Number System', def:"Base-20 (vigesimal) system; included zero; used for astronomy and calendar; dots and bars notation", category:'Ancient Systems' },
+    { term:'Thales of Miletus', def:"First to use abstract geometry without measurement; predicted solar eclipse; father of Greek mathematics", category:'Greek Math' },
+    { term:'Al-Khwarizmi',   def:"Islamic mathematician (c. 820 CE); wrote Algebra (al-kitab al-mukhtasar); word algorithm from his name", category:'Islamic Math' },
+    { term:'Eratosthenes',   def:"Calculated Earth circumference (c. 240 BCE) to within 2% accuracy; invented Sieve of Eratosthenes for primes", category:'Greek Math' },
+  ],
+  'bible-intro': [
+    { term:'Old Testament',  def:"39 books (Protestant); covers creation, fall, covenant, law, prophets, and wisdom literature; written before Christ", category:'Scripture' },
+    { term:'New Testament',  def:"27 books; covers life of Jesus (Gospels), early church (Acts), epistles (letters), and Revelation", category:'Scripture' },
+    { term:'Pentateuch/Torah', def:"First 5 books: Genesis, Exodus, Leviticus, Numbers, Deuteronomy; the Law of Moses; foundational to Judaism and Christianity", category:'OT Books' },
+    { term:'Gospels',        def:"Matthew, Mark, Luke, John; four accounts of Jesus life, ministry, death, resurrection, and teaching", category:'NT Books' },
+    { term:'Epistles',       def:"NT letters to churches and individuals; Paul wrote Romans, Corinthians, Galatians, Ephesians, Philippians, Colossians, and more", category:'NT Books' },
+    { term:'Covenant',       def:"Agreement between God and people; Abrahamic, Mosaic, Davidic, and New Covenant through Christ", category:'Theology' },
+    { term:'Psalms',         def:"150 poems and songs of worship, lament, praise, and wisdom; attributed largely to King David", category:'OT Books' },
+    { term:'Prophecy',       def:"Isaiah, Jeremiah, Ezekiel, Daniel and 12 Minor Prophets; messages from God through chosen speakers", category:'OT Books' },
+    { term:'Canon',          def:"Recognized set of inspired Scripture; Protestant = 66 books; Catholic = 73; Eastern Orthodox = more", category:'Scripture' },
+    { term:'Hermeneutics',   def:"Study of principles for interpreting Scripture accurately; considers context, genre, language, and history", category:'Methods' },
+    { term:'Inerrancy',      def:"Belief that the Bible in its original manuscripts is without error in all it affirms", category:'Doctrine' },
+    { term:'Inspiration',    def:"The Holy Spirit guided human authors to write exactly what God intended (2 Tim 3:16)", category:'Doctrine' },
+    { term:'Exegesis',       def:"Drawing meaning OUT of the text through careful study; opposite of eisegesis (reading into it)", category:'Methods' },
+  ],
+  'world-religions': [
+    { term:'Christianity',   def:"Belief in Jesus Christ as Lord and Savior; Holy Trinity; Bible as Scripture; salvation by grace through faith", category:'Major Religions' },
+    { term:'Islam',          def:"Submission to Allah; 5 Pillars (Shahada, Salat, Zakat, Sawm, Hajj); Quran as holy text; founded through Muhammad", category:'Major Religions' },
+    { term:'Judaism',        def:"Covenant people of God; Torah as law; awaiting Messiah; Talmud interprets Scripture; monotheistic", category:'Major Religions' },
+    { term:'Hinduism',       def:"Oldest major religion; Brahman as ultimate reality; karma, dharma, moksha; Vedas and Upanishads as scripture", category:'Major Religions' },
+    { term:'Buddhism',       def:"Founded by Siddhartha Gautama; 4 Noble Truths; Eightfold Path; goal is Nirvana (freedom from suffering)", category:'Major Religions' },
+    { term:'Sikhism',        def:"Founded by Guru Nanak (1469 CE); monotheistic; Guru Granth Sahib is scripture; service and equality emphasized", category:'Major Religions' },
+    { term:'Taoism',         def:"Founded by Laozi; Tao = The Way; wu wei (non-action); harmony with nature; Tao Te Ching as text", category:'Major Religions' },
+    { term:'Confucianism',   def:"Based on Confucius teachings; emphasizes filial piety, relationships, ethics, and social harmony", category:'Major Religions' },
+    { term:'Animism',        def:"Belief that natural objects, places, and creatures possess spiritual essence; found in many indigenous religions", category:'Worldviews' },
+    { term:'Secular Humanism', def:"Non-religious worldview centered on human reason, ethics, and fulfillment without reference to God", category:'Worldviews' },
+    { term:'5 Pillars of Islam', def:"Shahada (declaration), Salat (prayer 5x daily), Zakat (charity), Sawm (Ramadan fasting), Hajj (pilgrimage)", category:'Islam' },
+    { term:'Sacred Texts',   def:"Bible (Christianity), Quran (Islam), Torah/Talmud (Judaism), Vedas (Hinduism), Tripitaka (Buddhism)", category:'Comparison' },
+  ],
+  'philosophy': [
+    { term:'Epistemology',   def:"Branch of philosophy studying knowledge: what can we know, how do we know it, and what is justified belief", category:'Branches' },
+    { term:'Metaphysics/Ontology', def:"Study of being and existence: what is real, what exists, and the nature of reality", category:'Branches' },
+    { term:'Ethics',         def:"Branch studying morality: right and wrong actions, good character, and how one ought to live", category:'Branches' },
+    { term:'Logic',          def:"Study of valid reasoning; distinguishes valid from invalid arguments; formal and informal logic", category:'Branches' },
+    { term:'Socratic Method', def:"Asking probing questions to expose contradictions and lead toward truth through dialogue", category:'Methods' },
+    { term:"Plato's Forms",  def:"True reality consists of perfect abstract forms; the physical world is imperfect shadow copies", category:'Ancient' },
+    { term:"Aristotle's Logic", def:"Syllogism: All men are mortal; Socrates is a man; therefore Socrates is mortal — valid deductive argument", category:'Ancient' },
+    { term:"Descartes",      def:"Cogito ergo sum — I think therefore I am; used methodological doubt to find certain knowledge", category:'Modern' },
+    { term:"Kant's Categorical Imperative", def:"Act only according to a maxim you could will to become a universal law for everyone", category:'Modern' },
+    { term:'Utilitarianism', def:"Greatest good for greatest number; judge actions by outcomes (Bentham, Mill)", category:'Modern' },
+    { term:'Existentialism', def:"Humans must create their own meaning; freedom and responsibility are central (Sartre, Kierkegaard, Camus)", category:'Contemporary' },
+    { term:'Empiricism',     def:"Knowledge comes primarily from sensory experience; Locke, Hume, Berkeley (vs. Rationalism)", category:'Epistemology' },
+    { term:'Rationalism',    def:"Knowledge derived from reason and innate ideas, not just experience; Descartes, Spinoza, Leibniz", category:'Epistemology' },
+  ],
+  'public-speaking': [
+    { term:'Ethos',          def:"Credibility and trustworthiness of the speaker; the audience must believe in your character and expertise", category:'Aristotle' },
+    { term:'Pathos',         def:"Emotional appeal; connecting with the feelings and values of the audience to motivate response", category:'Aristotle' },
+    { term:'Logos',          def:"Logical appeal; using evidence, data, examples, and reasoning to persuade rationally", category:'Aristotle' },
+    { term:'Thesis Statement', def:"One clear, focused sentence stating the main point or argument of your speech", category:'Structure' },
+    { term:'Hook',           def:"Attention-grabbing opening device: shocking statistic, story, rhetorical question, or bold claim", category:'Structure' },
+    { term:'Vocal Variety',  def:"Using changes in pitch, pace (rate), volume, and tone to keep audience engaged and emphasize key points", category:'Delivery' },
+    { term:'Eye Contact',    def:"Looking at individual audience members to build connection, show confidence, and gauge understanding", category:'Delivery' },
+    { term:'Transitions',    def:"Words and phrases that connect ideas and guide the audience (furthermore, however, in contrast, finally)", category:'Structure' },
+    { term:'Active Listening', def:"Fully concentrating on the speaker, processing the message, and responding thoughtfully and respectfully", category:'Listening' },
+    { term:'Q&A Management', def:"Anticipate questions; answer concisely and honestly; say you will follow up if you do not know", category:'Delivery' },
+    { term:'Impromptu Speaking', def:"Speaking with little or no preparation; use PREP (Point, Reason, Example, Point) to organize quickly", category:'Types' },
+    { term:'Monroe Motivated Sequence', def:"Attention, Need, Satisfaction, Visualization, Action — persuasive speech structure that drives audiences to act", category:'Structure' },
+  ],
+  'history': [
+    { term:'Primary Source',  def:"First-hand account or original document from the time period: diaries, speeches, photos, artifacts", category:'Methods' },
+    { term:'Secondary Source', def:"Analysis or interpretation of primary sources written after the event by historians or scholars", category:'Methods' },
+    { term:'Causation',       def:"The relationship between events where one event influences or brings about another", category:'Methods' },
+    { term:'Continuity and Change', def:"How societies maintain traditions while also transforming over time; core historical thinking concept", category:'Methods' },
+    { term:'French Revolution', def:"1789-1799; overthrew French monarchy; ideals of Liberty, Equality, Fraternity; led to Napoleon Bonaparte", category:'Modern History' },
+    { term:'Industrial Revolution', def:"18th-19th century shift from agrarian to factory economy; steam power, urbanization, wage labor", category:'Modern History' },
+    { term:'World War I',     def:"1914-1918; sparked by assassination of Archduke Franz Ferdinand; trench warfare; Treaty of Versailles (1919)", category:'20th Century' },
+    { term:'World War II',    def:"1939-1945; began with Hitler invading Poland; Holocaust; atomic bombs on Japan; UN founded after war", category:'20th Century' },
+    { term:'Cold War',        def:"1947-1991; ideological conflict between US (democracy) and USSR (communism); arms race; proxy wars", category:'20th Century' },
+    { term:'Civil Rights Movement', def:"1950s-1960s US movement to end racial segregation and discrimination; led by Dr. Martin Luther King Jr.", category:'American History' },
+    { term:'Colonialism',     def:"European nations claiming and exploiting overseas territories from 15th-20th centuries; shaped modern borders", category:'World History' },
+    { term:'The Renaissance', def:"14th-17th century European cultural rebirth of art, science, and humanism; began in Italy", category:'World History' },
+  ],
+  'writing-research': [
+    { term:'Thesis Statement', def:"A clear, arguable claim that your paper will support with evidence; the core of your argument", category:'Writing' },
+    { term:'Topic Sentence',  def:"First sentence of a paragraph; introduces the main idea and connects to the thesis", category:'Writing' },
+    { term:'MLA Format',      def:"Modern Language Association; used in humanities; in-text citation: (Author Page); Works Cited list", category:'Citation' },
+    { term:'APA Format',      def:"American Psychological Association; used in social sciences; in-text: (Author, year, p. #); References list", category:'Citation' },
+    { term:'Chicago Style',   def:"Used in history and some sciences; footnotes or endnotes; bibliography list at end", category:'Citation' },
+    { term:'Primary Research', def:"Collecting original data through surveys, interviews, experiments, or direct observations", category:'Research Types' },
+    { term:'Secondary Research', def:"Using existing sources such as peer-reviewed articles, books, and databases like JSTOR or EBSCOhost", category:'Research Types' },
+    { term:'Annotated Bibliography', def:"List of sources each followed by a brief summary and evaluation of its relevance and credibility", category:'Research Skills' },
+    { term:'Peer Review',     def:"Experts evaluate research before publication for quality, accuracy, and original contribution", category:'Research Skills' },
+    { term:'Plagiarism',      def:"Using someone else words or ideas without proper attribution; a serious academic integrity violation", category:'Ethics' },
+    { term:'Revision',        def:"Rereading and improving a draft for clarity, organization, argument strength, and effectiveness", category:'Writing Process' },
+    { term:'CRAAP Test',      def:"Currency, Relevance, Authority, Accuracy, Purpose — framework for evaluating source credibility", category:'Research Skills' },
+  ],
+  'christian-ethics': [
+    { term:'Natural Law',     def:"Moral principles discoverable through reason embedded in creation; basis for universal human rights (Aquinas)", category:'Foundations' },
+    { term:'Divine Command Theory', def:"An action is morally right because God commands it; morality is grounded in the will of God", category:'Foundations' },
+    { term:'Imago Dei',       def:"Humans made in the image of God (Genesis 1:27); source of inherent dignity, worth, and equality for all people", category:'Anthropology' },
+    { term:'Agape',           def:"Unconditional, selfless love modeled by God; the highest form of love in Christian ethics (Greek word)", category:'Love' },
+    { term:'The Great Commandment', def:"Love God with all heart, soul, mind, and strength; love your neighbor as yourself (Mark 12:30-31)", category:'Scripture' },
+    { term:'Golden Rule',     def:"Treat others as you wish to be treated (Matthew 7:12); reciprocity principle found in all major religions", category:'Scripture' },
+    { term:'Just War Theory', def:"Augustine and Aquinas criteria: just cause, right intention, proportionality, last resort, declared by authority", category:'Social Ethics' },
+    { term:'Social Justice',  def:"Care for the poor, oppressed, and marginalized rooted in biblical prophets (Micah 6:8) and NT teachings", category:'Social Ethics' },
+    { term:'Virtue Ethics',   def:"Character-based ethics developing virtues: faith, hope, love (theological); justice, courage, temperance, prudence (cardinal)", category:'Ethical Theory' },
+    { term:'Sanctity of Life', def:"All human life is sacred from conception to natural death; basis for Christian ethics on abortion and euthanasia", category:'Applied Ethics' },
+    { term:'Stewardship',     def:"Responsible management of creation, resources, and gifts entrusted by God; environmental and economic ethics", category:'Applied Ethics' },
+    { term:'Reconciliation',  def:"Restoring broken relationships; central to Christian ethics through forgiveness modeled on God forgiving humanity", category:'Community' },
+  ],
+  'philosophy-religion': [
+    { term:'Ontological Argument', def:"God is the greatest conceivable being; existing in reality is greater than existing only in mind; therefore God exists (Anselm)", category:'Arguments for God' },
+    { term:'Cosmological Argument', def:"Everything that exists has a cause; the universe exists; therefore there must be an uncaused First Cause (God)", category:'Arguments for God' },
+    { term:'Teleological Argument', def:"The universe shows complex design (fine-tuning); design implies a designer; therefore God exists (Paley, Craig)", category:'Arguments for God' },
+    { term:'Problem of Evil',  def:"If God is all-good and all-powerful, why does evil and suffering exist? — the greatest challenge to theism", category:'Challenges' },
+    { term:'Theodicy',         def:"Defense of God goodness despite evil; free will theodicy, soul-making theodicy (Hick), and greater good arguments", category:'Challenges' },
+    { term:'Faith and Reason', def:"Can religious belief be rationally justified? Reformed epistemology (Plantinga) argues yes — basic beliefs need no proof", category:'Epistemology' },
+    { term:'Religious Experience', def:"Mystical encounters claimed as evidence of God; William James catalogued varieties: conversion, mysticism, prayer", category:'Evidence' },
+    { term:'Revelation',       def:"God self-disclosure through Scripture and Jesus (special revelation); nature and conscience (general revelation)", category:'Doctrine' },
+    { term:'Religious Pluralism', def:"All major religions lead to the same ultimate reality; held by John Hick; challenged by exclusivists", category:'World Religions' },
+    { term:'Exclusivism',      def:"Only one religion is fully true; Christian view: salvation through Christ alone (John 14:6)", category:'World Religions' },
+    { term:'Inclusivism',      def:"Jesus is the only savior but may save those outside the church through non-explicit faith; middle position", category:'World Religions' },
+    { term:'Agnosticism',      def:"Position that the existence of God is unknown or unknowable; neither affirms nor denies theism", category:'Worldviews' },
+  ],
+  'moral-theology': [
+    { term:'Sin',              def:"Falling short of God moral standard; original sin (inherited), mortal sin (grave), venial sin (minor) — Catholic distinctions", category:'Core Concepts' },
+    { term:'Repentance/Metanoia', def:"A complete turning from sin toward God; Greek metanoia means change of mind and direction of life", category:'Core Concepts' },
+    { term:'Sanctification',   def:"Ongoing process of becoming more holy after salvation; transformation into the image of Christ", category:'Core Concepts' },
+    { term:'Conscience',       def:"Inner moral faculty that judges right from wrong; must be informed by Scripture, tradition, and reason", category:'Moral Faculty' },
+    { term:'Casuistry',        def:"Method of resolving difficult moral cases by applying ethical principles to specific situations", category:'Methods' },
+    { term:'Principle of Double Effect', def:"An action with both good and bad effects may be permissible if: good intent, good act, good outweighs bad (Aquinas)", category:'Methods' },
+    { term:'Moral Absolutes',  def:"Some actions are intrinsically evil regardless of intent or circumstances (e.g. torture, genocide)", category:'Norms' },
+    { term:'Proportionalism',  def:"Moral rightness depends on proportionate reason balancing values; disputed and rejected in Veritatis Splendor", category:'Norms' },
+    { term:'Catholic Social Teaching', def:"Body of teaching on human dignity, common good, solidarity, subsidiarity, and preferential option for the poor", category:'Social Ethics' },
+    { term:'Eschatological Ethics', def:"Living now in light of the coming Kingdom of God; justice, hope, and community shaped by final destiny", category:'Foundations' },
+    { term:'Atonement',        def:"How Christ reconciles humanity to God; theories: substitution, moral influence, Christus Victor, ransom", category:'Foundations' },
+    { term:'Grace',            def:"Unmerited favor and power from God; prevenient (drawing), justifying (saving), and sanctifying (transforming) grace", category:'Core Concepts' },
+  ],
+  'ministry-chaplaincy': [
+    { term:'Field Education',  def:"Supervised ministry placement in a church, hospital, or community setting during seminary education", category:'Formation' },
+    { term:'Chaplaincy',       def:"Ministry in institutional settings — military, hospital, prison, campus — serving people of all faith backgrounds", category:'Contexts' },
+    { term:'CPE (Clinical Pastoral Education)', def:"Training program for chaplains using verbatim reports, group process, and individual supervision in clinical setting", category:'Training' },
+    { term:'Supervised Ministry', def:"Structured learning with mentoring from an experienced ministry leader; reflection and accountability included", category:'Formation' },
+    { term:'Internship (Ministry)', def:"Extended ministry placement for students to apply classroom learning in real-world church or ministry contexts", category:'Formation' },
+    { term:'Verbatim Report',  def:"Written account of a pastoral encounter for supervision; records exact dialogue, feelings, and theological reflection", category:'CPE' },
+    { term:'Spiritual Care',   def:"Attending to spiritual and existential needs regardless of religious background; non-sectarian chaplaincy term", category:'Practice' },
+    { term:'Multi-faith Ministry', def:"Providing care to people of different religions without imposing one tradition; respect and presence-centered", category:'Practice' },
+    { term:'Unit of CPE',      def:"One quarter of full-time CPE: 400 total hours, 100 supervisory hours minimum; offered at ACPE-accredited centers", category:'CPE' },
+    { term:'Theology of Ministry', def:"Theological foundation for understanding one call, role, and purpose in serving others on behalf of God", category:'Foundations' },
+    { term:'Boundary Setting', def:"Maintaining appropriate limits in pastoral relationships to protect both care receiver and minister from harm", category:'Ethics' },
+    { term:'Self-care in Ministry', def:"Intentional practices — rest, supervision, community — to sustain a minister over long-term without burnout", category:'Practice' },
+  ],
+  'missions': [
+    { term:'Missio Dei',       def:"The mission of God; God is the primary missionary who sends the church into the world to participate in his work", category:'Theology' },
+    { term:'Great Commission', def:"Matthew 28:18-20; Jesus commands disciples to go, make disciples of all nations, baptize, and teach", category:'Scripture' },
+    { term:'Contextualization', def:"Adapting the gospel message to the cultural context without compromising its truth or core content", category:'Methods' },
+    { term:'Unreached People Groups', def:"Ethnic groups with less than 2% evangelical Christian; no indigenous church able to reach them without outside help", category:'Strategy' },
+    { term:'Cultural Competency', def:"Ability to interact respectfully and effectively with people of different cultural backgrounds and worldviews", category:'Skills' },
+    { term:'Syncretism',       def:"Blending Christianity with incompatible religious beliefs; distorts the gospel and creates false religion", category:'Dangers' },
+    { term:'Short-term Missions', def:"Brief trips of 1-2 weeks; most effective when supporting long-term missionaries and meeting defined needs", category:'Types' },
+    { term:'Long-term Missions', def:"Career missionaries who learn language, culture, and plant reproducible indigenous churches over many years", category:'Types' },
+    { term:'Bi-vocational Missions', def:"Supporting oneself through a secular job (tentmaking) while doing missionary work in restricted-access countries", category:'Strategy' },
+    { term:'Holistic Mission',  def:"Meeting physical, social, and spiritual needs together — word and deed ministry (integral mission)", category:'Theology' },
+    { term:'Church Planting',  def:"Establishing new local churches among unreached or underserved communities; core strategy of missions", category:'Strategy' },
+    { term:'Orality',          def:"Most of the world learns through oral rather than written methods; oral storytelling strategies for unreached groups", category:'Methods' },
+  ],
+  'counseling-ministry': [
+    { term:'Active Listening',  def:"Fully attending to a client; reflecting feelings; not interrupting; validating experience without judgment", category:'Skills' },
+    { term:'CBT (Cognitive Behavioral Therapy)', def:"Links thoughts, feelings, and behaviors; challenges cognitive distortions to change emotional responses", category:'Approaches' },
+    { term:'Crisis Intervention', def:"Immediate stabilization of someone in acute distress; assess safety, create plan, mobilize support, commit to follow-up", category:'Crisis' },
+    { term:'Suicide Risk Assessment', def:"Evaluate ideation, plan, means, intent, and protective factors; use tools like Columbia Protocol or SAD PERSONS", category:'Crisis' },
+    { term:'Mandated Reporter',  def:"Professionals required by law to report suspected child abuse or neglect regardless of confidentiality", category:'Legal/Ethics' },
+    { term:'Confidentiality',    def:"Keeping client information private; exceptions: imminent harm to self or others, child abuse, court order", category:'Legal/Ethics' },
+    { term:'Marriage and Family Therapy', def:"Systems approach that focuses on relationship patterns and dynamics rather than just individual pathology", category:'Approaches' },
+    { term:'Boundaries in Counseling', def:"Clear professional limits protecting clients from exploitation or harm; no dual relationships", category:'Ethics' },
+    { term:'Transference',       def:"Client unconsciously projects feelings about past relationships onto the counselor; must be managed carefully", category:'Concepts' },
+    { term:'Countertransference', def:"Counselor emotional reactions to client based on own unresolved issues; requires self-awareness and supervision", category:'Concepts' },
+    { term:'Empathic Presence',  def:"Being fully present with another in their pain without trying to fix; ministry of compassion (Romans 12:15)", category:'Ministry' },
+    { term:'Referral',           def:"Directing a client to a more specialized professional when needs exceed your scope of training or competency", category:'Practice' },
+  ],
+  'homiletics': [
+    { term:'Homiletics',       def:"The art and science of preaching; includes biblical exegesis, sermon structure, delivery, and pastoral application", category:'Foundations' },
+    { term:'Exegesis',         def:"Drawing meaning OUT of a text through careful study of original language, context, literary genre, and history", category:'Bible Study' },
+    { term:'Eisegesis',        def:"Reading personal ideas INTO a text rather than drawing meaning out; opposite of good biblical interpretation", category:'Bible Study' },
+    { term:'Expository Preaching', def:"Preaching systematically through a biblical text; the text itself drives the sermon structure and main points", category:'Sermon Types' },
+    { term:'Topical Preaching', def:"Sermon organized around a theme with multiple Scripture passages supporting the central idea", category:'Sermon Types' },
+    { term:'Narrative Preaching', def:"Sermon structured as a story using plot, tension, and resolution; engages imagination and emotion", category:'Sermon Types' },
+    { term:'Liturgy',          def:"The order of corporate worship; structured communal elements: creeds, prayers, Scripture, Eucharist, benediction", category:'Worship' },
+    { term:'Lectionary',       def:"A scheduled cycle of Scripture readings followed across the church year in liturgical traditions", category:'Worship' },
+    { term:'Call and Response', def:"Interactive worship element where leader speaks and congregation responds; rooted in African worship tradition", category:'Worship' },
+    { term:'Worship Leading',  def:"Guiding a congregation through music, prayer, and Scripture to encounter God and respond in faith", category:'Worship' },
+    { term:'Illustration',     def:"Stories, examples, or analogies that make abstract biblical truth concrete and memorable for listeners", category:'Sermon Craft' },
+    { term:'Application',      def:"Showing how biblical truth applies to everyday life; the bridge from ancient text to modern listener", category:'Sermon Craft' },
+  ],
+  'pastoral-ministry': [
+    { term:'Pastoral Care',    def:"Spiritual guidance, prayer, and support for individuals and families within a congregation through life challenges", category:'Care' },
+    { term:'Servant Leadership', def:"Leading by serving others first; modeled by Jesus who washed his disciples feet (John 13:1-17)", category:'Leadership' },
+    { term:'Discipleship',     def:"The ongoing process of becoming a follower of Jesus; growing in faith, obedience, and Christlike character", category:'Formation' },
+    { term:'Evangelism',       def:"Sharing the good news (gospel) of Jesus Christ with others to invite them into relationship with God", category:'Outreach' },
+    { term:'Church Administration', def:"Managing staff, budget, facilities, programs, and volunteers to support the church mission effectively", category:'Administration' },
+    { term:'Congregational Care', def:"Intentionally visiting, calling, and supporting church members through illness, grief, and life transitions", category:'Care' },
+    { term:'Vision Casting',   def:"Communicating a compelling picture of the future to inspire, align, and mobilize a congregation toward mission", category:'Leadership' },
+    { term:'Conflict Resolution', def:"Biblical process (Matthew 18) for addressing disputes within the church; grace, truth, and reconciliation", category:'Leadership' },
+    { term:'Spiritual Formation', def:"Intentional practices shaping a person into Christlikeness: prayer, Scripture, fasting, community, service", category:'Formation' },
+    { term:'Preaching Cycle',  def:"Planning, studying, writing, practicing, delivering, and evaluating sermons consistently week after week", category:'Preaching' },
+    { term:'Board/Elder Relations', def:"Pastor works with governing board on vision, budget, and accountability; shared authority and trust essential", category:'Administration' },
+    { term:'Bivocational Ministry', def:"Pastor who also works a secular job; common in smaller churches; requires strong time management and boundaries", category:'Contexts' },
+  ],
 };
 
-const CHIPS = ['Network+','NCLEX','CCNA','Security+','A+','MCAT','GRE','LSAT','AWS','CISSP','Azure','PMP','LPN','CNA','USMLE',
-  '1st Grade Words','2nd Grade Words','3rd Grade Words','Algebra','Geometry','Biology','Chemistry','Physics',
-  'U.S. History','Anatomy','Pharmacology','Discrete Math','Midwifery','Spanish','Psychology','Economics'];
+const CHIPS = [
+  'Network+','NCLEX','CCNA','Security+','A+','MCAT','GRE','LSAT','AWS','CISSP','Azure','PMP','LPN','CNA','USMLE',
+  '1st Grade Words','2nd Grade Words','3rd Grade Words','4th Grade Words','5th Grade Words','6th Grade Words','7th Grade Words','8th Grade Words',
+  'Addition','Subtraction','Multiplication','Long Division',
+  'Algebra','Geometry','Advanced Math','Ancient Math',
+  'Biology','Chemistry','Physics',
+  'U.S. History','History','Anatomy','Pharmacology','Discrete Math','Midwifery','Spanish','Psychology','Economics',
+  'PA CDL','PA Class C Driving','Boating Safety','Fishing License','UAS Law',
+  'Bible Intro','World Religions','Philosophy','Public Speaking','Writing & Research',
+  'Christian Ethics','Philosophy of Religion','Moral Theology',
+  'Ministry & Chaplaincy','Missions','Counseling & Crisis','Homiletics & Worship','Pastoral Ministry',
+];
 
 function matchExam(query: string): FlashCard[] {
   const q = query.toLowerCase().trim();
@@ -504,8 +956,18 @@ function matchExam(query: string): FlashCard[] {
   /* Grade-level sight words */
   if (/1st.*(grade|word|sight)|kindergarten|kinder|grade 1/.test(q)) return VOCAB_BANKS['sight-words-1'];
   if (/2nd.*(grade|word|sight)|grade 2/.test(q)) return VOCAB_BANKS['sight-words-2'];
-  if (/3rd.*(grade|word|sight)|4th|5th|grade [345]/.test(q)) return VOCAB_BANKS['sight-words-3'];
+  if (/3rd.*(grade|word|sight)|grade 3\b/.test(q)) return VOCAB_BANKS['sight-words-3'];
+  if (/4th.*(grade|word|vocab)|grade 4\b/.test(q)) return VOCAB_BANKS['sight-words-4'];
+  if (/5th.*(grade|word|vocab)|grade 5\b/.test(q)) return VOCAB_BANKS['sight-words-5'];
+  if (/6th.*(grade|word|vocab)|grade 6\b/.test(q)) return VOCAB_BANKS['sight-words-6'];
+  if (/7th.*(grade|word|vocab)|grade 7\b/.test(q)) return VOCAB_BANKS['sight-words-7'];
+  if (/8th.*(grade|word|vocab)|grade 8\b/.test(q)) return VOCAB_BANKS['sight-words-8'];
   if (/sight.word|dolch|fry.word/.test(q)) return VOCAB_BANKS['sight-words-1'];
+  /* Elementary math operations */
+  if (/addition|adding|addend|\bsum\b/.test(q)) return VOCAB_BANKS['addition'];
+  if (/subtract|minuend|subtrahend|differ/.test(q)) return VOCAB_BANKS['subtraction'];
+  if (/multipli|times table|product|\bfactor\b/.test(q)) return VOCAB_BANKS['multiplication'];
+  if (/long.divis|divis|dividend|divisor|quotient/.test(q)) return VOCAB_BANKS['long-division'];
   /* K-12 math */
   if (/alg(ebra)?|linear equat|quadratic|polynomial|variable|slope/.test(q)) return VOCAB_BANKS['algebra'];
   if (/geo(metry)?|triangle|pythagor|angle|polygon|circle area/.test(q)) return VOCAB_BANKS['geometry'];
@@ -515,6 +977,31 @@ function matchExam(query: string): FlashCard[] {
   if (/physics|force|newton|motion|energy|wave|momentum/.test(q)) return VOCAB_BANKS['physics'];
   /* Social studies */
   if (/us.hist|american.hist|civil.war|revolution|constitution/.test(q)) return VOCAB_BANKS['us-history'];
+  /* Advanced/ancient math */
+  if (/advanced.math|calculus|derivative|integral|eigenvalue|fourier|diff.eq|linear.alg/.test(q)) return VOCAB_BANKS['advanced-math'];
+  if (/ancient.math|babylonian|egyptian.math|greek.math|archimedes|euclid|fibonacci/.test(q)) return VOCAB_BANKS['ancient-math'];
+  /* PA driving and outdoor */
+  if (/pa.cdl|commercial.driv|cdl.driv|class.a.*driv|class.b.*driv/.test(q)) return VOCAB_BANKS['pa-cdl'];
+  if (/pa.class.c|class.c.*driv|drivers.test|driving.test|dmv|penndo/.test(q)) return VOCAB_BANKS['pa-class-c'];
+  if (/boating.safety|boat.safety|navigation.buoy|life.jacket|pwc|jet.ski|clinch.knot|palomar/.test(q)) return VOCAB_BANKS['boating-safety'];
+  if (/fishing.licen|pa.fishing|fish.licen|creel.limit|fish.size/.test(q)) return VOCAB_BANKS['fishing-license'];
+  if (/uas.law|drone.law|part.107|faa.drone|remote.pilot|unmanned/.test(q)) return VOCAB_BANKS['uas-law'];
+  /* Humanities */
+  if (/bible.intro|intro.*bible|bible.overv|old.testament|new.testament|gospel|epistl|canon/.test(q)) return VOCAB_BANKS['bible-intro'];
+  if (/world.relig|comparative.relig|hinduism|buddhism|islam.overv|taoism|sikhism/.test(q)) return VOCAB_BANKS['world-religions'];
+  if (/philos|epistemolog|ontolog|plato|aristotle|socrat|kant|descartes|utilit|existential/.test(q)) return VOCAB_BANKS['philosophy'];
+  if (/public.speak|speech|oratory|rhetoric|present|imprompt|persuasive.speak/.test(q)) return VOCAB_BANKS['public-speaking'];
+  if (/\bhist(ory)?\b|world.hist|chronolog|french.rev|industrial.rev|cold.war|world.war/.test(q)) return VOCAB_BANKS['history'];
+  if (/writing.research|research.method|mla.format|apa.format|chicago.style|annotated.bib|thesis.statement|plagiarism/.test(q)) return VOCAB_BANKS['writing-research'];
+  /* Theology */
+  if (/christian.ethic|imago.dei|natural.law|divine.command|agape|just.war|virtue.ethic/.test(q)) return VOCAB_BANKS['christian-ethics'];
+  if (/philos.relig|philosophy.of.relig|theodicy|problem.of.evil|ontological.arg|cosmological|teleological/.test(q)) return VOCAB_BANKS['philosophy-religion'];
+  if (/moral.theol|casuistry|double.effect|sanctification|moral.absol|sin.and/.test(q)) return VOCAB_BANKS['moral-theology'];
+  if (/ministy.chap|chaplain|field.educ|supervised.ministr|cpe|internship.*ministr/.test(q)) return VOCAB_BANKS['ministry-chaplaincy'];
+  if (/mission|missiol|cross.cultural|great.commission|unreached|misio.dei|contextuali/.test(q)) return VOCAB_BANKS['missions'];
+  if (/counsel|crisis.interven|marriage.famil|suicide.risk|cbt|transference|mandated.report/.test(q)) return VOCAB_BANKS['counseling-ministry'];
+  if (/homiletic|preaching|sermon|worship.lead|liturgy|lectionary|expository/.test(q)) return VOCAB_BANKS['homiletics'];
+  if (/pastoral.ministr|servant.lead|discipleship|evangelism|church.admin|congregat|vision.cast/.test(q)) return VOCAB_BANKS['pastoral-ministry'];
   /* College / trades */
   if (/anatomy|body|organ|muscl|skeletal|cardiovasc/.test(q)) return VOCAB_BANKS['anatomy'];
   if (/pharm(acology)?|drug|medication|agonist|half.life|dosage/.test(q)) return VOCAB_BANKS['pharmacology'];
@@ -730,7 +1217,7 @@ export default function StudyGameWidget() {
               <button key={t} onClick={() => setTab(t)} style={{
                 flex:1, padding:'4px 2px', borderRadius:7, border:'none', cursor:'pointer',
                 background: tab===t ? color : 'transparent',
-                color: tab===t ? '#fff' : 'rgba(226,232,240,0.4)',
+                color: tab===t ? '#fff' : 'var(--w-text-dim)',
                 fontSize:'0.55rem', fontWeight:700, fontFamily:'monospace',
                 display:'flex', alignItems:'center', justifyContent:'center', gap:3,
                 transition:'background 0.15s',
@@ -747,10 +1234,10 @@ export default function StudyGameWidget() {
             {tab === 'cards' && card && (
               <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:8 }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'rgba(226,232,240,0.3)' }}>
+                  <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'var(--w-text-faint)' }}>
                     {exam.toUpperCase()} — {card.category}
                   </span>
-                  <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'rgba(226,232,240,0.4)' }}>
+                  <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'var(--w-text-dim)' }}>
                     {cardIdx+1}/{cards.length}
                   </span>
                 </div>
@@ -778,9 +1265,9 @@ export default function StudyGameWidget() {
                       background:'rgba(255,255,255,0.04)',
                       border:'1px solid rgba(255,255,255,0.08)',
                     }}>
-                      <span style={{ fontSize:'0.55rem', fontFamily:'monospace', color:'rgba(226,232,240,0.3)', marginBottom:8, letterSpacing:1, textTransform:'uppercase' }}>term</span>
-                      <p style={{ fontSize:'1rem', fontWeight:700, color:'#E2E8F0', lineHeight:1.3, margin:0 }}>{card.term}</p>
-                      <p style={{ fontSize:'0.6rem', color:'rgba(226,232,240,0.25)', marginTop:12, margin:'12px 0 0' }}>tap to flip</p>
+                      <span style={{ fontSize:'0.55rem', fontFamily:'monospace', color:'var(--w-text-faint)', marginBottom:8, letterSpacing:1, textTransform:'uppercase' }}>term</span>
+                      <p style={{ fontSize:'1rem', fontWeight:700, color:'var(--w-text-main)', lineHeight:1.3, margin:0 }}>{card.term}</p>
+                      <p style={{ fontSize:'0.6rem', color:'var(--w-text-faint)', marginTop:12, margin:'12px 0 0' }}>tap to flip</p>
                     </div>
                     {/* Back */}
                     <div style={{
@@ -794,7 +1281,7 @@ export default function StudyGameWidget() {
                       boxShadow:`0 4px 20px ${glow}40`,
                     }}>
                       <span style={{ fontSize:'0.55rem', fontFamily:'monospace', color, marginBottom:8, letterSpacing:1, textTransform:'uppercase' }}>definition</span>
-                      <p style={{ fontSize:'0.72rem', color:'rgba(226,232,240,0.85)', lineHeight:1.5, margin:0 }}>{card.def}</p>
+                      <p style={{ fontSize:'0.72rem', color:'var(--w-text-main)', lineHeight:1.5, margin:0 }}>{card.def}</p>
                     </div>
                   </div>
                 </div>
@@ -804,7 +1291,7 @@ export default function StudyGameWidget() {
                     <ChevronLeft size={14} />
                   </button>
                   <button onClick={() => { setCardIdx(Math.floor(Math.random()*cards.length)); setFlipped(false); }}
-                    style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, padding:'5px 10px', cursor:'pointer', color:'rgba(226,232,240,0.5)' }}>
+                    style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:8, padding:'5px 10px', cursor:'pointer', color:'var(--w-text-dim)' }}>
                     <RotateCcw size={11} />
                   </button>
                   <button onClick={nextCard} style={{ background:`${color}15`, border:`1px solid ${color}30`, borderRadius:8, padding:'5px 12px', cursor:'pointer', color }}>
@@ -822,7 +1309,7 @@ export default function StudyGameWidget() {
                     <span style={{ fontSize:'2.8rem' }}>{grade === 'A' ? '🏆' : grade === 'B' ? '⭐' : grade === 'C' ? '👍' : '📚'}</span>
                     <div style={{ textAlign:'center' }}>
                       <p style={{ fontSize:'2.2rem', fontWeight:800, color, fontFamily:'monospace', lineHeight:1, margin:0 }}>{quizScore}/{quiz.length}</p>
-                      <p style={{ fontSize:'0.65rem', color:'rgba(226,232,240,0.5)', marginTop:6, margin:'6px 0 0' }}>{pct}% correct — Grade <strong style={{ color }}>{grade}</strong></p>
+                      <p style={{ fontSize:'0.65rem', color:'var(--w-text-dim)', marginTop:6, margin:'6px 0 0' }}>{pct}% correct — Grade <strong style={{ color }}>{grade}</strong></p>
                     </div>
                     <button onClick={resetQuiz}
                       style={{ background:color, color:'#fff', border:'none', borderRadius:10, padding:'8px 22px', cursor:'pointer', fontSize:'0.7rem', fontWeight:700, fontFamily:'monospace', boxShadow:`0 2px 12px ${glow}` }}>
@@ -833,7 +1320,7 @@ export default function StudyGameWidget() {
                   <>
                     {/* Quiz header */}
                     <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
-                      <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'rgba(226,232,240,0.3)' }}>
+                      <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'var(--w-text-faint)' }}>
                         Q {quizIdx+1}/{quiz.length} · {quizQ.category}
                       </span>
                       <div style={{ display:'flex', gap:8, alignItems:'center' }}>
@@ -849,8 +1336,8 @@ export default function StudyGameWidget() {
                     </div>
                     {/* Question */}
                     <div style={{ background:'rgba(255,255,255,0.04)', border:`1px solid ${color}25`, borderRadius:12, padding:'12px 14px', textAlign:'center', flexShrink:0 }}>
-                      <p style={{ fontSize:'0.52rem', fontFamily:'monospace', color:'rgba(226,232,240,0.3)', textTransform:'uppercase', letterSpacing:1, margin:'0 0 6px' }}>what is</p>
-                      <p style={{ fontSize:'0.88rem', fontWeight:700, color:'#E2E8F0', lineHeight:1.3, margin:0 }}>{quizQ.term}</p>
+                      <p style={{ fontSize:'0.52rem', fontFamily:'monospace', color:'var(--w-text-faint)', textTransform:'uppercase', letterSpacing:1, margin:'0 0 6px' }}>what is</p>
+                      <p style={{ fontSize:'0.88rem', fontWeight:700, color:'var(--w-text-main)', lineHeight:1.3, margin:0 }}>{quizQ.term}</p>
                     </div>
                     {/* Options */}
                     <div style={{ display:'flex', flexDirection:'column', gap:5, flex:1 }}>
@@ -860,7 +1347,7 @@ export default function StudyGameWidget() {
                         const answered = quizSelected !== null;
                         let bg = 'rgba(255,255,255,0.03)';
                         let borderC = 'rgba(255,255,255,0.08)';
-                        let textColor = 'rgba(226,232,240,0.75)';
+                        let textColor = 'var(--w-text-dim)';
                         if (answered && isCorrect) { bg = 'rgba(34,197,94,0.15)'; borderC = 'rgba(34,197,94,0.5)'; textColor = '#86efac'; }
                         else if (answered && isSelected) { bg = 'rgba(239,68,68,0.15)'; borderC = 'rgba(239,68,68,0.5)'; textColor = '#fca5a5'; }
                         return (
@@ -896,14 +1383,14 @@ export default function StudyGameWidget() {
             {tab === 'song' && (
               <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:8 }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'rgba(226,232,240,0.3)', textTransform:'uppercase', letterSpacing:1 }}>🎵 study anthem</span>
+                  <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'var(--w-text-faint)', textTransform:'uppercase', letterSpacing:1 }}>🎵 study anthem</span>
                   <button onClick={speakLyrics}
-                    style={{ background: speaking ? `${color}25` : 'rgba(255,255,255,0.04)', border:`1px solid ${speaking ? color+'40' : 'rgba(255,255,255,0.08)'}`, borderRadius:8, padding:'4px 10px', cursor:'pointer', color: speaking ? color : 'rgba(226,232,240,0.5)', display:'flex', alignItems:'center', gap:4, fontSize:'0.6rem', fontFamily:'monospace' }}>
+                    style={{ background: speaking ? `${color}25` : 'rgba(255,255,255,0.04)', border:`1px solid ${speaking ? color+'40' : 'rgba(255,255,255,0.08)'}`, borderRadius:8, padding:'4px 10px', cursor:'pointer', color: speaking ? color : 'var(--w-text-dim)', display:'flex', alignItems:'center', gap:4, fontSize:'0.6rem', fontFamily:'monospace' }}>
                     <Volume2 size={10} /> {speaking ? 'stop' : 'play TTS'}
                   </button>
                 </div>
                 <div style={{ flex:1, overflowY:'auto', background:'rgba(255,255,255,0.02)', borderRadius:10, padding:12 }}>
-                  <pre style={{ fontSize:'0.65rem', color:'rgba(226,232,240,0.7)', lineHeight:1.7, whiteSpace:'pre-wrap', fontFamily:'monospace', margin:0 }}>{lyrics}</pre>
+                  <pre style={{ fontSize:'0.65rem', color:'var(--w-text-dim)', lineHeight:1.7, whiteSpace:'pre-wrap', fontFamily:'monospace', margin:0 }}>{lyrics}</pre>
                 </div>
               </div>
             )}
@@ -966,7 +1453,7 @@ export default function StudyGameWidget() {
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4 pb-4">
           <span style={{ fontSize:'2.5rem' }}>📚</span>
-          <p style={{ color:'rgba(226,232,240,0.35)', fontSize:'0.75rem', textAlign:'center', lineHeight:1.6 }}>
+          <p style={{ color:'var(--w-text-dim)', fontSize:'0.75rem', textAlign:'center', lineHeight:1.6 }}>
             Type your exam or subject above.<br/>
             Flash cards, quiz, a study song, and video will generate instantly.
           </p>

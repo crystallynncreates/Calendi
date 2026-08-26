@@ -233,7 +233,7 @@ export default function CalendarWidget({ compact }: Props) {
         <div>
           <div className="text-xs font-mono uppercase tracking-widest" style={{ color, opacity: 0.65, fontSize: '0.6rem' }}>calendar</div>
           <p style={{ fontSize:'0.45rem', color:'var(--w-text-faint)', margin:'1px 0 0', fontFamily:'monospace', letterSpacing:0.3 }}>your schedule, events &amp; reminders in one glance</p>
-          <h2 className="text-sm font-bold" style={{ color: '#E2E8F0' }}>{format(viewDate, 'MMMM yyyy')}</h2>
+          <h2 className="text-sm font-bold" style={{ color: 'var(--w-text-main)' }}>{format(viewDate, 'MMMM yyyy')}</h2>
         </div>
         <div className="flex gap-1 items-center">
           <button title={notificationsEnabled ? 'notifications on' : 'enable notifications'}
@@ -241,7 +241,7 @@ export default function CalendarWidget({ compact }: Props) {
             className="btn-ghost btn-pill !px-2 !py-1">
             {notificationsEnabled
               ? <Bell size={12} style={{ color }} />
-              : <BellOff size={12} style={{ color: 'rgba(226,232,240,0.3)' }} />}
+              : <BellOff size={12} style={{ color: 'var(--w-text-faint)' }} />}
           </button>
           <button className="btn-ghost btn-pill !px-2 !py-1" onClick={() => setViewDate(subMonths(viewDate, 1))}><ChevronLeft size={13} /></button>
           <button className="btn-ghost btn-pill !px-2 !py-1" style={{ fontSize: '0.7rem' }} onClick={() => { setViewDate(new Date()); setSelected(null); }}>today</button>
@@ -252,7 +252,7 @@ export default function CalendarWidget({ compact }: Props) {
       {/* Day headers */}
       <div className="grid grid-cols-7 px-3 pb-0.5 shrink-0">
         {['S','M','T','W','T','F','S'].map((d, i) => (
-          <div key={i} className="text-center font-mono py-0.5" style={{ color: 'rgba(226,232,240,0.25)', fontSize: '0.58rem' }}>{d}</div>
+          <div key={i} className="text-center font-mono py-0.5" style={{ color: 'var(--w-text-faint)', fontSize: '0.58rem' }}>{d}</div>
         ))}
       </div>
 
@@ -276,7 +276,7 @@ export default function CalendarWidget({ compact }: Props) {
               }}>
               <span style={{
                 fontSize: '0.68rem', fontWeight: isT ? 700 : 500,
-                color: !inMonth ? 'rgba(226,232,240,0.18)' : isT ? color : isSel ? '#E2E8F0' : 'rgba(226,232,240,0.72)',
+                color: !inMonth ? 'var(--w-text-faint)' : isT ? color : isSel ? 'var(--w-text-main)' : 'var(--w-text-dim)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 width: 20, height: 20, borderRadius: '50%',
                 boxShadow: isT ? `0 0 8px ${glow}` : 'none',
@@ -307,7 +307,7 @@ export default function CalendarWidget({ compact }: Props) {
                 style={{
                   background: active ? `${COLOR_HEX[meta.color]}22` : 'rgba(255,255,255,0.04)',
                   border: `1px solid ${active ? COLOR_HEX[meta.color] + '55' : 'rgba(255,255,255,0.07)'}`,
-                  color: active ? COLOR_HEX[meta.color] : 'rgba(226,232,240,0.45)',
+                  color: active ? COLOR_HEX[meta.color] : 'var(--w-text-dim)',
                   fontSize: '0.62rem', fontWeight: 500,
                 }}>
                 <span style={{ fontSize: '0.7rem' }}>{meta.emoji}</span>
@@ -325,7 +325,7 @@ export default function CalendarWidget({ compact }: Props) {
               <button key={t} onClick={() => setPanelTab(t)} style={{
                 flex:1, padding:'4px 2px', borderRadius:8, border:'none', cursor:'pointer',
                 background: panelTab===t ? color : 'rgba(255,255,255,0.04)',
-                color: panelTab===t ? '#fff' : 'rgba(226,232,240,0.38)',
+                color: panelTab===t ? '#fff' : 'var(--w-text-dim)',
                 fontSize:'0.58rem', fontWeight:700, fontFamily:'monospace',
                 boxShadow: panelTab===t ? `0 2px 8px ${glow}` : 'none',
                 transition:'all 0.15s',
@@ -344,7 +344,7 @@ export default function CalendarWidget({ compact }: Props) {
             {panelTab === 'day' && (
               <>
                 <button className="btn-ghost btn-pill !px-1.5 !py-1 gap-1"
-                  style={{ color: deleting ? '#EF4444' : 'rgba(226,232,240,0.45)', borderColor: deleting ? 'rgba(239,68,68,0.4)' : 'rgba(226,232,240,0.12)', fontSize: '0.6rem' }}
+                  style={{ color: deleting ? '#EF4444' : 'var(--w-text-dim)', borderColor: deleting ? 'rgba(239,68,68,0.4)' : 'var(--w-border)', fontSize: '0.6rem' }}
                   onClick={() => { setDeleting(!deleting); setAdding(false); }} title="delete">
                   <Trash2 size={10} />
                 </button>
@@ -368,7 +368,7 @@ export default function CalendarWidget({ compact }: Props) {
                 <div key={i} className="flex items-center gap-2 mb-1.5 px-2 py-1.5 rounded-xl"
                   style={{ background: 'rgba(245,158,11,0.07)', border: '1px solid rgba(245,158,11,0.16)' }}>
                   <span style={{ fontSize: '0.7rem' }}>🎉</span>
-                  <span style={{ fontSize: '0.7rem', color: 'rgba(226,232,240,0.65)' }}>{h.name}</span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--w-text-dim)' }}>{h.name}</span>
                 </div>
               ))}
 
@@ -381,19 +381,19 @@ export default function CalendarWidget({ compact }: Props) {
                     <div className="flex items-start gap-1.5">
                       <span style={{ fontSize: '0.75rem', marginTop: 1 }}>{meta.emoji}</span>
                       <div className="flex-1 min-w-0">
-                        <p style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(226,232,240,0.88)', margin: 0 }} className="truncate">{e.title}</p>
-                        {e.time && <p style={{ fontSize: '0.6rem', color: 'rgba(226,232,240,0.35)', margin: '2px 0 0' }}>{e.time}</p>}
+                        <p style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--w-text-main)', margin: 0 }} className="truncate">{e.title}</p>
+                        {e.time && <p style={{ fontSize: '0.6rem', color: 'var(--w-text-dim)', margin: '2px 0 0' }}>{e.time}</p>}
                         {e.amount != null && <p style={{ fontSize: '0.6rem', color: COLOR_HEX[e.color], margin: '2px 0 0' }}>${e.amount.toFixed(2)}</p>}
                         {c && (
                           <div className="flex items-center gap-1 mt-0.5">
-                            <User size={9} style={{ color: 'rgba(226,232,240,0.28)' }} />
+                            <User size={9} style={{ color: 'var(--w-text-faint)' }} />
                             {c.phone
                               ? <a href={`tel:${c.phone}`} style={{ fontSize: '0.6rem', color }}>{c.name}</a>
-                              : <span style={{ fontSize: '0.6rem', color: 'rgba(226,232,240,0.35)' }}>{c.name}</span>}
+                              : <span style={{ fontSize: '0.6rem', color: 'var(--w-text-dim)' }}>{c.name}</span>}
                           </div>
                         )}
-                        {e.address && <p className="truncate" style={{ fontSize: '0.58rem', color: 'rgba(226,232,240,0.28)', margin: '2px 0 0' }}>📍 {e.address}</p>}
-                        {e.notes && <p style={{ fontSize: '0.6rem', color: 'rgba(226,232,240,0.38)', margin: '2px 0 0' }}>{e.notes}</p>}
+                        {e.address && <p className="truncate" style={{ fontSize: '0.58rem', color: 'var(--w-text-faint)', margin: '2px 0 0' }}>📍 {e.address}</p>}
+                        {e.notes && <p style={{ fontSize: '0.6rem', color: 'var(--w-text-dim)', margin: '2px 0 0' }}>{e.notes}</p>}
                         {e.checklist && e.checklist.length > 0 && (
                           <div className="mt-1.5 flex flex-col gap-1">
                             {e.checklist.map(item => (
@@ -403,7 +403,7 @@ export default function CalendarWidget({ compact }: Props) {
                                 <div style={{ width: 14, height: 14, borderRadius: 4, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1.5px solid ${item.done ? COLOR_HEX[e.color] : COLOR_HEX[e.color]+'55'}`, background: item.done ? COLOR_HEX[e.color] : 'transparent', transition: 'all 0.15s' }}>
                                   {item.done && <Check size={8} style={{ color: '#fff' }} />}
                                 </div>
-                                <span style={{ fontSize: '0.65rem', color: item.done ? 'rgba(226,232,240,0.3)' : 'rgba(226,232,240,0.7)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
+                                <span style={{ fontSize: '0.65rem', color: item.done ? 'var(--w-text-faint)' : 'var(--w-text-dim)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
                               </button>
                             ))}
                           </div>
@@ -416,14 +416,14 @@ export default function CalendarWidget({ compact }: Props) {
                             <Trash2 size={10} /> remove
                           </button>
                         ) : (
-                          <button onClick={() => removeEvent(e.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.4)', padding: 2 }}
+                          <button onClick={() => removeEvent(e.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-dim)', padding: 2 }}
                             onMouseEnter={el => (el.currentTarget as HTMLButtonElement).style.color = '#EF4444'}
-                            onMouseLeave={el => (el.currentTarget as HTMLButtonElement).style.color = 'rgba(226,232,240,0.4)'}>
+                            onMouseLeave={el => (el.currentTarget as HTMLButtonElement).style.color = 'var(--w-text-dim)'}>
                             <X size={10} />
                           </button>
                         )}
                         <a href={googleCalLink(e)} target="_blank" rel="noopener noreferrer" title="Add to Google Calendar">
-                          <ExternalLink size={9} style={{ color: 'rgba(226,232,240,0.18)' }} />
+                          <ExternalLink size={9} style={{ color: 'var(--w-text-faint)' }} />
                         </a>
                       </div>
                     </div>
@@ -432,7 +432,7 @@ export default function CalendarWidget({ compact }: Props) {
               })}
 
               {panelEvents.length === 0 && panelHolidays.length === 0 && !adding && (
-                <p className="text-center py-3" style={{ color: 'rgba(226,232,240,0.18)', fontSize: '0.7rem' }}>
+                <p className="text-center py-3" style={{ color: 'var(--w-text-faint)', fontSize: '0.7rem' }}>
                   tap a chip above to add something here
                 </p>
               )}
@@ -456,7 +456,7 @@ export default function CalendarWidget({ compact }: Props) {
               </form>
 
               {allTodos.length === 0 ? (
-                <p className="text-center py-4" style={{ color:'rgba(226,232,240,0.2)', fontSize:'0.7rem' }}>
+                <p className="text-center py-4" style={{ color:'var(--w-text-faint)', fontSize:'0.7rem' }}>
                   No to-dos yet — add one above
                 </p>
               ) : allTodos.map(e => {
@@ -469,14 +469,14 @@ export default function CalendarWidget({ compact }: Props) {
                       <div style={{ display:'flex', alignItems:'center', gap:6 }}>
                         <span style={{ fontSize:'0.7rem' }}>{TYPE_META[e.type]?.emoji ?? '✅'}</span>
                         <div>
-                          <p style={{ fontSize:'0.72rem', fontWeight:600, color:'rgba(226,232,240,0.88)', margin:0 }}>{e.title}</p>
-                          <p style={{ fontSize:'0.58rem', color:'rgba(226,232,240,0.3)', margin:0 }}>
+                          <p style={{ fontSize:'0.72rem', fontWeight:600, color:'var(--w-text-main)', margin:0 }}>{e.title}</p>
+                          <p style={{ fontSize:'0.58rem', color:'var(--w-text-faint)', margin:0 }}>
                             {isToday2 ? 'Today' : format(new Date(e.date + 'T12:00:00'), 'MMM d')}
                             {e.recur !== 'none' ? ` · ${e.recur}` : ''}
                           </p>
                         </div>
                       </div>
-                      <button onClick={() => removeEvent(e.id)} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(226,232,240,0.25)', padding:2 }}><X size={10}/></button>
+                      <button onClick={() => removeEvent(e.id)} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--w-text-faint)', padding:2 }}><X size={10}/></button>
                     </div>
                     {e.checklist && e.checklist.length > 0 && (
                       <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
@@ -486,7 +486,7 @@ export default function CalendarWidget({ compact }: Props) {
                             <div style={{ width:18, height:18, borderRadius:5, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', border:`2px solid ${item.done ? COLOR_HEX[e.color] : COLOR_HEX[e.color]+'60'}`, background: item.done ? COLOR_HEX[e.color] : 'transparent', transition:'all 0.15s' }}>
                               {item.done && <Check size={10} style={{ color:'#fff' }}/>}
                             </div>
-                            <span style={{ fontSize:'0.68rem', color: item.done ? 'rgba(226,232,240,0.3)' : 'rgba(226,232,240,0.78)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
+                            <span style={{ fontSize:'0.68rem', color: item.done ? 'var(--w-text-faint)' : 'var(--w-text-main)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
                           </button>
                         ))}
                       </div>
@@ -495,7 +495,7 @@ export default function CalendarWidget({ compact }: Props) {
                       <button onClick={() => removeEvent(e.id)}
                         style={{ display:'flex', alignItems:'center', gap:8, background:'none', border:'none', cursor:'pointer', padding:'4px 0', width:'100%', textAlign:'left' }}>
                         <div style={{ width:18, height:18, borderRadius:5, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', border:`2px solid ${COLOR_HEX[e.color]+'60'}`, background:'transparent', transition:'all 0.15s' }} />
-                        <span style={{ fontSize:'0.65rem', color:'rgba(226,232,240,0.35)' }}>tap checkbox to mark done</span>
+                        <span style={{ fontSize:'0.65rem', color:'var(--w-text-dim)' }}>tap checkbox to mark done</span>
                       </button>
                     )}
                   </div>
@@ -517,7 +517,7 @@ export default function CalendarWidget({ compact }: Props) {
 
               {/* Bill list */}
               {allBills.length === 0 ? (
-                <div style={{ textAlign:'center', padding:'16px 0', color:'rgba(226,232,240,0.2)', fontSize:'0.7rem' }}>
+                <div style={{ textAlign:'center', padding:'16px 0', color:'var(--w-text-faint)', fontSize:'0.7rem' }}>
                   No bills yet — tap "🧾 Bill" chip above to add one
                 </div>
               ) : allBills.map(e => {
@@ -532,8 +532,8 @@ export default function CalendarWidget({ compact }: Props) {
                         {isPaid && <Check size={12} style={{ color:'#fff' }}/>}
                       </button>
                       <div style={{ flex:1, minWidth:0 }}>
-                        <p style={{ fontSize:'0.72rem', fontWeight:600, color:'rgba(226,232,240,0.88)', margin:0, textDecoration: isPaid ? 'line-through' : 'none' }} className="truncate">{e.title}</p>
-                        <p style={{ fontSize:'0.6rem', color:'rgba(226,232,240,0.35)', margin:0 }}>
+                        <p style={{ fontSize:'0.72rem', fontWeight:600, color:'var(--w-text-main)', margin:0, textDecoration: isPaid ? 'line-through' : 'none' }} className="truncate">{e.title}</p>
+                        <p style={{ fontSize:'0.6rem', color:'var(--w-text-dim)', margin:0 }}>
                           Due: {format(new Date(e.date + 'T12:00:00'), 'MMM d, yyyy')}
                           {e.recur !== 'none' ? ` · ${e.recur}` : ''}
                         </p>
@@ -549,7 +549,7 @@ export default function CalendarWidget({ compact }: Props) {
                         </span>
                       </div>
                     </div>
-                    {e.notes && <p style={{ fontSize:'0.6rem', color:'rgba(226,232,240,0.3)', margin:'4px 0 0 30px' }}>{e.notes}</p>}
+                    {e.notes && <p style={{ fontSize:'0.6rem', color:'var(--w-text-faint)', margin:'4px 0 0 30px' }}>{e.notes}</p>}
                   </div>
                 );
               })}
@@ -579,7 +579,7 @@ export default function CalendarWidget({ compact }: Props) {
                 </select>
                 <label className="flex items-center gap-1.5" style={{ cursor: 'pointer' }}>
                   <input type="checkbox" checked={form.allDay} onChange={e => setForm(f => ({ ...f, allDay: e.target.checked }))} style={{ accentColor: color }} />
-                  <span style={{ fontSize: '0.72rem', color: 'rgba(226,232,240,0.4)' }}>all day</span>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--w-text-dim)' }}>all day</span>
                 </label>
               </div>
 
@@ -598,8 +598,8 @@ export default function CalendarWidget({ compact }: Props) {
                   {form.checklist.map(item => (
                     <div key={item.id} className="flex items-center gap-1.5 mb-1">
                       <div style={{ width: 10, height: 10, borderRadius: 3, border: `1px solid ${color}50`, flexShrink: 0 }} />
-                      <span className="flex-1" style={{ fontSize: '0.68rem', color: 'rgba(226,232,240,0.6)' }}>{item.text}</span>
-                      <button onClick={() => setForm(f => ({ ...f, checklist: f.checklist.filter(c => c.id !== item.id) }))} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.2)', padding: 0 }}>
+                      <span className="flex-1" style={{ fontSize: '0.68rem', color: 'var(--w-text-dim)' }}>{item.text}</span>
+                      <button onClick={() => setForm(f => ({ ...f, checklist: f.checklist.filter(c => c.id !== item.id) }))} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 0 }}>
                         <X size={9} />
                       </button>
                     </div>
@@ -615,7 +615,7 @@ export default function CalendarWidget({ compact }: Props) {
 
               <button onClick={() => setMoreFields(!moreFields)}
                 className="flex items-center gap-1 mb-2"
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.28)', padding: 0, fontSize: '0.65rem' }}>
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 0, fontSize: '0.65rem' }}>
                 {moreFields ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
                 {moreFields ? 'fewer options' : 'notes, address, contact'}
               </button>

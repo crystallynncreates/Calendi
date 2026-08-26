@@ -128,8 +128,8 @@ export default function NotesWidget() {
                   background: n.id===activeId ? `${color}15` : 'transparent',
                   border:`1px solid ${n.id===activeId ? color+'35' : 'transparent'}`,
                 }}>
-                <p className="text-xs font-medium truncate" style={{ color: n.id===activeId ? color : 'rgba(226,232,240,0.55)' }}>{n.title || 'Untitled'}</p>
-                <p style={{ color:'rgba(226,232,240,0.25)', fontSize:'0.58rem', marginTop:1 }}>{new Date(n.updated).toLocaleDateString()}</p>
+                <p className="text-xs font-medium truncate" style={{ color: n.id===activeId ? color : 'var(--w-text-dim)' }}>{n.title || 'Untitled'}</p>
+                <p style={{ color:'var(--w-text-faint)', fontSize:'0.58rem', marginTop:1 }}>{new Date(n.updated).toLocaleDateString()}</p>
               </button>
             ))}
           </div>
@@ -140,7 +140,7 @@ export default function NotesWidget() {
       <div className="flex-1 flex flex-col min-w-0" style={{ padding:'10px 12px 8px' }}>
         {/* Top bar */}
         <div className="flex items-center justify-between mb-1.5 shrink-0">
-          <span className="text-xs font-mono uppercase tracking-widest" style={{ color:'rgba(226,232,240,0.3)' }}>notes</span>
+          <span className="text-xs font-mono uppercase tracking-widest" style={{ color:'var(--w-text-faint)' }}>notes</span>
           <div className="flex gap-1 items-center">
             {saved && <span style={{ fontSize:'0.65rem', fontFamily:'monospace', color:`${color}80` }}>saved ✓</span>}
             <button className="btn-ghost btn-pill !px-1.5 !py-1" onClick={newNote} title="New note">
@@ -159,7 +159,7 @@ export default function NotesWidget() {
             {/* Title */}
             <input
               className="bg-transparent border-none outline-none font-semibold text-sm shrink-0 mb-1.5"
-              style={{ color:'#E2E8F0', borderBottom:'1px solid rgba(255,255,255,0.07)', paddingBottom:5 }}
+              style={{ color:'var(--w-text-main)', borderBottom:'1px solid rgba(255,255,255,0.07)', paddingBottom:5 }}
               value={active.title}
               onChange={e => updateTitle(e.target.value)}
               placeholder="Note title"
@@ -174,7 +174,7 @@ export default function NotesWidget() {
                 <button key={t.cmd} title={t.title} onClick={() => exec(t.cmd)}
                   style={{
                     background:'none', border:'none', cursor:'pointer', borderRadius:4,
-                    color:'rgba(226,232,240,0.6)', padding:'3px 4px',
+                    color:'var(--w-text-dim)', padding:'3px 4px',
                     transition:'background 0.15s',
                   }}
                   onMouseEnter={e=>(e.currentTarget.style.background='rgba(255,255,255,0.08)')}
@@ -187,7 +187,7 @@ export default function NotesWidget() {
               <select value={fontSize} onChange={e => applyFontSize(e.target.value)}
                 style={{
                   background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)',
-                  color:'rgba(226,232,240,0.6)', borderRadius:4, fontSize:'0.6rem',
+                  color:'var(--w-text-dim)', borderRadius:4, fontSize:'0.6rem',
                   padding:'1px 2px', cursor:'pointer', fontFamily:'monospace',
                 }}>
                 {FONT_SIZES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -196,7 +196,7 @@ export default function NotesWidget() {
               {/* Highlight */}
               <div style={{ position:'relative' }}>
                 <button title="Highlight" onClick={() => setShowHl(v=>!v)}
-                  style={{ background:'none', border:'none', cursor:'pointer', borderRadius:4, color:'rgba(226,232,240,0.6)', padding:'3px 4px' }}>
+                  style={{ background:'none', border:'none', cursor:'pointer', borderRadius:4, color:'var(--w-text-dim)', padding:'3px 4px' }}>
                   <Highlighter size={11}/>
                 </button>
                 {showHl && (
@@ -210,7 +210,7 @@ export default function NotesWidget() {
                         style={{ width:16, height:16, borderRadius:4, background:c, border:'none', cursor:'pointer' }} />
                     ))}
                     <button onClick={() => { document.execCommand('backColor', false, 'transparent'); setShowHl(false); editorRef.current?.focus(); }}
-                      style={{ width:16, height:16, borderRadius:4, background:'transparent', border:'1px solid rgba(255,255,255,0.2)', cursor:'pointer', fontSize:'0.6rem', color:'rgba(226,232,240,0.5)' }}>
+                      style={{ width:16, height:16, borderRadius:4, background:'transparent', border:'1px solid rgba(255,255,255,0.2)', cursor:'pointer', fontSize:'0.6rem', color:'var(--w-text-dim)' }}>
                       ✕
                     </button>
                   </div>
@@ -227,7 +227,7 @@ export default function NotesWidget() {
               onBlur={saveHtml}
               style={{
                 flex:1, outline:'none', overflowY:'auto',
-                color:'rgba(226,232,240,0.8)', fontSize:fontSize,
+                color:'var(--w-text-main)', fontSize:fontSize,
                 lineHeight:1.6, fontFamily:'inherit',
                 minHeight:0,
               }}
@@ -236,15 +236,15 @@ export default function NotesWidget() {
 
             {/* Footer */}
             <div style={{ borderTop:'1px solid rgba(255,255,255,0.04)', paddingTop:4, marginTop:4, flexShrink:0 }}>
-              <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'rgba(226,232,240,0.2)' }}>
+              <span style={{ fontSize:'0.6rem', fontFamily:'monospace', color:'var(--w-text-faint)' }}>
                 {wordCount()} words
               </span>
             </div>
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center gap-3">
-            <Type size={22} style={{ color:'rgba(226,232,240,0.15)' }} />
-            <p style={{ color:'rgba(226,232,240,0.25)', fontSize:'0.75rem', textAlign:'center' }}>no notes yet</p>
+            <Type size={22} style={{ color:'var(--w-text-faint)' }} />
+            <p style={{ color:'var(--w-text-faint)', fontSize:'0.75rem', textAlign:'center' }}>no notes yet</p>
             <button className="btn-pill !text-xs !py-1.5"
               style={{ background:color, color:'#fff', boxShadow:`0 4px 16px ${glow}` }}
               onClick={newNote}>
@@ -257,7 +257,7 @@ export default function NotesWidget() {
       <style>{`
         [contenteditable]:empty:before {
           content: attr(data-placeholder);
-          color: rgba(226,232,240,0.2);
+          color: var(--w-text-faint);
           pointer-events: none;
         }
       `}</style>

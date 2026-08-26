@@ -82,7 +82,7 @@ export default function PlannerSheet({ onClose }: Props) {
       <div className="w-full max-w-lg rounded-t-3xl anim-slide-up flex flex-col" style={{ background: '#0D0D1A', border: '1px solid rgba(255,255,255,0.07)', borderBottom: 'none', maxHeight: '85vh' }}>
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-5 pb-3 shrink-0">
-          <h2 className="font-bold text-lg" style={{ color: '#E2E8F0' }}>planners</h2>
+          <h2 className="font-bold text-lg" style={{ color: 'var(--w-text-main)' }}>planners</h2>
           <button className="btn-ghost btn-pill !px-2 !py-1.5" onClick={onClose}><X size={16} /></button>
         </div>
 
@@ -94,7 +94,7 @@ export default function PlannerSheet({ onClose }: Props) {
             return (
               <button key={t} onClick={() => { setActiveType(t); setCreating(false); }}
                 className="flex-1 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all"
-                style={{ background: active ? color : 'transparent', color: active ? '#fff' : 'rgba(226,232,240,0.4)', boxShadow: active ? `0 2px 8px ${color}60` : 'none' }}>
+                style={{ background: active ? color : 'transparent', color: active ? '#fff' : 'var(--w-text-dim)', boxShadow: active ? `0 2px 8px ${color}60` : 'none' }}>
                 {meta.emoji} {meta.label}
               </button>
             );
@@ -126,11 +126,11 @@ export default function PlannerSheet({ onClose }: Props) {
                 )}
               </div>
               <div className="flex gap-2 items-center">
-                <MapPin size={13} style={{ color: 'rgba(226,232,240,0.3)', flexShrink: 0 }} />
+                <MapPin size={13} style={{ color: 'var(--w-text-faint)', flexShrink: 0 }} />
                 <input className="input-dark flex-1" placeholder="location" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} />
               </div>
               <div className="flex gap-2 items-center">
-                <DollarSign size={13} style={{ color: 'rgba(226,232,240,0.3)', flexShrink: 0 }} />
+                <DollarSign size={13} style={{ color: 'var(--w-text-faint)', flexShrink: 0 }} />
                 <input className="input-dark flex-1" placeholder="budget" type="number" value={form.budget} onChange={e => setForm(f => ({ ...f, budget: e.target.value }))} />
               </div>
               <textarea className="input-dark" rows={2} placeholder="notes..." value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} style={{ resize: 'none' }} />
@@ -147,7 +147,7 @@ export default function PlannerSheet({ onClose }: Props) {
           {typePlanners.length === 0 && !creating && (
             <div className="flex flex-col items-center py-10 gap-2">
               <span style={{ fontSize: '2.5rem' }}>{PLANNER_META[activeType].emoji}</span>
-              <p style={{ color: 'rgba(226,232,240,0.25)', fontSize: '0.8rem' }}>no {PLANNER_META[activeType].label.toLowerCase()}s yet</p>
+              <p style={{ color: 'var(--w-text-faint)', fontSize: '0.8rem' }}>no {PLANNER_META[activeType].label.toLowerCase()}s yet</p>
             </div>
           )}
 
@@ -163,42 +163,42 @@ export default function PlannerSheet({ onClose }: Props) {
                   style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
                   <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{PLANNER_META[p.type].emoji}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm truncate" style={{ color: '#E2E8F0' }}>{p.title}</p>
-                    <p style={{ fontSize: '0.65rem', color: 'rgba(226,232,240,0.35)' }}>
+                    <p className="font-semibold text-sm truncate" style={{ color: 'var(--w-text-main)' }}>{p.title}</p>
+                    <p style={{ fontSize: '0.65rem', color: 'var(--w-text-dim)' }}>
                       {p.date}{p.endDate ? ` → ${p.endDate}` : ''}
                       {p.location ? ` · ${p.location}` : ''}
                       {p.checklist.length > 0 ? ` · ${done}/${p.checklist.length} done` : ''}
                     </p>
                   </div>
-                  {expanded ? <ChevronUp size={14} style={{ color: 'rgba(226,232,240,0.3)', flexShrink: 0 }} />
-                    : <ChevronDown size={14} style={{ color: 'rgba(226,232,240,0.3)', flexShrink: 0 }} />}
+                  {expanded ? <ChevronUp size={14} style={{ color: 'var(--w-text-faint)', flexShrink: 0 }} />
+                    : <ChevronDown size={14} style={{ color: 'var(--w-text-faint)', flexShrink: 0 }} />}
                 </button>
 
                 {expanded && (
                   <div className="px-3 pb-3 anim-slide-up">
                     {p.budget != null && (
-                      <p style={{ fontSize: '0.68rem', color: 'rgba(226,232,240,0.4)', marginBottom: 8 }}>
+                      <p style={{ fontSize: '0.68rem', color: 'var(--w-text-dim)', marginBottom: 8 }}>
                         <DollarSign size={10} style={{ display: 'inline', marginRight: 3 }} />
                         budget: ${p.budget.toFixed(2)}
                       </p>
                     )}
-                    {p.notes && <p style={{ fontSize: '0.7rem', color: 'rgba(226,232,240,0.4)', marginBottom: 10 }}>{p.notes}</p>}
+                    {p.notes && <p style={{ fontSize: '0.7rem', color: 'var(--w-text-dim)', marginBottom: 10 }}>{p.notes}</p>}
 
                     {/* Checklist */}
-                    <p style={{ fontSize: '0.62rem', fontFamily: 'monospace', color: 'rgba(226,232,240,0.3)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>checklist</p>
+                    <p style={{ fontSize: '0.62rem', fontFamily: 'monospace', color: 'var(--w-text-faint)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>checklist</p>
                     <div className="flex flex-col gap-1 mb-2">
                       {p.checklist.map(item => (
                         <div key={item.id} className="flex items-center gap-2">
                           <button onClick={() => toggleCheck(p, item.id)} style={{
                             width: 14, height: 14, borderRadius: 4, flexShrink: 0,
-                            border: `1.5px solid ${item.done ? color : 'rgba(226,232,240,0.25)'}`,
+                            border: `1.5px solid ${item.done ? color : 'var(--w-text-faint)'}`,
                             background: item.done ? color : 'transparent',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
                           }}>
                             {item.done && <Check size={9} style={{ color: '#fff' }} />}
                           </button>
-                          <span className="flex-1" style={{ fontSize: '0.72rem', color: item.done ? 'rgba(226,232,240,0.25)' : 'rgba(226,232,240,0.65)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
-                          <button onClick={() => removeCheckItem(p, item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.18)', padding: 2 }}>
+                          <span className="flex-1" style={{ fontSize: '0.72rem', color: item.done ? 'var(--w-text-faint)' : 'var(--w-text-dim)', textDecoration: item.done ? 'line-through' : 'none' }}>{item.text}</span>
+                          <button onClick={() => removeCheckItem(p, item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2 }}>
                             <X size={10} />
                           </button>
                         </div>

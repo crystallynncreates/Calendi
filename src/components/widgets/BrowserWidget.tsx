@@ -57,7 +57,7 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
       </div>
       {/* Address bar */}
       <div className="flex items-center gap-1.5 px-2 py-2 shrink-0" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <Globe size={12} style={{ color: 'rgba(226,232,240,0.3)', flexShrink: 0 }} />
+        <Globe size={12} style={{ color: 'var(--w-text-faint)', flexShrink: 0 }} />
         <form
           className="flex-1"
           onSubmit={e => { e.preventDefault(); navigate(url); }}
@@ -65,7 +65,7 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
         >
           <input
             className="flex-1 bg-transparent border-none outline-none text-xs font-mono"
-            style={{ color: 'rgba(226,232,240,0.7)' }}
+            style={{ color: 'var(--w-text-dim)' }}
             value={url}
             onChange={e => setUrl(e.target.value)}
             placeholder="search or enter URL"
@@ -75,10 +75,10 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
         </form>
         {activeUrl && (
           <>
-            <button onClick={refresh} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.3)', padding: 2 }}>
+            <button onClick={refresh} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2 }}>
               <RefreshCw size={11} />
             </button>
-            <button onClick={() => { setActiveUrl(''); setUrl(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(226,232,240,0.3)', padding: 2 }}>
+            <button onClick={() => { setActiveUrl(''); setUrl(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2 }}>
               <X size={11} />
             </button>
           </>
@@ -103,7 +103,7 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
         </div>
       ) : (
         <div className="flex-1 p-3 overflow-y-auto">
-          <p className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: 'rgba(226,232,240,0.25)' }}>quick links</p>
+          <p className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: 'var(--w-text-faint)' }}>quick links</p>
           <div className="grid grid-cols-3 gap-1.5">
             {QUICK_LINKS.map(q => (
               <button
@@ -116,11 +116,11 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
                   ? <q.Logo size={28} />
                   : <span style={{ fontSize: 20 }}>{q.emoji}</span>
                 }
-                <span className="text-xs font-mono" style={{ color: 'rgba(226,232,240,0.5)' }}>{q.label}</span>
+                <span className="text-xs font-mono" style={{ color: 'var(--w-text-dim)' }}>{q.label}</span>
               </button>
             ))}
           </div>
-          <p className="text-xs mt-4 text-center leading-relaxed" style={{ color: 'rgba(226,232,240,0.18)' }}>
+          <p className="text-xs mt-4 text-center leading-relaxed" style={{ color: 'var(--w-text-faint)' }}>
             type a URL or search term above<br />some sites block embedding by design
           </p>
         </div>

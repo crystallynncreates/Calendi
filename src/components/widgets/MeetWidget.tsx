@@ -31,7 +31,7 @@ export default function MeetWidget() {
         {(['meet','zoom'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)}
             className="flex-1 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all"
-            style={{ background: tab===t ? color : 'transparent', color: tab===t ? '#fff' : 'rgba(226,232,240,0.4)', boxShadow: tab===t ? `0 2px 8px ${glow}` : 'none' }}>
+            style={{ background: tab===t ? color : 'transparent', color: tab===t ? '#fff' : 'var(--w-text-dim)', boxShadow: tab===t ? `0 2px 8px ${glow}` : 'none' }}>
             {t === 'meet' ? 'google meet' : 'zoom'}
           </button>
         ))}
@@ -44,8 +44,8 @@ export default function MeetWidget() {
               <GoogleMeetLogo size={48} />
             </div>
             <div className="text-center">
-              <p className="text-sm font-semibold" style={{ color:'#E2E8F0' }}>Google Meet</p>
-              <p className="text-xs mt-1 px-2" style={{ color:'rgba(226,232,240,0.35)', lineHeight:1.5 }}>
+              <p className="text-sm font-semibold" style={{ color:'var(--w-text-main)' }}>Google Meet</p>
+              <p className="text-xs mt-1 px-2" style={{ color:'var(--w-text-dim)', lineHeight:1.5 }}>
                 Sign in required. Open in the Calendi app frame or a new tab.
               </p>
             </div>
@@ -72,8 +72,8 @@ export default function MeetWidget() {
               <ZoomLogo size={48} />
             </div>
             <div className="text-center">
-              <p className="text-sm font-semibold" style={{ color:'#E2E8F0' }}>Zoom</p>
-              <p className="text-xs mt-1 px-2" style={{ color:'rgba(226,232,240,0.35)', lineHeight:1.5 }}>
+              <p className="text-sm font-semibold" style={{ color:'var(--w-text-main)' }}>Zoom</p>
+              <p className="text-xs mt-1 px-2" style={{ color:'var(--w-text-dim)', lineHeight:1.5 }}>
                 Sign in required. Open in app frame to stay in Calendi.
               </p>
             </div>

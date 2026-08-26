@@ -1612,7 +1612,7 @@ export default function StudyGameWidget() {
     const H = canvas.offsetHeight || 200;
     canvas.width = W * dpr;
     canvas.height = H * dpr;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
     if (!ctx) return;
     ctx.scale(dpr, dpr);
     const stars = Array.from({ length: 180 }, () => ({
@@ -1688,7 +1688,7 @@ export default function StudyGameWidget() {
     const H = canvas.offsetHeight || 200;
     canvas.width = W * dpr;
     canvas.height = H * dpr;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
     if (!ctx) return;
     ctx.scale(dpr, dpr);
     const [R, G, B] = hexToRgb(color);

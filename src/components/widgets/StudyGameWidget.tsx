@@ -293,7 +293,7 @@ const VOCAB_BANKS: Record<string, FlashCard[]> = {
     { term:'beautiful', def:'Very pretty — "The sunset was beautiful."', category:'Grade 3' },
     { term:'different',  def:'Not the same — "Each snowflake is different."', category:'Grade 3' },
     { term:'important',  def:'Very meaningful — "Reading is important for learning."', category:'Grade 3' },
-    { term:'together',   def:'With each other — "Let's work together."', category:'Grade 3' },
+    { term:'together',   def:'With each other, as a team — "We can work together!"', category:'Grade 3' },
     { term:'question',   def:'Something you ask — "She raised her hand to ask a question."', category:'Grade 3' },
     { term:'favorite',   def:'Liked best — "Pizza is my favorite food."', category:'Grade 3' },
     { term:'enough',     def:'As much as needed — "Did you get enough sleep?"', category:'Grade 3' },

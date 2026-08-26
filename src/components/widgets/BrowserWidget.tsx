@@ -11,12 +11,12 @@ type QuickLink = {
 };
 
 const QUICK_LINKS: QuickLink[] = [
-  { label: 'Google',        url: 'https://www.google.com',                         Logo: GoogleLogo },
-  { label: 'YouTube',       url: 'https://www.youtube.com',                        Logo: YouTubeLogo },
+  { label: 'Google',        url: 'https://lite.duckduckgo.com/lite/',              Logo: GoogleLogo },
+  { label: 'YouTube',       url: 'https://piped.video',                            Logo: YouTubeLogo },
   { label: 'Maps',          url: 'https://maps.google.com/maps?q=&output=embed',   Logo: GoogleMapsLogo },
-  { label: 'Translate',     url: 'https://translate.google.com',                   emoji: '🌐' },
+  { label: 'Translate',     url: 'https://lingva.ml',                              emoji: '🌐' },
   { label: 'Wikipedia',     url: 'https://en.m.wikipedia.org',                     emoji: '📖' },
-  { label: 'Weather',       url: 'https://wttr.in/?theme=dark',                    emoji: '🌤️' },
+  { label: 'Weather',       url: 'https://wttr.in/?format=v2',                     emoji: '🌤️' },
   { label: 'HowStuffWorks', url: 'https://www.howstuffworks.com',                  emoji: '🔬' },
 ];
 
@@ -34,7 +34,7 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
     let full = target.trim();
     if (!full) return;
     if (!full.startsWith('http://') && !full.startsWith('https://')) {
-      full = full.includes('.') ? `https://${full}` : `https://www.google.com/search?q=${encodeURIComponent(full)}`;
+      full = full.includes('.') ? `https://${full}` : `https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(full)}`;
     }
     setActiveUrl(full);
     setUrl(full);
@@ -96,7 +96,8 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
             onLoad={() => setLoading(false)}
             onError={() => setLoading(false)}
             style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-storage-access-by-user-activation"
+            allow="accelerometer; camera; clipboard-write; encrypted-media; fullscreen; geolocation; gyroscope; microphone; payment; autoplay"
           />
         </div>
       ) : (

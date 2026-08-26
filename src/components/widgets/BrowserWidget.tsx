@@ -11,13 +11,12 @@ type QuickLink = {
 };
 
 const QUICK_LINKS: QuickLink[] = [
-  { label: 'Search',      url: 'https://search.brave.com',                      Logo: GoogleLogo },
+  { label: 'Google',      url: 'https://www.startpage.com',                     Logo: GoogleLogo },
   { label: 'YouTube',     url: 'https://piped.video',                           Logo: YouTubeLogo },
   { label: 'Maps',        url: 'https://maps.google.com/maps?q=&output=embed',  Logo: GoogleMapsLogo },
   { label: 'Translate',   url: 'https://lingva.ml',                             emoji: '🌐' },
   { label: 'Wikipedia',   url: 'https://en.m.wikipedia.org',                    emoji: '📖' },
-  { label: 'Weather',     url: 'https://wttr.in/?format=v2',                    emoji: '🌤️' },
-  { label: 'SimpleWiki',  url: 'https://simple.wikipedia.org/wiki/Main_Page',   emoji: '🔬' },
+  { label: 'Weather',     url: 'https://weather.com',                           emoji: '🌤️' },
 ];
 
 interface BrowserProps { initialUrl?: string }
@@ -34,7 +33,7 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
     let full = target.trim();
     if (!full) return;
     if (!full.startsWith('http://') && !full.startsWith('https://')) {
-      full = full.includes('.') ? `https://${full}` : `https://search.brave.com/search?q=${encodeURIComponent(full)}`;
+      full = full.includes('.') ? `https://${full}` : `https://www.startpage.com/do/search?query=${encodeURIComponent(full)}`;
     }
     setActiveUrl(full);
     setUrl(full);

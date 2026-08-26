@@ -2131,6 +2131,7 @@ export default function StudyGameWidget() {
                 </div>
               </div>
             )}
+          </div>
         </>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4 pb-4">

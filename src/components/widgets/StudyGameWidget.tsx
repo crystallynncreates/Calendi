@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Search, ChevronLeft, ChevronRight, RotateCcw, Music, Video, BookOpen, Volume2, HelpCircle } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 
@@ -1275,6 +1275,100 @@ function buildQuiz(cards: FlashCard[]): QuizQ[] {
   });
 }
 
+/* ── Module-level utilities (no component state needed) ── */
+
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace('#', '');
+  if (h.length === 3) return [parseInt(h[0]+h[0],16), parseInt(h[1]+h[1],16), parseInt(h[2]+h[2],16)];
+  return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+}
+
+function getDeepVoice(): SpeechSynthesisVoice | undefined {
+  const vs = window.speechSynthesis?.getVoices() ?? [];
+  const prefer = ['Google UK English Male','Microsoft David Desktop','Microsoft David','Alex','Daniel','Fred','Thomas','Jorge','Google US English Male'];
+  for (const n of prefer) { const v = vs.find(x => x.name.includes(n)); if (v) return v; }
+  return vs.find(x => x.lang.startsWith('en') && /male|david|mark|jorge|daniel|fred/i.test(x.name))
+      ?? vs.find(x => x.lang.startsWith('en'));
+}
+
+function getBrightVoice(): SpeechSynthesisVoice | undefined {
+  const vs = window.speechSynthesis?.getVoices() ?? [];
+  const prefer = ['Samantha','Victoria','Karen','Moira','Tessa','Google US English','Microsoft Zira'];
+  for (const n of prefer) { const v = vs.find(x => x.name.includes(n)); if (v) return v; }
+  return vs.find(x => x.lang.startsWith('en'));
+}
+
+const MUSIC_EIGHTH = 60 / 90 / 2; // eighth note at 90 BPM
+
+function scheduleAudioNote(ctx: AudioContext, time: number, type: string, beat: number) {
+  const vol = 0.32;
+  if (type === 'kick') {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.setValueAtTime(165, time);
+    o.frequency.exponentialRampToValueAtTime(38, time + 0.18);
+    g.gain.setValueAtTime(vol * 1.9, time);
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.27);
+    o.start(time); o.stop(time + 0.3);
+  }
+  if (type === 'snare') {
+    const sz = Math.floor(ctx.sampleRate * 0.14);
+    const buf = ctx.createBuffer(1, sz, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < sz; i++) d[i] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = 1800; flt.Q.value = 0.65;
+    const g = ctx.createGain();
+    src.connect(flt); flt.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(vol * 0.85, time);
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.14);
+    src.start(time); src.stop(time + 0.14);
+  }
+  if (type === 'hihat') {
+    const sz = Math.floor(ctx.sampleRate * 0.038);
+    const buf = ctx.createBuffer(1, sz, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < sz; i++) d[i] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const flt = ctx.createBiquadFilter(); flt.type = 'highpass'; flt.frequency.value = 9000;
+    const g = ctx.createGain();
+    src.connect(flt); flt.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(vol * 0.18, time);
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.038);
+    src.start(time); src.stop(time + 0.038);
+  }
+  if (type === 'bass') {
+    const bassFreqs = [55, 55, 73.4, 55, 49, 61.7, 55, 65.4];
+    const freq = bassFreqs[beat % bassFreqs.length];
+    const dur = MUSIC_EIGHTH;
+    const o = ctx.createOscillator(), flt = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = 'sawtooth';
+    o.connect(flt); flt.connect(g); g.connect(ctx.destination);
+    flt.type = 'lowpass'; flt.frequency.value = 380;
+    o.frequency.setValueAtTime(freq, time);
+    g.gain.setValueAtTime(vol * 0.75, time);
+    g.gain.setValueAtTime(vol * 0.6, time + dur * 0.75);
+    g.gain.exponentialRampToValueAtTime(0.001, time + dur * 0.92);
+    o.start(time); o.stop(time + dur);
+  }
+  if (type === 'pad') {
+    const chords = [[220, 261.6, 329.6], [196, 246.9, 329.6], [220, 261.6, 329.6], [174.6, 220, 277.2]];
+    const chord = chords[Math.floor(beat / 16) % chords.length];
+    const dur = 60 / 90 * 4;
+    chord.forEach(fr => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine';
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.setValueAtTime(fr, time);
+      g.gain.setValueAtTime(0, time);
+      g.gain.linearRampToValueAtTime(vol * 0.065, time + 0.45);
+      g.gain.setValueAtTime(vol * 0.055, time + dur - 0.6);
+      g.gain.linearRampToValueAtTime(0, time + dur);
+      o.start(time); o.stop(time + dur + 0.1);
+    });
+  }
+}
+
 type Tab = 'cards' | 'quiz' | 'song' | 'video';
 
 export default function StudyGameWidget() {
@@ -1301,17 +1395,36 @@ export default function StudyGameWidget() {
   const videoRef = useRef<{ interval: ReturnType<typeof setInterval>|null; elapsed: number; total: number; lastSlide: number }>({ interval:null, elapsed:0, total:0, lastSlide:-1 });
   const [lyricLine, setLyricLine] = useState(0);
   const lyricRef = useRef<ReturnType<typeof setInterval>|null>(null);
+  const speakingRef = useRef(false);
+  const videoSlideRef = useRef(0);
+  const videoCanvasRef = useRef<HTMLCanvasElement>(null);
+  const videoAnimRef = useRef<number>(0);
+  const songCanvasRef = useRef<HTMLCanvasElement>(null);
+  const songAnimRef = useRef<number>(0);
+  const audioCtxRef = useRef<AudioContext|null>(null);
+  const musicSchedulerRef = useRef<ReturnType<typeof setInterval>|null>(null);
+  const musicNextRef = useRef(0);
+  const musicBeatRef = useRef(0);
+
+  function stopBackgroundMusic() {
+    if (musicSchedulerRef.current) { clearInterval(musicSchedulerRef.current); musicSchedulerRef.current = null; }
+    try { if (audioCtxRef.current) { audioCtxRef.current.close(); audioCtxRef.current = null; } } catch (_) {}
+  }
 
   function stopVideo() {
     if (videoRef.current.interval) { clearInterval(videoRef.current.interval); videoRef.current.interval = null; }
     window.speechSynthesis?.cancel();
+    cancelAnimationFrame(videoAnimRef.current);
     setVideoState('idle');
     setVideoSlide(0);
     setVideoProgress(0);
+    videoSlideRef.current = 0;
   }
 
   function loadExam(q: string) {
     stopVideo();
+    stopBackgroundMusic();
+    cancelAnimationFrame(songAnimRef.current);
     if (lyricRef.current) { clearInterval(lyricRef.current); lyricRef.current = null; }
     const matched = matchExam(q);
     setExam(q);
@@ -1334,18 +1447,60 @@ export default function StudyGameWidget() {
   function nextCard() { setCardIdx(i => (i + 1) % cards.length); setFlipped(false); }
   function prevCard() { setCardIdx(i => (i - 1 + cards.length) % cards.length); setFlipped(false); }
 
+  function startBackgroundMusic() {
+    try {
+      if (audioCtxRef.current) { audioCtxRef.current.close().catch(() => {}); }
+      const AC = (window.AudioContext ?? (window as any).webkitAudioContext) as typeof AudioContext | undefined;
+      if (!AC) return;
+      audioCtxRef.current = new AC();
+      if (audioCtxRef.current.state === 'suspended') audioCtxRef.current.resume().catch(() => {});
+      musicNextRef.current = audioCtxRef.current.currentTime + 0.05;
+      musicBeatRef.current = 0;
+      if (musicSchedulerRef.current) clearInterval(musicSchedulerRef.current);
+      musicSchedulerRef.current = setInterval(() => {
+        const ctx = audioCtxRef.current;
+        if (!ctx) return;
+        while (musicNextRef.current < ctx.currentTime + 0.12) {
+          const beat = musicBeatRef.current;
+          const step = beat % 8;
+          const t = musicNextRef.current;
+          if (step === 0 || step === 4) scheduleAudioNote(ctx, t, 'kick', beat);
+          if (step === 2 || step === 6) scheduleAudioNote(ctx, t, 'snare', beat);
+          scheduleAudioNote(ctx, t, 'hihat', beat);
+          if (step % 2 === 0) scheduleAudioNote(ctx, t, 'bass', beat);
+          if (beat % 16 === 0) scheduleAudioNote(ctx, t, 'pad', beat);
+          musicNextRef.current += MUSIC_EIGHTH;
+          musicBeatRef.current++;
+        }
+      }, 22);
+    } catch (_) {}
+  }
+
   function speakLyrics() {
     window.speechSynthesis?.cancel();
     if (lyricRef.current) { clearInterval(lyricRef.current); lyricRef.current = null; }
-    if (speaking) { setSpeaking(false); setLyricLine(0); return; }
+    if (speaking) {
+      setSpeaking(false); speakingRef.current = false;
+      setLyricLine(0);
+      stopBackgroundMusic();
+      return;
+    }
     if (!lyrics || !('speechSynthesis' in window)) return;
     const lines = lyrics.split('\n');
     setLyricLine(0);
     const utt = new SpeechSynthesisUtterance(lyrics.replace(/🎵|🎓|🎶/g, ''));
-    utt.rate = 1.1; utt.pitch = 1.05;
-    utt.onend = () => { setSpeaking(false); setLyricLine(0); if (lyricRef.current) { clearInterval(lyricRef.current); lyricRef.current = null; } };
+    const brightV = getBrightVoice();
+    if (brightV) utt.voice = brightV;
+    utt.rate = 1.05; utt.pitch = 1.18; utt.volume = 0.85;
+    utt.onend = () => {
+      setSpeaking(false); speakingRef.current = false;
+      setLyricLine(0);
+      stopBackgroundMusic();
+      if (lyricRef.current) { clearInterval(lyricRef.current); lyricRef.current = null; }
+    };
+    startBackgroundMusic();
     window.speechSynthesis.speak(utt);
-    setSpeaking(true);
+    setSpeaking(true); speakingRef.current = true;
     let idx = 0;
     lyricRef.current = setInterval(() => {
       idx = (idx + 1) % lines.length;
@@ -1378,7 +1533,11 @@ export default function StudyGameWidget() {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const utt = new SpeechSynthesisUtterance(text);
-    utt.rate = 0.92; utt.pitch = 1.0;
+    const deepV = getDeepVoice();
+    if (deepV) utt.voice = deepV;
+    utt.pitch = 0.62;
+    utt.rate = 0.80;
+    utt.volume = 0.92;
     window.speechSynthesis.speak(utt);
   }
 
@@ -1444,6 +1603,155 @@ export default function StudyGameWidget() {
     }
   }
 
+  function startVideoCanvas() {
+    const canvas = videoCanvasRef.current;
+    if (!canvas) return;
+    cancelAnimationFrame(videoAnimRef.current);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W = canvas.offsetWidth || 300;
+    const H = canvas.offsetHeight || 200;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.scale(dpr, dpr);
+    const stars = Array.from({ length: 180 }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.6 + 0.2,
+      speed: Math.random() * 0.28 + 0.06,
+      phase: Math.random() * Math.PI * 2,
+    }));
+    const nebulas = [
+      { x: W * 0.15, y: H * 0.25, r: W * 0.52, hue: 265 },
+      { x: W * 0.85, y: H * 0.78, r: W * 0.46, hue: 198 },
+      { x: W * 0.5,  y: H * 0.5,  r: W * 0.36, hue: 310 },
+    ];
+    let burst: { x:number; y:number; vx:number; vy:number; life:number; hue:number }[] = [];
+    const slideHues = [270, 200, 320, 150, 60, 30, 180, 240];
+    let lastSlide = -1;
+    let frame = 0;
+
+    function vtick() {
+      frame++;
+      ctx.clearRect(0, 0, W, H);
+      const bg = ctx.createLinearGradient(0, 0, W, H);
+      bg.addColorStop(0, '#070512'); bg.addColorStop(1, '#04030e');
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+      nebulas.forEach((nb, i) => {
+        const pulse = Math.sin(frame * 0.006 + i * 1.8) * 0.5 + 0.5;
+        const nx = nb.x + Math.sin(frame * 0.004 + i) * 22;
+        const ny = nb.y + Math.cos(frame * 0.005 + i) * 16;
+        const grad = ctx.createRadialGradient(nx, ny, 0, nb.x, nb.y, nb.r * (0.85 + pulse * 0.25));
+        grad.addColorStop(0, `hsla(${nb.hue},75%,44%,${0.09 + pulse * 0.05})`);
+        grad.addColorStop(0.5, `hsla(${nb.hue},55%,28%,${0.03 + pulse * 0.02})`);
+        grad.addColorStop(1, 'transparent');
+        ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+      });
+      ctx.strokeStyle = 'rgba(150,130,255,0.023)'; ctx.lineWidth = 0.5;
+      for (let x = 0; x < W; x += 46) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+      for (let y = 0; y < H; y += 46) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+      stars.forEach(s => {
+        s.y -= s.speed;
+        if (s.y < -3) { s.y = H + 3; s.x = Math.random() * W; }
+        const twk = 0.3 + 0.7 * Math.abs(Math.sin(frame * 0.033 + s.phase));
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(215,210,255,${twk * 0.85})`; ctx.fill();
+      });
+      const curSlide = videoSlideRef.current;
+      if (curSlide !== lastSlide) {
+        lastSlide = curSlide;
+        const hue = slideHues[curSlide % slideHues.length];
+        for (let i = 0; i < 55; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const spd = Math.random() * 5.5 + 1.5;
+          burst.push({ x: W/2, y: H*0.42, vx: Math.cos(angle)*spd, vy: Math.sin(angle)*spd, life: 1, hue });
+        }
+      }
+      burst = burst.filter(p => p.life > 0.02);
+      burst.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        p.vx *= 0.91; p.vy *= 0.91; p.life *= 0.90;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.life * 3.8, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue},90%,68%,${p.life})`; ctx.fill();
+      });
+      videoAnimRef.current = requestAnimationFrame(vtick);
+    }
+    videoAnimRef.current = requestAnimationFrame(vtick);
+  }
+
+  function startSongCanvas() {
+    const canvas = songCanvasRef.current;
+    if (!canvas) return;
+    cancelAnimationFrame(songAnimRef.current);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W = canvas.offsetWidth || 300;
+    const H = canvas.offsetHeight || 200;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.scale(dpr, dpr);
+    const [R, G, B] = hexToRgb(color);
+    const BAR = 52;
+    const phases = Array.from({ length: BAR }, (_, i) => i * 0.42 + Math.sin(i) * 0.3);
+    let frame = 0;
+
+    function stick() {
+      frame++;
+      ctx.clearRect(0, 0, W, H);
+      const bg = ctx.createLinearGradient(0, 0, 0, H);
+      bg.addColorStop(0, '#0b0612'); bg.addColorStop(1, '#060410');
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+      const isPlaying = speakingRef.current;
+      const beat = isPlaying ? 0.7 + 0.3 * Math.abs(Math.sin(frame * 0.09)) : 0.25;
+      const orb = ctx.createRadialGradient(W*0.5, H*0.5, 0, W*0.5, H*0.5, W*0.56);
+      orb.addColorStop(0, `rgba(${R},${G},${B},${0.1 * beat})`);
+      orb.addColorStop(0.65, `rgba(${R},${G},${B},${0.03 * beat})`);
+      orb.addColorStop(1, 'transparent');
+      ctx.fillStyle = orb; ctx.fillRect(0, 0, W, H);
+      const bW = (W * 0.88) / BAR;
+      const startX = W * 0.06;
+      const maxBH = H * 0.44;
+      const baseBH = H * 0.06;
+      for (let i = 0; i < BAR; i++) {
+        const m = isPlaying ? 0.45 + 0.55 * Math.abs(Math.sin(frame * 0.1 + phases[i])) : 0.1;
+        const bh = baseBH + maxBH * m;
+        const x = startX + i * bW;
+        const y = H - 6 - bh;
+        const grad = ctx.createLinearGradient(0, y, 0, H - 6);
+        grad.addColorStop(0, `rgba(${R},${G},${B},0.95)`);
+        grad.addColorStop(0.55, `rgba(${R},${G},${B},0.55)`);
+        grad.addColorStop(1, `rgba(${R},${G},${B},0.12)`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(x, y, bW * 0.6, bh);
+        const tbh = (H*0.04 + H*0.14*(isPlaying?0.3+0.3*Math.abs(Math.sin(frame*0.1+phases[i])):0.05));
+        ctx.fillStyle = `rgba(${R},${G},${B},0.06)`;
+        ctx.fillRect(x, 2, bW * 0.6, tbh);
+      }
+      if (isPlaying) {
+        for (let ring = 0; ring < 3; ring++) {
+          const prog = ((frame * 0.5 + ring * 70) % 210) / 210;
+          const rad = prog * Math.min(W, H) * 0.36;
+          const alpha = (1 - prog) * 0.19;
+          ctx.beginPath(); ctx.arc(W/2, H*0.45, rad, 0, Math.PI*2);
+          ctx.strokeStyle = `rgba(${R},${G},${B},${alpha})`;
+          ctx.lineWidth = 2.5; ctx.stroke();
+        }
+      }
+      ctx.beginPath();
+      const wY = H * 0.45;
+      const amp = isPlaying ? H * 0.065 : H * 0.012;
+      for (let x = 0; x <= W; x += 3) {
+        const y = wY + amp * Math.sin((x / W) * Math.PI * 8 + frame * 0.13);
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(${R},${G},${B},${isPlaying ? 0.38 : 0.08})`;
+      ctx.lineWidth = 1.8; ctx.stroke();
+      songAnimRef.current = requestAnimationFrame(stick);
+    }
+    songAnimRef.current = requestAnimationFrame(stick);
+  }
+
   useEffect(() => {
     if (cards.length > 0) {
       setQuiz(buildQuiz(cards));
@@ -1458,7 +1766,31 @@ export default function StudyGameWidget() {
     window.speechSynthesis?.cancel();
     if (videoRef.current.interval) clearInterval(videoRef.current.interval);
     if (lyricRef.current) clearInterval(lyricRef.current);
+    cancelAnimationFrame(videoAnimRef.current);
+    cancelAnimationFrame(songAnimRef.current);
+    stopBackgroundMusic();
   }, []);
+
+  useEffect(() => { speakingRef.current = speaking; }, [speaking]);
+  useEffect(() => { videoSlideRef.current = videoSlide; }, [videoSlide]);
+
+  useEffect(() => {
+    if (tab === 'video') {
+      const t = setTimeout(startVideoCanvas, 60);
+      return () => { clearTimeout(t); cancelAnimationFrame(videoAnimRef.current); };
+    } else {
+      cancelAnimationFrame(videoAnimRef.current);
+    }
+  }, [tab]);
+
+  useEffect(() => {
+    if (tab === 'song') {
+      const t = setTimeout(startSongCanvas, 60);
+      return () => { clearTimeout(t); cancelAnimationFrame(songAnimRef.current); };
+    } else {
+      cancelAnimationFrame(songAnimRef.current);
+    }
+  }, [tab]);
 
   const card = cards[cardIdx];
   const quizDone = quiz.length > 0 && quizIdx >= quiz.length;
@@ -1668,158 +2000,137 @@ export default function StudyGameWidget() {
               </div>
             )}
 
-            {/* ── SONG (animated music video) ── */}
+            {/* ── SONG — Canvas visualizer + synthesized beat + narrated lyrics ── */}
             {tab === 'song' && (
-              <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:0, position:'relative', overflow:'hidden' }}>
-                {/* Animated background glow */}
-                <div style={{
-                  position:'absolute', inset:0, borderRadius:10, zIndex:0, pointerEvents:'none',
-                  background: speaking ? `radial-gradient(ellipse at 50% 70%, ${color}28 0%, transparent 75%)` : 'transparent',
-                  animation: speaking ? 'song-pulse 2.2s ease-in-out infinite' : 'none',
-                  transition:'background 0.5s',
-                }} />
-                {/* Header */}
-                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0, zIndex:1, paddingBottom:8 }}>
-                  <span style={{ fontSize:'0.58rem', fontFamily:'monospace', letterSpacing:1, textTransform:'uppercase', color: speaking ? color : 'var(--w-text-faint)' }}>
-                    {speaking ? '🎵 now playing' : '🎵 study anthem'}
-                  </span>
+              <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:0, position:'relative', overflow:'hidden', borderRadius:10 }}>
+                <canvas ref={songCanvasRef} style={{ position:'absolute', inset:0, width:'100%', height:'100%', borderRadius:10 }} />
+                <div style={{ position:'relative', zIndex:1, display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0, paddingBottom:8 }}>
+                  <div style={{ display:'flex', flexDirection:'column', gap:2 }}>
+                    <span style={{ fontSize:'0.58rem', fontFamily:'monospace', letterSpacing:1.5, textTransform:'uppercase', color: speaking ? color : 'rgba(200,190,255,0.5)' }}>
+                      {speaking ? '🎵 now playing' : '🎵 study anthem'}
+                    </span>
+                    {speaking && <span style={{ fontSize:'0.46rem', fontFamily:'monospace', color:'rgba(180,170,255,0.38)', letterSpacing:1 }}>♪ beat + vocal active</span>}
+                  </div>
                   <button onClick={speakLyrics} style={{
-                    background: speaking ? `${color}25` : 'rgba(255,255,255,0.04)',
-                    border:`1px solid ${speaking ? color+'50' : 'rgba(255,255,255,0.08)'}`,
-                    borderRadius:8, padding:'4px 10px', cursor:'pointer',
-                    color: speaking ? color : 'var(--w-text-dim)',
+                    background: speaking ? `${color}30` : 'rgba(255,255,255,0.07)',
+                    border:`1px solid ${speaking ? color+'65' : 'rgba(255,255,255,0.14)'}`,
+                    borderRadius:8, padding:'5px 12px', cursor:'pointer',
+                    color: speaking ? color : 'rgba(210,200,255,0.65)',
                     display:'flex', alignItems:'center', gap:4,
-                    fontSize:'0.6rem', fontFamily:'monospace', fontWeight:700,
+                    fontSize:'0.6rem', fontFamily:'monospace', fontWeight:800,
+                    boxShadow: speaking ? `0 0 14px ${glow}50` : 'none',
                   }}>
                     <Volume2 size={10} /> {speaking ? '■ Stop' : '▶ Play'}
                   </button>
                 </div>
-                {/* Lyric scroll */}
-                <div style={{ flex:1, overflowY:'auto', zIndex:1, padding:'2px 0' }}>
+                <div style={{ flex:1, overflowY:'auto', zIndex:1, padding:'0 2px', position:'relative' }}>
                   {lyrics.split('\n').map((line, i) => {
                     const isActive = speaking && lyricLine === i;
                     const isHeader = line.startsWith('[') || line.startsWith('🎵');
                     return (
                       <p key={i} style={{
-                        margin:'1px 0', padding:'2px 6px', borderRadius:5,
-                        fontSize: isActive ? '0.74rem' : '0.62rem',
-                        fontWeight: isActive ? 800 : isHeader ? 600 : 400,
-                        color: isActive ? 'var(--w-text-main)' : isHeader ? color : 'var(--w-text-dim)',
-                        background: isActive ? `${color}22` : 'transparent',
+                        margin:'1px 0', padding:'3px 8px', borderRadius:6,
+                        fontSize: isActive ? '0.76rem' : '0.61rem',
+                        fontWeight: isActive ? 800 : isHeader ? 700 : 400,
+                        color: isActive ? '#ffffff' : isHeader ? color : 'rgba(200,190,255,0.42)',
+                        background: isActive ? `${color}30` : 'transparent',
                         fontFamily:'monospace', lineHeight:1.65,
-                        transition:'font-size 0.2s, background 0.2s, color 0.2s',
+                        transition:'font-size 0.18s, background 0.18s, color 0.18s',
                         textAlign: isHeader ? 'center' : 'left',
-                        textShadow: isActive ? `0 0 12px ${glow}` : 'none',
-                      }}>{line || ' '}</p>
+                        textShadow: isActive ? `0 0 18px ${glow}, 0 0 6px ${glow}80` : 'none',
+                        letterSpacing: isHeader ? 1 : 0,
+                      }}>{line || ' '}</p>
                     );
                   })}
                 </div>
               </div>
             )}
 
-            {/* ── VIDEO (AI animated study presentation) ── */}
+            {/* ── VIDEO — Canvas space animation + deep-voice narrated slide show ── */}
             {tab === 'video' && (
-              <div style={{ height:'100%', display:'flex', flexDirection:'column', gap:8 }}>
-                {videoState === 'idle' && videoSlide === 0 ? (
-                  /* Start screen */
-                  <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:16 }}>
-                    <span style={{ fontSize:'2.5rem' }}>🎬</span>
-                    <div style={{ textAlign:'center' }}>
-                      <p style={{ fontSize:'0.85rem', fontWeight:800, color:'var(--w-text-main)', margin:'0 0 4px', fontFamily:'monospace' }}>{exam.toUpperCase()}</p>
-                      <p style={{ fontSize:'0.6rem', color:'var(--w-text-dim)', margin:0 }}>AI-narrated study overview · {cards.length} key concepts</p>
+              <div style={{ height:'100%', position:'relative', overflow:'hidden', borderRadius:10 }}>
+                <canvas ref={videoCanvasRef} style={{ position:'absolute', inset:0, width:'100%', height:'100%', borderRadius:10 }} />
+                <div style={{ position:'relative', zIndex:1, height:'100%', display:'flex', flexDirection:'column', gap:8 }}>
+                  {videoState === 'idle' && videoSlide === 0 ? (
+                    <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:16 }}>
+                      <div style={{ textAlign:'center' }}>
+                        <p style={{ fontSize:'0.85rem', fontWeight:800, color:'rgba(230,225,255,0.95)', margin:'0 0 4px', fontFamily:'monospace', letterSpacing:1 }}>{exam.toUpperCase()}</p>
+                        <p style={{ fontSize:'0.6rem', color:'rgba(180,170,255,0.55)', margin:0 }}>Deep-voice narrated overview · {cards.length} key concepts</p>
+                      </div>
+                      <button onClick={startVideo} style={{
+                        background:color, color:'#fff', border:'none', borderRadius:12,
+                        padding:'11px 30px', cursor:'pointer', fontSize:'0.72rem',
+                        fontWeight:800, fontFamily:'monospace', letterSpacing:1,
+                        boxShadow:`0 4px 22px ${glow}, 0 0 40px ${glow}40`,
+                        display:'flex', alignItems:'center', gap:8,
+                      }}>
+                        <Video size={14} /> Start Presentation
+                      </button>
+                      <p style={{ fontSize:'0.5rem', color:'rgba(160,150,220,0.35)', fontFamily:'monospace', margin:0, letterSpacing:0.5 }}>
+                        ▪ cinematic narration  ▪ particle transitions  ▪ ~3 min
+                      </p>
                     </div>
-                    <button onClick={startVideo} style={{
-                      background:color, color:'#fff', border:'none', borderRadius:12,
-                      padding:'10px 28px', cursor:'pointer', fontSize:'0.72rem',
-                      fontWeight:800, fontFamily:'monospace', letterSpacing:1,
-                      boxShadow:`0 4px 18px ${glow}`,
-                      display:'flex', alignItems:'center', gap:8,
-                    }}>
-                      <Video size={14} /> Start Presentation
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    {/* Progress bar */}
-                    <div style={{ height:3, background:'rgba(255,255,255,0.08)', borderRadius:2, flexShrink:0 }}>
-                      <div style={{ width:`${videoProgress*100}%`, height:'100%', background:color, borderRadius:2, transition:'width 0.1s linear' }} />
-                    </div>
-                    {/* Slide area */}
-                    <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:0, overflow:'hidden' }}>
-                      {(() => {
-                        const n = cards.length;
-                        if (videoSlide === 0) {
-                          return (
-                            <div key="intro" className="anim-fade-slide-in" style={{ textAlign:'center', padding:'0 12px' }}>
-                              <span style={{ fontSize:'2rem' }}>📚</span>
-                              <p style={{ fontSize:'1rem', fontWeight:800, color:'var(--w-text-main)', fontFamily:'monospace', margin:'10px 0 4px' }}>{exam.toUpperCase()}</p>
-                              <p style={{ fontSize:'0.62rem', color:'var(--w-text-dim)', margin:'0 0 12px' }}>Comprehensive Study Overview</p>
-                              <div style={{ padding:'5px 14px', background:`${color}18`, border:`1px solid ${color}35`, borderRadius:20, display:'inline-block' }}>
+                  ) : (
+                    <>
+                      <div style={{ height:3, background:'rgba(255,255,255,0.06)', borderRadius:2, flexShrink:0 }}>
+                        <div style={{ width:`${videoProgress*100}%`, height:'100%', background:color, borderRadius:2, transition:'width 0.1s linear', boxShadow:`0 0 8px ${glow}` }} />
+                      </div>
+                      <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:0, overflow:'hidden' }}>
+                        {(() => {
+                          const n = cards.length;
+                          if (videoSlide === 0) return (
+                            <div key="intro" className="anim-fade-slide-in" style={{ textAlign:'center', padding:'20px', background:'rgba(8,5,20,0.55)', borderRadius:16, border:'1px solid rgba(200,180,255,0.1)' }}>
+                              <span style={{ fontSize:'2.2rem' }}>📚</span>
+                              <p style={{ fontSize:'1rem', fontWeight:800, color:'rgba(240,235,255,0.95)', fontFamily:'monospace', margin:'10px 0 6px', letterSpacing:1 }}>{exam.toUpperCase()}</p>
+                              <p style={{ fontSize:'0.62rem', color:'rgba(180,170,255,0.55)', margin:'0 0 14px' }}>Comprehensive Study Overview</p>
+                              <div style={{ padding:'5px 16px', background:`${color}22`, border:`1px solid ${color}45`, borderRadius:20, display:'inline-block', boxShadow:`0 0 14px ${glow}30` }}>
                                 <span style={{ fontSize:'0.58rem', color, fontFamily:'monospace' }}>▶ Narrated · {n} key concepts</span>
                               </div>
                             </div>
                           );
-                        } else if (videoSlide > n) {
-                          return (
-                            <div key="outro" className="anim-fade-slide-in" style={{ textAlign:'center', padding:'0 12px' }}>
+                          if (videoSlide > n) return (
+                            <div key="outro" className="anim-fade-slide-in" style={{ textAlign:'center', padding:'20px 16px', background:'rgba(8,5,20,0.55)', borderRadius:16, border:`1px solid ${color}30` }}>
                               <span style={{ fontSize:'2.5rem' }}>🎓</span>
                               <p style={{ fontSize:'1rem', fontWeight:800, color, fontFamily:'monospace', margin:'10px 0 4px' }}>Study Complete!</p>
-                              <p style={{ fontSize:'0.65rem', color:'var(--w-text-dim)', margin:'0 0 12px' }}>You covered {n} key terms for {exam}</p>
-                              <p style={{ fontSize:'0.58rem', color:'var(--w-text-faint)', margin:0 }}>Switch to Cards or Quiz to reinforce your knowledge.</p>
-                              <button onClick={() => { setVideoSlide(0); setVideoProgress(0); }} style={{
-                                marginTop:14, background:`${color}18`, border:`1px solid ${color}35`, borderRadius:10,
+                              <p style={{ fontSize:'0.65rem', color:'rgba(200,190,255,0.65)', margin:'0 0 12px' }}>You covered {n} key terms for {exam}</p>
+                              <p style={{ fontSize:'0.56rem', color:'rgba(160,150,220,0.4)', margin:'0 0 14px' }}>Switch to Cards or Quiz to reinforce your knowledge.</p>
+                              <button onClick={() => { setVideoSlide(0); setVideoProgress(0); videoSlideRef.current = 0; }} style={{
+                                background:`${color}22`, border:`1px solid ${color}45`, borderRadius:10,
                                 padding:'6px 18px', cursor:'pointer', color, fontSize:'0.6rem', fontFamily:'monospace', fontWeight:700,
                               }}>Watch Again</button>
                             </div>
                           );
-                        } else {
-                          const slideCard = cards[videoSlide - 1];
+                          const sc = cards[videoSlide - 1];
                           return (
-                            <div key={videoSlide} className="anim-fade-slide-in" style={{ width:'100%', padding:'0 6px', display:'flex', flexDirection:'column', gap:10, alignItems:'center' }}>
-                              <span style={{
-                                fontSize:'0.5rem', fontFamily:'monospace', letterSpacing:2, textTransform:'uppercase',
-                                padding:'3px 12px', background:`${color}18`, border:`1px solid ${color}35`, borderRadius:20, color,
-                              }}>{slideCard.category}</span>
-                              <p style={{ fontSize:'0.95rem', fontWeight:800, color:'var(--w-text-main)', fontFamily:'monospace', textAlign:'center', lineHeight:1.3, margin:0 }}>{slideCard.term}</p>
-                              <p style={{ fontSize:'0.65rem', color:'var(--w-text-dim)', textAlign:'center', lineHeight:1.65, margin:0 }}>{slideCard.def}</p>
-                              <span style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', fontFamily:'monospace', marginTop:4 }}>{videoSlide} / {n}</span>
+                            <div key={videoSlide} className="anim-fade-slide-in" style={{ width:'100%', padding:'18px 14px', display:'flex', flexDirection:'column', gap:10, alignItems:'center', background:'rgba(8,5,20,0.58)', borderRadius:14, border:'1px solid rgba(200,180,255,0.08)' }}>
+                              <span style={{ fontSize:'0.5rem', fontFamily:'monospace', letterSpacing:2, textTransform:'uppercase', padding:'3px 14px', background:`${color}22`, border:`1px solid ${color}45`, borderRadius:20, color, boxShadow:`0 0 10px ${glow}30` }}>{sc.category}</span>
+                              <p style={{ fontSize:'1rem', fontWeight:800, color:'rgba(240,235,255,0.95)', fontFamily:'monospace', textAlign:'center', lineHeight:1.3, margin:0, textShadow:`0 0 20px ${glow}50` }}>{sc.term}</p>
+                              <p style={{ fontSize:'0.65rem', color:'rgba(190,180,255,0.72)', textAlign:'center', lineHeight:1.7, margin:0 }}>{sc.def}</p>
+                              <span style={{ fontSize:'0.5rem', color:'rgba(150,140,200,0.4)', fontFamily:'monospace', marginTop:2 }}>{videoSlide} / {n}</span>
                             </div>
                           );
-                        }
-                      })()}
-                    </div>
-                    {/* Dot navigation */}
-                    <div style={{ display:'flex', gap:4, justifyContent:'center', flexWrap:'wrap', flexShrink:0 }}>
-                      {Array.from({ length: Math.min(cards.length + 2, 14) }, (_, i) => (
-                        <div key={i} style={{
-                          width:5, height:5, borderRadius:'50%',
-                          background: videoSlide === i ? color : 'rgba(255,255,255,0.15)',
-                          transition:'background 0.25s',
-                        }} />
-                      ))}
-                    </div>
-                    {/* Playback controls */}
-                    {videoState !== 'idle' && (
-                      <div style={{ display:'flex', gap:8, justifyContent:'center', flexShrink:0 }}>
-                        <button onClick={toggleVideoPause} style={{
-                          background:`${color}20`, border:`1px solid ${color}45`, borderRadius:10,
-                          padding:'6px 20px', cursor:'pointer', color, fontSize:'0.62rem', fontFamily:'monospace', fontWeight:800,
-                        }}>
-                          {videoState === 'playing' ? '⏸ Pause' : '▶ Resume'}
-                        </button>
-                        <button onClick={stopVideo} style={{
-                          background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:10,
-                          padding:'6px 14px', cursor:'pointer', color:'var(--w-text-dim)', fontSize:'0.62rem', fontFamily:'monospace',
-                        }}>
-                          ■ Stop
-                        </button>
+                        })()}
                       </div>
-                    )}
-                  </>
-                )}
+                      <div style={{ display:'flex', gap:3, justifyContent:'center', flexWrap:'wrap', flexShrink:0 }}>
+                        {Array.from({ length: Math.min(cards.length + 2, 14) }, (_, i) => (
+                          <div key={i} style={{ width:5, height:5, borderRadius:'50%', background: videoSlide===i ? color : 'rgba(255,255,255,0.12)', transition:'background 0.25s', boxShadow: videoSlide===i ? `0 0 6px ${glow}` : 'none' }} />
+                        ))}
+                      </div>
+                      {videoState !== 'idle' && (
+                        <div style={{ display:'flex', gap:8, justifyContent:'center', flexShrink:0 }}>
+                          <button onClick={toggleVideoPause} style={{ background:`${color}22`, border:`1px solid ${color}50`, borderRadius:10, padding:'6px 20px', cursor:'pointer', color, fontSize:'0.62rem', fontFamily:'monospace', fontWeight:800, boxShadow:`0 0 10px ${glow}30` }}>
+                            {videoState === 'playing' ? '⏸ Pause' : '▶ Resume'}
+                          </button>
+                          <button onClick={stopVideo} style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.09)', borderRadius:10, padding:'6px 14px', cursor:'pointer', color:'rgba(180,170,255,0.5)', fontSize:'0.62rem', fontFamily:'monospace' }}>
+                            ■ Stop
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             )}
-          </div>
         </>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4 pb-4">

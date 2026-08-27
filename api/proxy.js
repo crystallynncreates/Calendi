@@ -46,42 +46,47 @@ export default async function handler(req, res) {
   let html = await upstream.text();
   const origin = target.origin;
 
-  // Multi-layer navigation interceptor injected at the top of <head>.
-  // All same-origin navigations send postMessage to the parent BrowserWidget,
-  // which re-points the iframe src to /api/proxy?url=... so Google stays in-frame.
+  // Navigation interceptor injected at the top of <head>.
+  // Avoids overriding Location/history prototypes (they cause reload loops because
+  // Google reads back window.location.pathname — which is the proxy path — and
+  // passes it to replaceState, resolving it against the google.com base to create
+  // a double-proxy URL). Instead we intercept three targeted ways:
+  //   1. Capture-phase click handler  — <a> links
+  //   2. Capture-phase submit handler — form submissions
+  //   3. keydown Enter on input[name=q] — Google's search box (hooked on DOMContentLoaded
+  //      and retried after 500 ms / 1500 ms for dynamic inputs)
+  // All intercepted navigations go via postMessage so the parent BrowserWidget can
+  // reload the iframe src as /api/proxy?url=<target> rather than navigating directly.
   const interceptor =
     `<base href="${origin}/"><script>(function(){` +
     `var O='${origin}';` +
-    // proxyNav: resolve URL, if same-origin send to parent via postMessage and return true
     `function pn(u){try{var a=new URL(u,document.baseURI).href;` +
     `if(a.startsWith(O)){window.parent.postMessage({calendi:'nav',url:a},'*');return true;}}` +
     `catch(e){}return false;}` +
-    // 1. Location.prototype.href setter — catches  location.href = url
-    `try{var hd=Object.getOwnPropertyDescriptor(Location.prototype,'href');` +
-    `if(hd&&hd.configurable){Object.defineProperty(Location.prototype,'href',` +
-    `{get:hd.get,set:function(v){if(!pn(String(v)))hd.set.call(this,v);},configurable:true,enumerable:true});}}catch(e){}` +
-    // 2. location.assign — catches  location.assign(url)
-    `try{var oa=Location.prototype.assign;Location.prototype.assign=function(v){if(!pn(v))oa.call(this,v);};}catch(e){}` +
-    // 3. location.replace — catches  location.replace(url)
-    `try{var ore=Location.prototype.replace;Location.prototype.replace=function(v){if(!pn(v))ore.call(this,v);};}catch(e){}` +
-    // 4. history.pushState — catches SPA navigation
-    `try{var ops=history.pushState;history.pushState=function(s,t,u){if(!u||!pn(String(u)))ops.call(this,s,t,u);};}catch(e){}` +
-    // 5. history.replaceState
-    `try{var ors=history.replaceState;history.replaceState=function(s,t,u){if(!u||!pn(String(u)))ors.call(this,s,t,u);};}catch(e){}` +
-    // 6. capture-phase click interceptor
+    // click interceptor
     `document.addEventListener('click',function(e){` +
     `var a=e.target.closest('a[href]');if(!a)return;` +
     `var h=a.getAttribute('href');if(!h||h[0]==='#'||/^(javascript|mailto|tel):/.test(h))return;` +
     `try{var abs=new URL(h,document.baseURI).href;` +
     `if(abs.startsWith(O)){e.preventDefault();e.stopImmediatePropagation();pn(abs);}` +
     `else{a.setAttribute('target','_blank');a.setAttribute('rel','noopener');}}catch(er){}},true);` +
-    // 7. capture-phase submit interceptor
+    // submit interceptor
     `document.addEventListener('submit',function(e){` +
     `var f=e.target;var action=f.action||location.href;` +
     `try{var abs=new URL(action,document.baseURI).href;` +
+    `if(!abs.startsWith(O))return;` +
     `e.preventDefault();e.stopImmediatePropagation();` +
     `var q=new URLSearchParams(new FormData(f)).toString();` +
     `pn(abs+(q?(abs.includes('?')?'&':'?')+q:''));}catch(er){}},true);` +
+    // search-box keydown interceptor (hooks input[name=q] to catch Enter before Google's JS)
+    `function hs(){document.querySelectorAll('input[name=q]').forEach(function(inp){` +
+    `if(inp._ch)return;inp._ch=true;` +
+    `inp.addEventListener('keydown',function(e){` +
+    `if(e.key==='Enter'||e.keyCode===13){` +
+    `e.preventDefault();e.stopImmediatePropagation();` +
+    `pn(O+'/search?q='+encodeURIComponent(inp.value));` +
+    `}},true);});}` +
+    `document.addEventListener('DOMContentLoaded',hs);setTimeout(hs,500);setTimeout(hs,1500);` +
     `}());<\/script>`;
 
   const headMatch = html.match(/<head[^>]*>/i);

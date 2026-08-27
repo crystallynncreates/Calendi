@@ -64,14 +64,24 @@ export default async function handler(req, res) {
   const interceptor =
     `<base href="${origin}/"><script>(function(){` +
     `var O='${origin}';` +
+    // pn: resolve u against the base URL; if it's a real same-origin destination send
+    // it to the parent via postMessage. Guard against the double-proxy trap: because
+    // <base href> is set to the proxied origin, Google's history.replaceState calls that
+    // pass the current proxy path (/api/proxy?url=...) as a relative URL resolve to
+    // <proxied-origin>/api/proxy?url=..., which looks like a same-origin URL but is
+    // actually the proxy path. We detect this by checking if the resolved path starts
+    // with /api/ and bail out.
     `function pn(u){try{var a=new URL(u,document.baseURI).href;` +
-    `if(a.startsWith(O)){window.parent.postMessage({calendi:'nav',url:a},'*');return true;}}` +
+    `if(!a.startsWith(O))return false;` +
+    `if(new URL(a).pathname.indexOf('/api/')===0)return false;` +
+    `window.parent.postMessage({calendi:'nav',url:a},'*');return true;}` +
     `catch(e){}return false;}` +
     // 1. Navigation API — broadest net, catches location.href / pushState / form / link
     `try{if(window.navigation){` +
     `window.navigation.addEventListener('navigate',function(e){` +
     `try{var abs=new URL(e.destination.url,document.baseURI).href;` +
     `if(!abs.startsWith(O))return;` +
+    `if(new URL(abs).pathname.indexOf('/api/')===0)return;` +
     `if(e.canIntercept){e.intercept({handler:function(){` +
     `window.parent.postMessage({calendi:'nav',url:abs},'*');` +
     `return new Promise(function(res){setTimeout(res,5000);});` +

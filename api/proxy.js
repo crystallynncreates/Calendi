@@ -46,31 +46,53 @@ export default async function handler(req, res) {
   let html = await upstream.text();
   const origin = target.origin;
 
-  // Navigation interceptor injected at the top of <head>.
-  // Avoids overriding Location/history prototypes (they cause reload loops because
-  // Google reads back window.location.pathname — which is the proxy path — and
-  // passes it to replaceState, resolving it against the google.com base to create
-  // a double-proxy URL). Instead we intercept three targeted ways:
-  //   1. Capture-phase click handler  — <a> links
-  //   2. Capture-phase submit handler — form submissions
-  //   3. keydown Enter on input[name=q] — Google's search box (hooked on DOMContentLoaded
-  //      and retried after 500 ms / 1500 ms for dynamic inputs)
-  // All intercepted navigations go via postMessage so the parent BrowserWidget can
-  // reload the iframe src as /api/proxy?url=<target> rather than navigating directly.
+  // Navigation interceptor injected at top of <head>. Three layers:
+  //
+  // 1. window.navigation API (Chrome 102+) — fires BEFORE any navigation and gives the
+  //    destination URL. We intercept same-origin destinations via postMessage so the
+  //    parent BrowserWidget can remount the iframe with the proxied URL instead.
+  //    For interceptable (same-document) navigations we call e.intercept(); for
+  //    cross-document ones we just postMessage — the parent remounts the iframe before
+  //    the blocked google.com response arrives.
+  //
+  // 2. Broad capture-phase keydown — catches Enter on ANY input/textarea/contenteditable/
+  //    role=searchbox element. Google's new AI search interface uses a contenteditable
+  //    div, not input[name=q], so the hook must be element-agnostic.
+  //
+  // 3. Capture-phase click + submit — catches <a> links and traditional form posts.
+  //    External links get target=_blank.
   const interceptor =
     `<base href="${origin}/"><script>(function(){` +
     `var O='${origin}';` +
     `function pn(u){try{var a=new URL(u,document.baseURI).href;` +
     `if(a.startsWith(O)){window.parent.postMessage({calendi:'nav',url:a},'*');return true;}}` +
     `catch(e){}return false;}` +
-    // click interceptor
+    // 1. Navigation API — broadest net, catches location.href / pushState / form / link
+    `try{if(window.navigation){` +
+    `window.navigation.addEventListener('navigate',function(e){` +
+    `try{var abs=new URL(e.destination.url,document.baseURI).href;` +
+    `if(!abs.startsWith(O))return;` +
+    `if(e.canIntercept){e.intercept({handler:function(){` +
+    `window.parent.postMessage({calendi:'nav',url:abs},'*');` +
+    `return new Promise(function(res){setTimeout(res,5000);});` +
+    `}});}else{window.parent.postMessage({calendi:'nav',url:abs},'*');}` +
+    `}catch(er){}},{capture:true});}}catch(e){}` +
+    // 2. Broad keydown Enter — any text input/textarea/contenteditable/role=searchbox
+    `document.addEventListener('keydown',function(e){` +
+    `if(e.key!=='Enter'&&e.keyCode!==13)return;` +
+    `var el=e.target,tag=el.tagName,role=(el.getAttribute('role')||'').toLowerCase(),ce=el.contentEditable;` +
+    `if(tag==='INPUT'||tag==='TEXTAREA'||ce==='true'||role==='textbox'||role==='combobox'||role==='searchbox'){` +
+    `var val=(el.value||el.innerText||el.textContent||'').trim();` +
+    `if(val){e.preventDefault();e.stopImmediatePropagation();` +
+    `pn(O+'/search?q='+encodeURIComponent(val));}}},true);` +
+    // 3a. click interceptor
     `document.addEventListener('click',function(e){` +
     `var a=e.target.closest('a[href]');if(!a)return;` +
     `var h=a.getAttribute('href');if(!h||h[0]==='#'||/^(javascript|mailto|tel):/.test(h))return;` +
     `try{var abs=new URL(h,document.baseURI).href;` +
     `if(abs.startsWith(O)){e.preventDefault();e.stopImmediatePropagation();pn(abs);}` +
     `else{a.setAttribute('target','_blank');a.setAttribute('rel','noopener');}}catch(er){}},true);` +
-    // submit interceptor
+    // 3b. submit interceptor
     `document.addEventListener('submit',function(e){` +
     `var f=e.target;var action=f.action||location.href;` +
     `try{var abs=new URL(action,document.baseURI).href;` +
@@ -78,15 +100,6 @@ export default async function handler(req, res) {
     `e.preventDefault();e.stopImmediatePropagation();` +
     `var q=new URLSearchParams(new FormData(f)).toString();` +
     `pn(abs+(q?(abs.includes('?')?'&':'?')+q:''));}catch(er){}},true);` +
-    // search-box keydown interceptor (hooks input[name=q] to catch Enter before Google's JS)
-    `function hs(){document.querySelectorAll('input[name=q]').forEach(function(inp){` +
-    `if(inp._ch)return;inp._ch=true;` +
-    `inp.addEventListener('keydown',function(e){` +
-    `if(e.key==='Enter'||e.keyCode===13){` +
-    `e.preventDefault();e.stopImmediatePropagation();` +
-    `pn(O+'/search?q='+encodeURIComponent(inp.value));` +
-    `}},true);});}` +
-    `document.addEventListener('DOMContentLoaded',hs);setTimeout(hs,500);setTimeout(hs,1500);` +
     `}());<\/script>`;
 
   const headMatch = html.match(/<head[^>]*>/i);

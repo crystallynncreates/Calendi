@@ -1,10 +1,3 @@
-const INSTANCES = [
-  'https://searx.be',
-  'https://searxng.site',
-  'https://search.mdosch.de',
-  'https://search.bus-hit.me',
-];
-
 function esc(s) {
   if (s == null) return '';
   return String(s).replace(/[&<>"']/g, c =>
@@ -14,6 +7,106 @@ function esc(s) {
 
 function hostname(url) {
   try { return new URL(url).hostname; } catch { return url; }
+}
+
+function attrVal(tag, attr) {
+  const m = tag.match(new RegExp(attr + '="([^"]*)"'));
+  return m ? m[1] : '';
+}
+
+function parseDDG(html) {
+  const results = [];
+  let pos = 0;
+  while (results.length < 20) {
+    const start = html.indexOf('<div class="result ', pos);
+    if (start === -1) break;
+    const next = html.indexOf('<div class="result ', start + 10);
+    const block = next === -1 ? html.slice(start) : html.slice(start, next);
+    pos = start + 10;
+    if (block.includes('result--ad')) continue;
+    const aTagM = block.match(/<a[^>]*class="result__a"[^>]*>/);
+    if (!aTagM) continue;
+    const aTag = aTagM[0];
+    const href = attrVal(aTag, 'href');
+    const aIdx = block.indexOf(aTag);
+    const closeA = block.indexOf('</a>', aIdx + aTag.length);
+    const titleRaw = block.slice(aIdx + aTag.length, closeA > -1 ? closeA : undefined);
+    const title = titleRaw.replace(/<[^>]+>/g, '').trim();
+    let url = '';
+    try {
+      const uddg = href.match(/[?&]uddg=([^&]+)/);
+      if (uddg) url = decodeURIComponent(uddg[1]);
+    } catch {}
+    if (!url && href) url = href.startsWith('//') ? 'https:' + href : href;
+    if (!url || !title) continue;
+    const snipM = block.match(/<a[^>]+class="result__snippet"[^>]*>([\s\S]*?)<\/a>/);
+    const content = snipM ? snipM[1].replace(/<[^>]+>/g, '').trim() : '';
+    results.push({ title, url, content });
+  }
+  return results;
+}
+
+const SEARXNG = [
+  'https://searx.be',
+  'https://searxng.site',
+  'https://search.mdosch.de',
+  'https://search.bus-hit.me',
+  'https://searx.tiekoetter.com',
+  'https://search.sapti.me',
+];
+
+async function searchDDG(query) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const r = await fetch(
+      `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`,
+      {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Lynx/2.9.0dev.12 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/1.1.1n',
+          'Accept': 'text/html,application/xhtml+xml',
+          'Accept-Language': 'en-US,en;q=0.9',
+        },
+      }
+    );
+    clearTimeout(timer);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const html = await r.text();
+    const results = parseDDG(html);
+    if (results.length === 0) throw new Error('no results parsed');
+    return results;
+  } catch (e) {
+    clearTimeout(timer);
+    throw e;
+  }
+}
+
+async function searchSearXNG(query) {
+  for (const base of SEARXNG) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 6000);
+    try {
+      const r = await fetch(
+        `${base}/search?q=${encodeURIComponent(query)}&format=json&language=en&categories=general`,
+        {
+          signal: controller.signal,
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'application/json',
+          },
+        }
+      );
+      clearTimeout(timer);
+      if (!r.ok) continue;
+      const data = await r.json();
+      const results = (data.results || []).slice(0, 20);
+      if (results.length > 0) return results;
+    } catch {
+      clearTimeout(timer);
+    }
+  }
+  throw new Error('all search backends unavailable');
 }
 
 function page(query, results, errMsg) {
@@ -46,7 +139,7 @@ function page(query, results, errMsg) {
           <button type="submit">Search</button>
         </div>
       </form>
-      <p class="powered">Powered by SearXNG · results open in a new tab</p>
+      <p class="powered">Powered by DuckDuckGo · results open in a new tab</p>
     </div>` : '';
 
   const resultsContent = query ? `
@@ -116,32 +209,15 @@ export default async function handler(req, res) {
   let results = [];
   let lastErr = null;
 
-  for (const base of INSTANCES) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 6000);
+  try {
+    results = await searchDDG(query);
+  } catch (e) {
+    lastErr = e.message;
     try {
-      const r = await fetch(
-        `${base}/search?q=${encodeURIComponent(query)}&format=json&language=en&categories=general`,
-        {
-          signal: controller.signal,
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
-            'Accept': 'application/json',
-            'Accept-Language': 'en-US,en;q=0.9',
-          },
-        }
-      );
-      clearTimeout(timer);
-      if (r.ok) {
-        const data = await r.json();
-        results = (data.results || []).slice(0, 20);
-        lastErr = null;
-        break;
-      }
-      lastErr = `HTTP ${r.status} from ${base}`;
-    } catch (e) {
-      clearTimeout(timer);
-      lastErr = e.message;
+      results = await searchSearXNG(query);
+      lastErr = null;
+    } catch (e2) {
+      lastErr = e2.message;
     }
   }
 

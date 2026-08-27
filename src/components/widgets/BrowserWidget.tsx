@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type FC } from 'react';
+import { useState, useRef, type FC } from 'react';
 import { RefreshCw, Globe, X, ExternalLink } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 import { GoogleLogo, YouTubeLogo, GoogleMapsLogo } from '../BrandLogos';
@@ -10,10 +10,8 @@ type QuickLink = {
   emoji?: string;
 };
 
-const PROXY = (u: string) => `/api/proxy?url=${encodeURIComponent(u)}`;
-
 const QUICK_LINKS: QuickLink[] = [
-  { label: 'Google',      url: PROXY('https://www.google.com'),                 Logo: GoogleLogo },
+  { label: 'Google',      url: '/api/search',                                   Logo: GoogleLogo },
   { label: 'YouTube',     url: 'https://piped.video',                           Logo: YouTubeLogo },
   { label: 'Maps',        url: 'https://maps.google.com/maps?q=&output=embed',  Logo: GoogleMapsLogo },
   { label: 'Translate',   url: 'https://lingva.ml',                             emoji: '🌐' },
@@ -31,29 +29,13 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
   const [loading, setLoading] = useState(!!initialUrl);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // Receive postMessage from the proxy iframe when Google's JS navigates via
-  // location.href, location.assign, or history.pushState — intercept and re-proxy.
-  useEffect(() => {
-    function onMsg(e: MessageEvent) {
-      const d = e.data;
-      if (d && d.calendi === 'nav' && typeof d.url === 'string') {
-        const proxied = `/api/proxy?url=${encodeURIComponent(d.url)}`;
-        setActiveUrl(proxied);
-        setUrl(proxied);
-        setLoading(true);
-      }
-    }
-    window.addEventListener('message', onMsg);
-    return () => window.removeEventListener('message', onMsg);
-  }, []);
-
   function navigate(target: string) {
     let full = target.trim();
     if (!full) return;
     if (!full.startsWith('http://') && !full.startsWith('https://') && !full.startsWith('/')) {
       full = full.includes('.')
         ? `https://${full}`
-        : PROXY(`https://www.google.com/search?q=${encodeURIComponent(full)}`);
+        : `/api/search?q=${encodeURIComponent(full)}`;
     }
     setActiveUrl(full);
     setUrl(full);

@@ -11,12 +11,12 @@ type QuickLink = {
 };
 
 const QUICK_LINKS: QuickLink[] = [
-  { label: 'Google',      url: '/api/search',                                   Logo: GoogleLogo },
-  { label: 'YouTube',     url: 'https://piped.video',                           Logo: YouTubeLogo },
-  { label: 'Maps',        url: 'https://maps.google.com/maps?q=&output=embed',  Logo: GoogleMapsLogo },
-  { label: 'Translate',   url: 'https://lingva.ml',                             emoji: '🌐' },
-  { label: 'Wikipedia',   url: 'https://en.m.wikipedia.org',                    emoji: '📖' },
-  { label: 'Weather',     url: 'https://forecast.weather.gov/',                 emoji: '🌤️' },
+  { label: 'Google',      url: '/api/search',                                                           Logo: GoogleLogo },
+  { label: 'YouTube',     url: '/api/proxy?url=https%3A%2F%2Fpiped.video',                              Logo: YouTubeLogo },
+  { label: 'Maps',        url: 'https://maps.google.com/maps?q=&output=embed',                          Logo: GoogleMapsLogo },
+  { label: 'Translate',   url: '/api/proxy?url=https%3A%2F%2Flingva.ml',                                emoji: '🌐' },
+  { label: 'Wikipedia',   url: '/api/proxy?url=https%3A%2F%2Fen.m.wikipedia.org%2Fwiki%2FMain_Page',    emoji: '📖' },
+  { label: 'Weather',     url: '/api/proxy?url=https%3A%2F%2Fforecast.weather.gov%2F',                  emoji: '🌤️' },
 ];
 
 interface BrowserProps { initialUrl?: string }
@@ -36,6 +36,13 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
       full = full.includes('.')
         ? `https://${full}`
         : `/api/search?q=${encodeURIComponent(full)}`;
+    }
+    // Route external URLs through proxy so they stay in-frame (skip Maps embed which Google allows)
+    if (
+      (full.startsWith('http://') || full.startsWith('https://')) &&
+      !full.includes('maps.google.com')
+    ) {
+      full = `/api/proxy?url=${encodeURIComponent(full)}`;
     }
     setActiveUrl(full);
     setUrl(full);

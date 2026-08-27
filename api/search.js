@@ -151,7 +151,7 @@ function page(query, results, errMsg) {
       ${hasResults ? results.map(r => `
         <div class="result">
           <div class="cite">${esc(hostname(r.url))}</div>
-          <a class="title" href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.title || r.url)}</a>
+          <a class="title" href="/api/proxy?url=${encodeURIComponent(r.url)}">${esc(r.title || r.url)}</a>
           ${r.content ? `<div class="snippet">${esc(r.content)}</div>` : ''}
         </div>`).join('') : (!errMsg ? '<div class="empty">No results found.</div>' : '')}
     </div>` : '';

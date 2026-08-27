@@ -46,28 +46,42 @@ export default async function handler(req, res) {
   let html = await upstream.text();
   const origin = target.origin;
 
-  // Injected before any page script so capture-phase listeners fire first:
-  // - <base href> resolves relative URLs to the real origin
-  // - Click interceptor: routes same-origin links through proxy, forces external links to _blank
-  // - Submit interceptor: routes form submissions through proxy
+  // Multi-layer navigation interceptor injected at the top of <head>.
+  // All same-origin navigations send postMessage to the parent BrowserWidget,
+  // which re-points the iframe src to /api/proxy?url=... so Google stays in-frame.
   const interceptor =
     `<base href="${origin}/"><script>(function(){` +
-    `var P='/api/proxy?url=',O='${origin}';` +
+    `var O='${origin}';` +
+    // proxyNav: resolve URL, if same-origin send to parent via postMessage and return true
+    `function pn(u){try{var a=new URL(u,document.baseURI).href;` +
+    `if(a.startsWith(O)){window.parent.postMessage({calendi:'nav',url:a},'*');return true;}}` +
+    `catch(e){}return false;}` +
+    // 1. Location.prototype.href setter — catches  location.href = url
+    `try{var hd=Object.getOwnPropertyDescriptor(Location.prototype,'href');` +
+    `if(hd&&hd.configurable){Object.defineProperty(Location.prototype,'href',` +
+    `{get:hd.get,set:function(v){if(!pn(String(v)))hd.set.call(this,v);},configurable:true,enumerable:true});}}catch(e){}` +
+    // 2. location.assign — catches  location.assign(url)
+    `try{var oa=Location.prototype.assign;Location.prototype.assign=function(v){if(!pn(v))oa.call(this,v);};}catch(e){}` +
+    // 3. location.replace — catches  location.replace(url)
+    `try{var ore=Location.prototype.replace;Location.prototype.replace=function(v){if(!pn(v))ore.call(this,v);};}catch(e){}` +
+    // 4. history.pushState — catches SPA navigation
+    `try{var ops=history.pushState;history.pushState=function(s,t,u){if(!u||!pn(String(u)))ops.call(this,s,t,u);};}catch(e){}` +
+    // 5. history.replaceState
+    `try{var ors=history.replaceState;history.replaceState=function(s,t,u){if(!u||!pn(String(u)))ors.call(this,s,t,u);};}catch(e){}` +
+    // 6. capture-phase click interceptor
     `document.addEventListener('click',function(e){` +
     `var a=e.target.closest('a[href]');if(!a)return;` +
-    `var h=a.getAttribute('href');` +
-    `if(!h||h[0]==='#'||/^(javascript|mailto|tel):/.test(h))return;` +
+    `var h=a.getAttribute('href');if(!h||h[0]==='#'||/^(javascript|mailto|tel):/.test(h))return;` +
     `try{var abs=new URL(h,document.baseURI).href;` +
-    `if(abs.startsWith(O)){e.preventDefault();e.stopImmediatePropagation();location.href=P+encodeURIComponent(abs);}` +
-    `else{a.setAttribute('target','_blank');a.setAttribute('rel','noopener');}}catch(er){}` +
-    `},true);` +
+    `if(abs.startsWith(O)){e.preventDefault();e.stopImmediatePropagation();pn(abs);}` +
+    `else{a.setAttribute('target','_blank');a.setAttribute('rel','noopener');}}catch(er){}},true);` +
+    // 7. capture-phase submit interceptor
     `document.addEventListener('submit',function(e){` +
     `var f=e.target;var action=f.action||location.href;` +
     `try{var abs=new URL(action,document.baseURI).href;` +
     `e.preventDefault();e.stopImmediatePropagation();` +
     `var q=new URLSearchParams(new FormData(f)).toString();` +
-    `location.href=P+encodeURIComponent(abs+(q?(abs.includes('?')?'&':'?')+q:''));}catch(er){}` +
-    `},true);` +
+    `pn(abs+(q?(abs.includes('?')?'&':'?')+q:''));}catch(er){}},true);` +
     `}());<\/script>`;
 
   const headMatch = html.match(/<head[^>]*>/i);

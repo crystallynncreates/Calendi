@@ -1,4 +1,4 @@
-import { useState, useRef, type FC } from 'react';
+import { useState, useRef, useEffect, type FC } from 'react';
 import { RefreshCw, Globe, X, ExternalLink } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 import { GoogleLogo, YouTubeLogo, GoogleMapsLogo } from '../BrandLogos';
@@ -30,6 +30,22 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
   const [activeUrl, setActiveUrl] = useState(initialUrl ?? '');
   const [loading, setLoading] = useState(!!initialUrl);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Receive postMessage from the proxy iframe when Google's JS navigates via
+  // location.href, location.assign, or history.pushState — intercept and re-proxy.
+  useEffect(() => {
+    function onMsg(e: MessageEvent) {
+      const d = e.data;
+      if (d && d.calendi === 'nav' && typeof d.url === 'string') {
+        const proxied = `/api/proxy?url=${encodeURIComponent(d.url)}`;
+        setActiveUrl(proxied);
+        setUrl(proxied);
+        setLoading(true);
+      }
+    }
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
 
   function navigate(target: string) {
     let full = target.trim();

@@ -10,8 +10,10 @@ type QuickLink = {
   emoji?: string;
 };
 
+const PROXY = (u: string) => `/api/proxy?url=${encodeURIComponent(u)}`;
+
 const QUICK_LINKS: QuickLink[] = [
-  { label: 'Google',      url: 'https://searx.be',                              Logo: GoogleLogo },
+  { label: 'Google',      url: PROXY('https://www.google.com'),                 Logo: GoogleLogo },
   { label: 'YouTube',     url: 'https://piped.video',                           Logo: YouTubeLogo },
   { label: 'Maps',        url: 'https://maps.google.com/maps?q=&output=embed',  Logo: GoogleMapsLogo },
   { label: 'Translate',   url: 'https://lingva.ml',                             emoji: '🌐' },
@@ -32,8 +34,10 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
   function navigate(target: string) {
     let full = target.trim();
     if (!full) return;
-    if (!full.startsWith('http://') && !full.startsWith('https://')) {
-      full = full.includes('.') ? `https://${full}` : `https://searx.be/search?q=${encodeURIComponent(full)}&language=en`;
+    if (!full.startsWith('http://') && !full.startsWith('https://') && !full.startsWith('/')) {
+      full = full.includes('.')
+        ? `https://${full}`
+        : PROXY(`https://www.google.com/search?q=${encodeURIComponent(full)}`);
     }
     setActiveUrl(full);
     setUrl(full);

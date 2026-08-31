@@ -1,35 +1,87 @@
 import { useState, useRef, type FC } from 'react';
 import { RefreshCw, Globe, X, ExternalLink } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
-import { GoogleLogo, YouTubeLogo, GoogleMapsLogo } from '../BrandLogos';
+import {
+  GoogleLogo, YouTubeLogo, GoogleMapsLogo,
+  NetflixLogo, DisneyPlusLogo, HuluLogo, PrimeLogo,
+  InstagramLogo, FacebookLogo, WhatsAppLogo, TikTokLogo, XLogo,
+  GmailLogo, OutlookLogo, TeamsLogo, GoogleMeetLogo, ZoomLogo, CanvasLMSLogo,
+} from '../BrandLogos';
 
-type QuickLink = {
+type AppDef = {
+  id: string;
   label: string;
-  url: string;
   Logo?: FC<{ size: number }>;
   emoji?: string;
+  url: string;
+  mode: 'frame' | 'popup';
+  win?: string;
 };
 
-const QUICK_LINKS: QuickLink[] = [
-  { label: 'Google',      url: '/api/search',                                                           Logo: GoogleLogo },
-  { label: 'YouTube',     url: '/api/proxy?url=https%3A%2F%2Fpiped.video',                              Logo: YouTubeLogo },
-  { label: 'Maps',        url: 'https://maps.google.com/maps?q=&output=embed',                          Logo: GoogleMapsLogo },
-  { label: 'Translate',   url: '/api/proxy?url=https%3A%2F%2Flingva.ml',                                emoji: '🌐' },
-  { label: 'Wikipedia',   url: '/api/proxy?url=https%3A%2F%2Fen.m.wikipedia.org%2Fwiki%2FMain_Page',    emoji: '📖' },
-  { label: 'Weather',     url: '/api/proxy?url=https%3A%2F%2Fforecast.weather.gov%2F',                  emoji: '🌤️' },
+type Category = {
+  name: string;
+  note?: string;
+  apps: AppDef[];
+};
+
+const POPUP_OPTS = 'width=1400,height=900,resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no,location=yes';
+
+const CATEGORIES: Category[] = [
+  {
+    name: 'Search & Browse',
+    apps: [
+      { id: 'google',    label: 'Google',    Logo: GoogleLogo,     url: '/api/search',                                                          mode: 'frame' },
+      { id: 'youtube',   label: 'YouTube',   Logo: YouTubeLogo,    url: '/api/proxy?url=https%3A%2F%2Fpiped.video',                             mode: 'frame' },
+      { id: 'wikipedia', label: 'Wikipedia', emoji: '📖',           url: '/api/proxy?url=https%3A%2F%2Fen.m.wikipedia.org%2Fwiki%2FMain_Page',  mode: 'frame' },
+      { id: 'maps',      label: 'Maps',      Logo: GoogleMapsLogo, url: 'https://maps.google.com/maps?q=&output=embed',                         mode: 'frame' },
+    ],
+  },
+  {
+    name: 'Streaming',
+    note: 'companion window',
+    apps: [
+      { id: 'netflix',  label: 'Netflix',  Logo: NetflixLogo,    url: 'https://www.netflix.com',     mode: 'popup', win: 'calendi-stream' },
+      { id: 'disney',   label: 'Disney+',  Logo: DisneyPlusLogo, url: 'https://www.disneyplus.com',  mode: 'popup', win: 'calendi-stream' },
+      { id: 'hulu',     label: 'Hulu',     Logo: HuluLogo,       url: 'https://www.hulu.com',        mode: 'popup', win: 'calendi-stream' },
+      { id: 'prime',    label: 'Prime',    Logo: PrimeLogo,      url: 'https://www.primevideo.com',  mode: 'popup', win: 'calendi-stream' },
+      { id: 'peacock',  label: 'Peacock',  emoji: '🦚',           url: 'https://www.peacocktv.com',  mode: 'popup', win: 'calendi-stream' },
+    ],
+  },
+  {
+    name: 'Social',
+    note: 'companion window',
+    apps: [
+      { id: 'instagram', label: 'Instagram', Logo: InstagramLogo, url: 'https://www.instagram.com', mode: 'popup', win: 'calendi-social' },
+      { id: 'tiktok',    label: 'TikTok',    Logo: TikTokLogo,   url: 'https://www.tiktok.com',    mode: 'popup', win: 'calendi-social' },
+      { id: 'x',         label: 'X',         Logo: XLogo,        url: 'https://www.x.com',         mode: 'popup', win: 'calendi-social' },
+      { id: 'facebook',  label: 'Facebook',  Logo: FacebookLogo, url: 'https://www.facebook.com',  mode: 'popup', win: 'calendi-social' },
+      { id: 'whatsapp',  label: 'WhatsApp',  Logo: WhatsAppLogo, url: 'https://web.whatsapp.com',  mode: 'popup', win: 'calendi-whatsapp' },
+    ],
+  },
+  {
+    name: 'Work',
+    apps: [
+      { id: 'gmail',   label: 'Gmail',   Logo: GmailLogo,      url: 'https://mail.google.com/mail/u/0/',         mode: 'popup', win: 'calendi-gmail' },
+      { id: 'outlook', label: 'Outlook', Logo: OutlookLogo,    url: 'https://outlook.live.com',                  mode: 'popup', win: 'calendi-outlook' },
+      { id: 'canvas',  label: 'Canvas',  Logo: CanvasLMSLogo,  url: '/api/proxy?url=https%3A%2F%2Fcanvas.instructure.com', mode: 'frame' },
+      { id: 'teams',   label: 'Teams',   Logo: TeamsLogo,      url: 'https://teams.microsoft.com',               mode: 'popup', win: 'calendi-teams' },
+      { id: 'meet',    label: 'Meet',    Logo: GoogleMeetLogo, url: 'https://meet.google.com',                   mode: 'popup', win: 'calendi-meet' },
+      { id: 'zoom',    label: 'Zoom',    Logo: ZoomLogo,       url: 'https://zoom.us',                           mode: 'popup', win: 'calendi-zoom' },
+    ],
+  },
 ];
 
 interface BrowserProps { initialUrl?: string }
 
 export default function BrowserWidget({ initialUrl }: BrowserProps) {
   const skin = useStore(s => s.skin);
-  const { color, glow } = getSkinColors(skin);
+  const { color } = getSkinColors(skin);
   const [url, setUrl] = useState(initialUrl ?? '');
   const [activeUrl, setActiveUrl] = useState(initialUrl ?? '');
   const [loading, setLoading] = useState(!!initialUrl);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  function navigate(target: string) {
+  function navigateTo(target: string) {
     let full = target.trim();
     if (!full) return;
     if (!full.startsWith('http://') && !full.startsWith('https://') && !full.startsWith('/')) {
@@ -37,7 +89,6 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
         ? `https://${full}`
         : `/api/search?q=${encodeURIComponent(full)}`;
     }
-    // Route external URLs through proxy so they stay in-frame (skip Maps embed which Google allows)
     if (
       (full.startsWith('http://') || full.startsWith('https://')) &&
       !full.includes('maps.google.com')
@@ -49,6 +100,14 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
     setLoading(true);
   }
 
+  function openApp(app: AppDef) {
+    if (app.mode === 'popup') {
+      window.open(app.url, app.win ?? 'calendi-popup', POPUP_OPTS);
+    } else {
+      navigateTo(app.url);
+    }
+  }
+
   function refresh() {
     if (!activeUrl) return;
     setActiveUrl('');
@@ -56,22 +115,24 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
   }
 
   function openExternal() {
-    window.open(activeUrl, '_blank', 'noopener');
+    let target = activeUrl;
+    try {
+      if (activeUrl.startsWith('/api/proxy')) {
+        const params = new URL(activeUrl, location.href).searchParams;
+        target = params.get('url') ?? activeUrl;
+      }
+    } catch {}
+    window.open(target, '_blank', 'noopener');
   }
 
   return (
     <div className="widget-card h-full flex flex-col" style={{ borderColor: `${color}25` }}>
-      {/* Header tagline */}
-      <div style={{ padding:'6px 10px 2px', flexShrink:0 }}>
-        <p style={{ fontSize:'0.5rem', color:'var(--w-text-faint)', margin:0, fontFamily:'monospace', letterSpacing:0.3 }}>🌐 browser — search the web, open any site, explore quick links</p>
-      </div>
-
       {/* Address bar */}
-      <div className="flex items-center gap-1.5 px-2 py-2 shrink-0" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <Globe size={12} style={{ color: 'var(--w-text-faint)', flexShrink: 0 }} />
+      <div className="flex items-center gap-1.5 px-2 py-1.5 shrink-0" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <Globe size={11} style={{ color: 'var(--w-text-faint)', flexShrink: 0 }} />
         <form
           className="flex-1"
-          onSubmit={e => { e.preventDefault(); navigate(url); }}
+          onSubmit={e => { e.preventDefault(); navigateTo(url); }}
           style={{ display: 'flex', gap: 6 }}
         >
           <input
@@ -79,7 +140,7 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
             style={{ color: 'var(--w-text-dim)' }}
             value={url}
             onChange={e => setUrl(e.target.value)}
-            placeholder="search or enter URL"
+            placeholder="search or enter any URL…"
             onFocus={e => e.target.select()}
           />
           <button type="submit" style={{ display: 'none' }} />
@@ -87,13 +148,13 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
         {activeUrl && (
           <>
             <button onClick={refresh} title="Refresh" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2 }}>
-              <RefreshCw size={11} />
+              <RefreshCw size={10} />
             </button>
             <button onClick={openExternal} title="Open in new tab" style={{ background: 'none', border: 'none', cursor: 'pointer', color, padding: 2 }}>
-              <ExternalLink size={11} />
+              <ExternalLink size={10} />
             </button>
-            <button onClick={() => { setActiveUrl(''); setUrl(''); }} title="Close" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2 }}>
-              <X size={11} />
+            <button onClick={() => { setActiveUrl(''); setUrl(''); }} title="Back to apps" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2 }}>
+              <X size={10} />
             </button>
           </>
         )}
@@ -118,26 +179,69 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
           />
         </div>
       ) : (
-        <div className="flex-1 p-3 overflow-y-auto">
-          <p className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: 'var(--w-text-faint)' }}>quick links</p>
-          <div className="grid grid-cols-3 gap-1.5">
-            {QUICK_LINKS.map(q => (
-              <button
-                key={q.label}
-                onClick={() => navigate(q.url)}
-                className="flex flex-col items-center gap-1.5 p-2 rounded-xl transition-all glass-hover"
-                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer' }}
-              >
-                {q.Logo
-                  ? <q.Logo size={28} />
-                  : <span style={{ fontSize: 20 }}>{q.emoji}</span>
-                }
-                <span className="text-xs font-mono" style={{ color: 'var(--w-text-dim)' }}>{q.label}</span>
-              </button>
-            ))}
-          </div>
-          <p className="text-xs mt-4 text-center leading-relaxed" style={{ color: 'var(--w-text-faint)' }}>
-            type any URL or search above — tap the <ExternalLink size={9} style={{ display:'inline', verticalAlign:'middle' }} /> icon to open blocked sites in a full tab
+        <div className="flex-1 overflow-y-auto" style={{ padding: '8px 10px 10px' }}>
+          {CATEGORIES.map(cat => (
+            <div key={cat.name} style={{ marginBottom: 12 }}>
+              <div className="flex items-center gap-2" style={{ marginBottom: 6 }}>
+                <span style={{ fontSize: '0.55rem', fontFamily: 'monospace', letterSpacing: 1.5, textTransform: 'uppercase', color, fontWeight: 700, flexShrink: 0 }}>
+                  {cat.name}
+                </span>
+                {cat.note && (
+                  <span style={{ fontSize: '0.48rem', fontFamily: 'monospace', color: 'var(--w-text-faint)', whiteSpace: 'nowrap' }}>
+                    · opens in companion window ↗
+                  </span>
+                )}
+                <div style={{ flex: 1, height: 1, background: `${color}20` }} />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 5 }}>
+                {cat.apps.map(app => (
+                  <button
+                    key={app.id}
+                    onClick={() => openApp(app)}
+                    title={app.mode === 'popup' ? `${app.label} — opens in companion window` : app.label}
+                    style={{
+                      position: 'relative',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 4,
+                      padding: '7px 4px',
+                      borderRadius: 10,
+                      background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid rgba(255,255,255,0.06)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s',
+                      minHeight: 60,
+                    }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.07)';
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = `${color}50`;
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.03)';
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.06)';
+                    }}
+                  >
+                    {app.mode === 'popup' && (
+                      <span style={{ position: 'absolute', top: 3, right: 4, fontSize: '0.45rem', color: 'var(--w-text-faint)', lineHeight: 1, opacity: 0.7 }}>↗</span>
+                    )}
+                    {app.Logo
+                      ? <app.Logo size={26} />
+                      : <span style={{ fontSize: 22, lineHeight: 1 }}>{app.emoji}</span>
+                    }
+                    <span style={{ fontSize: '0.55rem', fontFamily: 'monospace', color: 'var(--w-text-dim)', letterSpacing: 0.3, textAlign: 'center', lineHeight: 1.2 }}>
+                      {app.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <p style={{ fontSize: '0.5rem', fontFamily: 'monospace', color: 'var(--w-text-faint)', textAlign: 'center', marginTop: 4, lineHeight: 1.7 }}>
+            type any URL or search above · ↗ apps open in a companion window with full login &amp; streaming
           </p>
         </div>
       )}

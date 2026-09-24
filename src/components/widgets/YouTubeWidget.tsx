@@ -57,17 +57,16 @@ export default function YouTubeWidget() {
     try {
       const r = await fetch(`/api/youtube-search?q=${encodeURIComponent(query)}`);
       const data = await r.json();
-      if (data.error) {
-        setSearchErr(data.error + (data.setup ? '\n\n' + data.setup : ''));
+      if (!r.ok || data.error) {
+        const msg = data?.error?.message || data?.error || data?.setup || 'YouTube search failed';
+        setSearchErr(typeof msg === 'string' ? msg : JSON.stringify(msg));
         setMode('home');
       } else {
         setResults(data.items || []);
       }
     } catch {
-      // Fallback to embed search
-      setEmbedSrc(`https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(query)}`);
-      setMode('player');
-      setLoading(true);
+      setSearchErr('Could not reach YouTube API. Check your API key in Vercel settings.');
+      setMode('home');
     }
     setSearching(false);
   }

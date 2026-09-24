@@ -25,7 +25,12 @@ export default async function handler(req, res) {
     ...(pageToken ? { pageToken } : {}),
   });
 
-  const r = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`);
+  const r = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`, {
+    headers: {
+      'Referer': 'https://calendi-khaki.vercel.app/',
+      'Origin': 'https://calendi-khaki.vercel.app',
+    },
+  });
   const data = await r.json();
 
   if (!r.ok) {

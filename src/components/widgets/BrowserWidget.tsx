@@ -3,8 +3,6 @@ import { RefreshCw, Globe, X, ExternalLink } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 import {
   GoogleLogo, YouTubeLogo, GoogleMapsLogo,
-  NetflixLogo, DisneyPlusLogo, HuluLogo, PrimeLogo,
-  InstagramLogo, FacebookLogo, WhatsAppLogo, TikTokLogo, XLogo,
   GmailLogo, OutlookLogo, TeamsLogo, GoogleMeetLogo, ZoomLogo, CanvasLMSLogo,
 } from '../BrandLogos';
 
@@ -30,43 +28,22 @@ const CATEGORIES: Category[] = [
   {
     name: 'Search & Browse',
     apps: [
-      { id: 'google',    label: 'Google',    Logo: GoogleLogo,     url: '/api/search',                                                          mode: 'frame' },
-      { id: 'youtube',   label: 'YouTube',   Logo: YouTubeLogo,    url: '/api/proxy?url=https%3A%2F%2Fpiped.video',                             mode: 'frame' },
-      { id: 'wikipedia', label: 'Wikipedia', emoji: '📖',           url: '/api/proxy?url=https%3A%2F%2Fen.m.wikipedia.org%2Fwiki%2FMain_Page',  mode: 'frame' },
-      { id: 'maps',      label: 'Maps',      Logo: GoogleMapsLogo, url: 'https://maps.google.com/maps?q=&output=embed',                         mode: 'frame' },
-    ],
-  },
-  {
-    name: 'Streaming',
-    note: 'companion window',
-    apps: [
-      { id: 'netflix',  label: 'Netflix',  Logo: NetflixLogo,    url: 'https://www.netflix.com',     mode: 'popup', win: 'calendi-stream' },
-      { id: 'disney',   label: 'Disney+',  Logo: DisneyPlusLogo, url: 'https://www.disneyplus.com',  mode: 'popup', win: 'calendi-stream' },
-      { id: 'hulu',     label: 'Hulu',     Logo: HuluLogo,       url: 'https://www.hulu.com',        mode: 'popup', win: 'calendi-stream' },
-      { id: 'prime',    label: 'Prime',    Logo: PrimeLogo,      url: 'https://www.primevideo.com',  mode: 'popup', win: 'calendi-stream' },
-      { id: 'peacock',  label: 'Peacock',  emoji: '🦚',           url: 'https://www.peacocktv.com',  mode: 'popup', win: 'calendi-stream' },
-    ],
-  },
-  {
-    name: 'Social',
-    note: 'companion window',
-    apps: [
-      { id: 'instagram', label: 'Instagram', Logo: InstagramLogo, url: 'https://www.instagram.com', mode: 'popup', win: 'calendi-social' },
-      { id: 'tiktok',    label: 'TikTok',    Logo: TikTokLogo,   url: 'https://www.tiktok.com',    mode: 'popup', win: 'calendi-social' },
-      { id: 'x',         label: 'X',         Logo: XLogo,        url: 'https://www.x.com',         mode: 'popup', win: 'calendi-social' },
-      { id: 'facebook',  label: 'Facebook',  Logo: FacebookLogo, url: 'https://www.facebook.com',  mode: 'popup', win: 'calendi-social' },
-      { id: 'whatsapp',  label: 'WhatsApp',  Logo: WhatsAppLogo, url: 'https://web.whatsapp.com',  mode: 'popup', win: 'calendi-whatsapp' },
+      { id: 'google',    label: 'Google',    Logo: GoogleLogo,     url: '/api/search',                                                         mode: 'frame' },
+      { id: 'youtube',   label: 'YouTube',   Logo: YouTubeLogo,    url: '/api/proxy?url=https%3A%2F%2Fpiped.video',                            mode: 'frame' },
+      { id: 'wikipedia', label: 'Wikipedia', emoji: '📖',           url: '/api/proxy?url=https%3A%2F%2Fen.m.wikipedia.org%2Fwiki%2FMain_Page', mode: 'frame' },
+      { id: 'maps',      label: 'Maps',      Logo: GoogleMapsLogo, url: 'https://maps.google.com/maps?q=&output=embed',                        mode: 'frame' },
     ],
   },
   {
     name: 'Work',
+    note: 'companion window',
     apps: [
-      { id: 'gmail',   label: 'Gmail',   Logo: GmailLogo,      url: 'https://mail.google.com/mail/u/0/',         mode: 'popup', win: 'calendi-gmail' },
-      { id: 'outlook', label: 'Outlook', Logo: OutlookLogo,    url: 'https://outlook.live.com',                  mode: 'popup', win: 'calendi-outlook' },
+      { id: 'gmail',   label: 'Gmail',   Logo: GmailLogo,      url: 'https://mail.google.com/mail/u/0/', mode: 'popup', win: 'calendi-gmail' },
+      { id: 'outlook', label: 'Outlook', Logo: OutlookLogo,    url: 'https://outlook.live.com',          mode: 'popup', win: 'calendi-outlook' },
       { id: 'canvas',  label: 'Canvas',  Logo: CanvasLMSLogo,  url: '/api/proxy?url=https%3A%2F%2Fcanvas.instructure.com', mode: 'frame' },
-      { id: 'teams',   label: 'Teams',   Logo: TeamsLogo,      url: 'https://teams.microsoft.com',               mode: 'popup', win: 'calendi-teams' },
-      { id: 'meet',    label: 'Meet',    Logo: GoogleMeetLogo, url: 'https://meet.google.com',                   mode: 'popup', win: 'calendi-meet' },
-      { id: 'zoom',    label: 'Zoom',    Logo: ZoomLogo,       url: 'https://zoom.us',                           mode: 'popup', win: 'calendi-zoom' },
+      { id: 'teams',   label: 'Teams',   Logo: TeamsLogo,      url: 'https://teams.microsoft.com',       mode: 'popup', win: 'calendi-teams' },
+      { id: 'meet',    label: 'Meet',    Logo: GoogleMeetLogo, url: 'https://meet.google.com',           mode: 'popup', win: 'calendi-meet' },
+      { id: 'zoom',    label: 'Zoom',    Logo: ZoomLogo,       url: 'https://zoom.us',                   mode: 'popup', win: 'calendi-zoom' },
     ],
   },
 ];
@@ -241,7 +218,7 @@ export default function BrowserWidget({ initialUrl }: BrowserProps) {
           ))}
 
           <p style={{ fontSize: '0.5rem', fontFamily: 'monospace', color: 'var(--w-text-faint)', textAlign: 'center', marginTop: 4, lineHeight: 1.7 }}>
-            type any URL or search above · ↗ apps open in a companion window with full login &amp; streaming
+            type any URL or search above · ↗ work apps open in a companion window with full login
           </p>
         </div>
       )}

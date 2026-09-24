@@ -1,8 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, Bell, BellOff } from 'lucide-react';
+import { Play, Pause, RotateCcw, Bell, BellOff, Plus, Trash2 } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 
 type Tab = 'timer' | 'alarm';
+
+type AlarmEntry = {
+  id: string;
+  time: string;
+  label: string;
+  enabled: boolean;
+};
 
 function beep(ctx: AudioContext, freq: number, dur: number) {
   const osc = ctx.createOscillator();
@@ -35,16 +42,16 @@ export default function TimerWidget() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Alarm state
-  const [alarmTime, setAlarmTime] = useState('07:00');
-  const [alarmOn, setAlarmOn] = useState(false);
-  const [alarmFired, setAlarmFired] = useState(false);
+  const [alarms, setAlarms] = useState<AlarmEntry[]>([
+    { id: '1', time: '07:00', label: '', enabled: false },
+  ]);
+  const [firedIds, setFiredIds] = useState<Set<string>>(new Set());
 
   function getCtx() {
     if (!audioCtx.current) audioCtx.current = new AudioContext();
     return audioCtx.current;
   }
 
-  // Parse MM:SS
   function parseInput(s: string) {
     const parts = s.split(':');
     if (parts.length === 2) return parseInt(parts[0] || '0') * 60 + parseInt(parts[1] || '0');
@@ -74,19 +81,40 @@ export default function TimerWidget() {
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [running]);
 
-  // Alarm checker
+  // Multi-alarm checker
   useEffect(() => {
-    if (!alarmOn) return;
     const id = setInterval(() => {
       const now = new Date();
-      const t = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-      if (t === alarmTime && now.getSeconds() < 5) {
-        setAlarmFired(true);
-        for (let i = 0; i < 10; i++) setTimeout(() => alarmSound(getCtx()), i * 700);
-      }
+      const t = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+      if (now.getSeconds() >= 5) return;
+      alarms.filter(a => a.enabled && a.time === t).forEach(a => {
+        setFiredIds(prev => {
+          if (prev.has(a.id)) return prev;
+          for (let i = 0; i < 10; i++) setTimeout(() => alarmSound(getCtx()), i * 700);
+          return new Set([...prev, a.id]);
+        });
+      });
     }, 1000);
     return () => clearInterval(id);
-  }, [alarmOn, alarmTime]);
+  }, [alarms]);
+
+  function addAlarm() {
+    setAlarms(prev => [...prev, { id: Date.now().toString(), time: '08:00', label: '', enabled: false }]);
+  }
+
+  function deleteAlarm(id: string) {
+    setAlarms(prev => prev.filter(a => a.id !== id));
+    setFiredIds(prev => { const s = new Set(prev); s.delete(id); return s; });
+  }
+
+  function updateAlarm(id: string, changes: Partial<AlarmEntry>) {
+    setAlarms(prev => prev.map(a => a.id === id ? { ...a, ...changes } : a));
+  }
+
+  function dismissAlarm(id: string) {
+    setFiredIds(prev => { const s = new Set(prev); s.delete(id); return s; });
+    updateAlarm(id, { enabled: false });
+  }
 
   const mm = Math.floor(seconds / 60).toString().padStart(2, '0');
   const ss = (seconds % 60).toString().padStart(2, '0');
@@ -94,12 +122,13 @@ export default function TimerWidget() {
   const pct = total > 0 ? ((total - seconds) / total) * 100 : 0;
   const circumference = 2 * Math.PI * 45;
   const offset = circumference - (pct / 100) * circumference;
+  const anyFired = firedIds.size > 0;
 
   return (
     <div className="widget-card h-full flex flex-col p-3 select-none">
       {/* Tabs */}
       <div className="flex gap-1 mb-3 p-0.5 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)' }}>
-        {(['timer','alarm'] as Tab[]).map(t => (
+        {(['timer', 'alarm'] as Tab[]).map(t => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -109,13 +138,14 @@ export default function TimerWidget() {
               color: tab === t ? '#fff' : 'var(--w-text-dim)',
               boxShadow: tab === t ? `0 2px 10px ${glow}` : 'none',
             }}
-          >{t}</button>
+          >
+            {t === 'alarm' && anyFired ? '⏰' : ''}{t}
+          </button>
         ))}
       </div>
 
       {tab === 'timer' && (
         <div className="flex flex-col items-center flex-1">
-          {/* Ring */}
           <div className="relative my-2">
             <svg width="100" height="100" viewBox="0 0 100 100" style={{ transform: 'rotate(-90deg)' }}>
               <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="6" />
@@ -166,35 +196,106 @@ export default function TimerWidget() {
       )}
 
       {tab === 'alarm' && (
-        <div className="flex flex-col items-center gap-4 flex-1 pt-2">
-          <input
-            type="time"
-            className="input-dark text-center font-mono text-3xl font-bold !py-3"
-            style={{ fontSize: 'clamp(1.5rem,4vw,2rem)', letterSpacing: '-0.02em', color }}
-            value={alarmTime}
-            onChange={e => setAlarmTime(e.target.value)}
-          />
-
-          {alarmFired && (
-            <div className="w-full py-3 rounded-2xl text-center text-sm font-bold animate-pulse" style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)', color: '#EF4444', animation: 'alarm-pulse 0.8s ease-in-out infinite' }}>
-              ⏰ WAKE UP!
+        <div className="flex flex-col gap-2 flex-1 overflow-y-auto">
+          {alarms.map(alarm => (
+            <div key={alarm.id}>
+              {firedIds.has(alarm.id) && (
+                <div
+                  className="w-full py-2 rounded-xl text-center text-xs font-bold mb-1"
+                  style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)', color: '#EF4444', animation: 'alarm-pulse 0.8s ease-in-out infinite' }}
+                >
+                  ⏰ {alarm.label || 'ALARM'} — WAKE UP!
+                  <button
+                    onClick={() => dismissAlarm(alarm.id)}
+                    style={{ marginLeft: 8, background: 'rgba(239,68,68,0.2)', border: '1px solid rgba(239,68,68,0.4)', borderRadius: 6, padding: '2px 8px', color: '#EF4444', cursor: 'pointer', fontSize: '0.65rem' }}
+                  >
+                    dismiss
+                  </button>
+                </div>
+              )}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  background: alarm.enabled ? `${color}12` : 'rgba(255,255,255,0.03)',
+                  border: `1px solid ${alarm.enabled ? color + '30' : 'rgba(255,255,255,0.07)'}`,
+                  borderRadius: 12,
+                  padding: '7px 10px',
+                  transition: 'all 0.2s',
+                }}
+              >
+                <input
+                  type="time"
+                  value={alarm.time}
+                  onChange={e => updateAlarm(alarm.id, { time: e.target.value })}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    outline: 'none',
+                    fontFamily: 'monospace',
+                    fontWeight: 700,
+                    fontSize: '1.1rem',
+                    color: alarm.enabled ? color : 'var(--w-text-main)',
+                    letterSpacing: '-0.02em',
+                    width: 90,
+                    flexShrink: 0,
+                  }}
+                />
+                <input
+                  type="text"
+                  value={alarm.label}
+                  onChange={e => updateAlarm(alarm.id, { label: e.target.value })}
+                  placeholder="label…"
+                  style={{
+                    flex: 1,
+                    background: 'none',
+                    border: 'none',
+                    outline: 'none',
+                    fontFamily: 'monospace',
+                    fontSize: '0.65rem',
+                    color: 'var(--w-text-dim)',
+                    minWidth: 0,
+                  }}
+                />
+                <button
+                  onClick={() => updateAlarm(alarm.id, { enabled: !alarm.enabled })}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: alarm.enabled ? color : 'var(--w-text-faint)', padding: 2, flexShrink: 0 }}
+                  title={alarm.enabled ? 'Turn off' : 'Turn on'}
+                >
+                  {alarm.enabled ? <Bell size={13} /> : <BellOff size={13} />}
+                </button>
+                <button
+                  onClick={() => deleteAlarm(alarm.id)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--w-text-faint)', padding: 2, flexShrink: 0 }}
+                  title="Delete alarm"
+                >
+                  <Trash2 size={12} />
+                </button>
+              </div>
             </div>
-          )}
+          ))}
 
           <button
-            className="btn-pill w-full"
-            style={{ background: alarmOn ? color : 'rgba(255,255,255,0.05)', color: alarmOn ? '#fff' : 'var(--w-text-dim)', boxShadow: alarmOn ? `0 4px 20px ${glow}` : 'none', border: `1px solid ${alarmOn ? color + '50' : 'rgba(255,255,255,0.1)'}` }}
-            onClick={() => { setAlarmOn(!alarmOn); setAlarmFired(false); }}
+            onClick={addAlarm}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 5,
+              padding: '7px 10px',
+              borderRadius: 12,
+              background: 'transparent',
+              border: `1px dashed ${color}40`,
+              cursor: 'pointer',
+              color: color,
+              fontSize: '0.65rem',
+              fontFamily: 'monospace',
+              marginTop: 2,
+            }}
           >
-            {alarmOn ? <Bell size={14} /> : <BellOff size={14} />}
-            {alarmOn ? 'alarm on' : 'set alarm'}
+            <Plus size={12} /> add alarm
           </button>
-
-          {alarmFired && (
-            <button className="btn-pill btn-ghost w-full" onClick={() => { setAlarmFired(false); setAlarmOn(false); }}>
-              dismiss
-            </button>
-          )}
         </div>
       )}
     </div>

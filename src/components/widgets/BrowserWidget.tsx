@@ -2,7 +2,7 @@ import { useState, useRef, type FC } from 'react';
 import { RefreshCw, Globe, X, ExternalLink } from 'lucide-react';
 import { useStore, getSkinColors } from '../../store';
 import {
-  GoogleLogo, YouTubeLogo, GoogleMapsLogo,
+  GoogleLogo, GoogleMapsLogo,
   GmailLogo, OutlookLogo, TeamsLogo, GoogleMeetLogo, ZoomLogo, CanvasLMSLogo,
 } from '../BrandLogos';
 
@@ -29,9 +29,26 @@ const CATEGORIES: Category[] = [
     name: 'Search & Browse',
     apps: [
       { id: 'google',    label: 'Google',    Logo: GoogleLogo,     url: '/api/search',                                                         mode: 'frame' },
-      { id: 'youtube',   label: 'YouTube',   Logo: YouTubeLogo,    url: '/api/proxy?url=https%3A%2F%2Fpiped.video',                            mode: 'frame' },
       { id: 'wikipedia', label: 'Wikipedia', emoji: '📖',           url: '/api/proxy?url=https%3A%2F%2Fen.m.wikipedia.org%2Fwiki%2FMain_Page', mode: 'frame' },
       { id: 'maps',      label: 'Maps',      Logo: GoogleMapsLogo, url: 'https://maps.google.com/maps?q=&output=embed',                        mode: 'frame' },
+      { id: 'nitrotype', label: 'NitroType', emoji: '🏎️',          url: '/api/proxy?url=https%3A%2F%2Fwww.nitrotype.com',                     mode: 'frame' },
+    ],
+  },
+  {
+    name: 'Social',
+    apps: [
+      { id: 'instagram', label: 'Instagram', emoji: '📷', url: '/api/social?platform=instagram', mode: 'frame' },
+      { id: 'tiktok',    label: 'TikTok',    emoji: '🎵', url: '/api/social?platform=tiktok',    mode: 'frame' },
+      { id: 'x',         label: 'X',         emoji: '✕',  url: '/api/social?platform=twitter',   mode: 'frame' },
+      { id: 'facebook',  label: 'Facebook',  emoji: '🔵', url: '/api/social?platform=facebook',  mode: 'frame' },
+    ],
+  },
+  {
+    name: 'Calendars',
+    apps: [
+      { id: 'gcal',        label: 'Google Cal',  Logo: GoogleLogo,  url: '/api/proxy?url=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fr',  mode: 'frame' },
+      { id: 'outlook-cal', label: 'Outlook Cal', Logo: OutlookLogo, url: 'https://outlook.live.com/calendar/0/view/month',                    mode: 'popup', win: 'calendi-outlook' },
+      { id: 'icloud-cal',  label: 'iCloud Cal',  emoji: '☁️',       url: 'https://www.icloud.com/calendar',                                  mode: 'popup', win: 'calendi-icloud' },
     ],
   },
   {
